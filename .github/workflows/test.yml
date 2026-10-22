@@ -21,4 +21,4 @@ jobs:
           node-version: "22"
       - run: npm test
       - name: Compile native evidence cold-verifier (does not run a model)
-        run: python3 -m py_compile tools/verify-native-029.py
+        run: python3 -m py_compile tools/verify-native-029.py tools/run-native-004.py
