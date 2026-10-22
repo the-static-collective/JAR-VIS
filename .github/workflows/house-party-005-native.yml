@@ -1,5 +1,7 @@
 name: House Party 005 — opt-in genuine local OpenManus guests
 on:
+  push:
+    branches: [proof/house-party-005-first-native-run]
   workflow_dispatch:
     inputs:
       approval:
@@ -13,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   live-guests:
-    if: ${{ inputs.approval == 'I_APPROVE_LOCAL_MODEL' }}
+    if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/proof/house-party-005-first-native-run') || inputs.approval == 'I_APPROVE_LOCAL_MODEL' }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
