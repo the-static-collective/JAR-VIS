@@ -4,50 +4,61 @@
 
 **Short name:** JAR;VIS  
 **Long semantic signature:** JaAR;rvVIiSs  
-**Status:** Genesis 001 — bounded local demonstration, not a deployed service.
+**Status:** Genesis 002 — executable local interactive workbench. **Not deployed or connected to live projects.**
 
 > JAR holds what matters. VIS attends to what is possible. The crossing belongs to those concerned.
 
-JAR;VIS is an **attendant across sovereign projects**, not an AI sovereign, a global database, or a replacement for the systems it serves. It can observe available particulars, propose a useful relation, request separate permission from those concerned, and return an attributable record of its bounded action.
+JAR;VIS is an attendant across independently owned projects, not a master AI, global database, or replacement for the systems it serves. It observes fictional particulars, explains potential connections, proposes bounded actions, requests simulated authorization, and records what happened — including HOLD.
 
-## First executable crossing
+## Try the local attendant
 
-Genesis 001 uses a *synthetic* Waseca Garden grocery-network scenario: one surplus food offer, one compatible need, two independently provided steward approvals, a **mock** Kinship relay, and a local receipt. It uses deterministic matching rather than an LLM, and never posts to a radio station, a website, or the internet.
+Node.js 20+ and no third-party runtime packages required.
+
+~~~sh
+npm test
+npm start
+~~~
+
+Open **http://127.0.0.1:7789** in a browser on the same machine. The interface includes an interactive field, JAR cards, a deterministic ask-the-attendant panel, proposal/approval controls, project doors, and a replayable local history.
+
+**All sample data is fictional.** Two simulated approvals require a local operator to type "MOCK YES" separately. They do not authenticate actual stewards or create real consent. The Kinship adapter only records an in-process mock message; no real broadcast or external communications take place.
 
 ~~~text
 OBSERVE → UNDERSTAND → PROPOSE → AUTHORIZE → ACT → RECEIPT → RETURN
                   JAR    ;    VIS
 ~~~
 
-Run with Node.js 20+; there are no third-party packages:
+The semicolon is the crossing: **ATTENTION ≠ AUTHORITY**.
 
-~~~sh
-npm test
-npm run demo:hold
-npm run demo
-~~~
+## Local guarantees and limits
 
-"demo:hold" demonstrates a proposal that **cannot** cross without authorization. "demo" prompts in the terminal for two separate, explicit mock approvals. Typing anything other than YES refuses that party's permission and holds the action. These approvals are **not authenticated signatures**; Genesis 001 runs entirely inside a trusted local demonstration.
+- Zero remote side effects; browser server binds to loopback only.
+- Missing, expired, or revoked demo grants cause HOLD.
+- One mock proposal/action/audience, two distinct steward roles, one explicit dispatch.
+- Append-only JSONL history with hash-chain validation on restart. Not signed, encrypted, or tamper-proof.
+- GHoT, reLATTE, Kinship, planZ, Abundent and PENNY appear as a **directory of potential doors**, not live integrations.
+- Rules-only attendant. No model connection; no background agent.
 
-## The division of responsibility
+## Documents
 
-- **JAR** preserves particular needs and offers, owner fields, visibility, and their present state. In this specimen it is an in-memory container, not durable memory.
-- **VIS** derives a *proposal* from JAR records. Intelligence, heuristics, and future models may be substituted. No proposal carries authority.
-- **The semicolon** is the explicit authorization crossing. Both affected stewards must approve the exact proposal/action/audience before this demonstration can act.
-- **Adapters** execute only bounded capabilities. Genesis 001 provides a mock Kinship outbox; no network connector is present.
-- **Receipts** record what was *simulated*, including HOLD. They do not establish truth, admission, identity, payment, fulfillment, or real-world delivery.
+- [Constitution](docs/CONSTITUTION.md)
+- [Genesis 001 — First crossing](docs/GENESIS-001.md)
+- [Genesis 002 — Interactive attendant](docs/GENESIS-002.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [reLATTE compatibility boundary](docs/RELATTE-SEAM.md)
+- [Particular schema](spec/particular-v0.schema.json)
 
-## Documents and code
+## Code
 
-- [Constitution](docs/CONSTITUTION.md): the governing constraints.
-- [Genesis 001](docs/GENESIS-001.md): specimen, limits, acceptance conditions.
-- [Architecture](docs/ARCHITECTURE.md): contracts and project relationships.
-- [reLATTE boundary](docs/RELATTE-SEAM.md): deliberate non-equivalence with signed reLATTE envelopes/receipts.
-- [Particular schema](spec/particular-v0.schema.json): small JAR record model.
-- [Engine](src/engine.mjs), [mock scenario](src/fixture.mjs), [CLI](src/demo.mjs), [tests](test/engine.test.mjs).
+- [Core crossing engine](src/engine.mjs)
+- [Local journal](src/journal.mjs)
+- [Workbench state machine](src/workbench.mjs)
+- [HTTP server](src/server.mjs)
+- [Interactive browser](public/index.html)
+- [Automated tests](test/workbench.test.mjs)
 
-## Next legitimate crossings
+## Next crossings
 
-Add authenticated human consent and revocation; durable local journaling; real typed reLATTE R1/R2 envelopes and R3 owner-local disposition; opt-in Kinship transport; privacy/retention policy; accessibility; and owner-controlled adapters to Abundent, GHoT, planZ, and PENNY.
+Authenticated and revocable human grants; capability declarations owned by actual source projects; cryptographically signed, canonical reLATTE envelopes with receiver-local admission; privacy controls; durable effect idempotency; adapters to Kinship and GHoT behind explicit scopes; Abundent return portal.
 
-**No default remote action. No assumed consent. No compulsory master node.**
+**No compulsory central master. No assumed consent. No automatic authority escalation.**
