@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { composeFixtureGardenParty, inspectCard } from "../src/house-party.mjs";
 import { gardenJar } from "../src/fixture.mjs";
+import { Jar } from "../src/engine.mjs";
 import { Workbench } from "../src/workbench.mjs";
 import { startWorkbenchServer } from "../src/server.mjs";
 
@@ -55,7 +56,6 @@ test("refuse parties when the synthetic source stops matching", () => {
   const jar = gardenJar();
   const need = jar.get("garden.need.produce-001");
   const offer = { ...jar.get("garden.offer.produce-001"), status: "closed" };
-  const { Jar } = await import("../src/engine.mjs");
   assert.throws(() => composeFixtureGardenParty({ jar: new Jar([need, offer]) }), /HOLD/);
 });
 test("workbench journals a fixture party; no prior Garden proposal or broadcast", () =>
