@@ -56,7 +56,9 @@ export class Workbench {
     const { proposals, grants, outcomes, events } = this.#replay();
     const list = [...proposals.values()].reverse().map((proposal) => ({
       ...copy(proposal),
-      approvedBy: [...(grants.get(proposal.id)?.keys() ?? [])],
+      approvedBy: [...(grants.get(proposal.id)?.values() ?? [])]
+        .filter((grant) => Date.parse(grant.expiresAt) > Date.parse(this.#clock()))
+        .map((grant) => grant.issuedBy),
       outcome: copy(outcomes.get(proposal.id) ?? null)
     }));
     return {
