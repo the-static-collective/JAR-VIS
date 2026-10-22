@@ -51,7 +51,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       const allowed = new Set(["127.0.0.1:" + boundPort, "localhost:" + boundPort]);
       if (!allowed.has(host)) return reply(res, 403, { error: "Untrusted Host header" });
       const origin = req.headers.origin;
-      if (origin && !allowed.has(new URL(origin).host)) {
+      if (origin && (new URL(origin).protocol !== "http:" || !allowed.has(new URL(origin).host))) {
         return reply(res, 403, { error: "Cross-origin request refused" });
       }
       const pathname = new URL(req.url, "http://" + host).pathname;

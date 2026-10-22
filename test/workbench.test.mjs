@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, rm, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { request } from "node:http";
 import { Workbench } from "../src/workbench.mjs";
 import { LocalJournal } from "../src/journal.mjs";
 import { startWorkbenchServer } from "../src/server.mjs";
@@ -105,7 +106,7 @@ test("attendant is deterministic and does not claim live project connections", (
     const workbench = await Workbench.open({ journalPath: path, clock: () => start });
     assert.match(workbench.attend("What is Kinship?").answer, /no real broadcast|No real broadcast/);
     assert.match(workbench.attend("How does authorization work?").answer, /MOCK/);
-    assert.match(workbench.attend("What about planZ?").answer, /not connected|Not connected/);
+    assert.match(workbench.attend("What about planZ?").answer, /none is connected|not connected|Not connected/);
     assert.throws(() => workbench.attend("x".repeat(501)), /500/);
   }));
 test("server binds loopback, protects writes, and never sends externally", () =>
@@ -123,8 +124,15 @@ test("server binds loopback, protects writes, and never sends externally", () =>
         body: JSON.stringify({ needId: "garden.need.produce-001" })
       });
       assert.equal(denied.status, 403);
-      const wrongHost = await fetch(url + "/api/state", { headers: { Host: "malicious.example" } });
-      assert.equal(wrongHost.status, 403);
+      const wrongHostStatus = await new Promise((resolve, reject) => {
+        const req = request(url + "/api/state", { headers: { host: "malicious.example" } }, (response) => {
+          response.resume();
+          response.on("end", () => resolve(response.statusCode));
+        });
+        req.on("error", reject);
+        req.end();
+      });
+      assert.equal(wrongHostStatus, 403);
       const wrongOrigin = await fetch(url + "/api/propose", {
         method: "POST",
         headers: {
