@@ -73,6 +73,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (pathname === "/api/dispatch") return reply(res, 200, await app.dispatch(body.proposalId));
       if (pathname === "/api/attend") return reply(res, 200, app.attend(body.text));
       if (pathname === "/api/inspect-door") return reply(res, 200, await app.inspectDoor(body.doorId));
+      if (pathname === "/api/house-party") return reply(res, 200, await app.hostFixtureParty());
       return reply(res, 404, { error: "Not found" });
     } catch (error) {
       const status = Number.isInteger(error.status) && error.status >= 400 && error.status < 500
