@@ -75,6 +75,7 @@ test("revocation and grant expiry prevent simulation", () =>
     assert.equal(workbench.state().outbox.length, 0);
     await workbench.grant({ proposalId: proposal.id, steward: proposal.stewards[0], decision: "approve" });
     setClock(expired);
+    assert.equal(workbench.state().proposals[0].approvedBy.length, 0);
     assert.equal((await workbench.dispatch(proposal.id)).receipt.kind, "HOLD");
     assert.equal(workbench.state().outbox.length, 0);
   }));
