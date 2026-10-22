@@ -47,7 +47,7 @@ class HouseParty005ContractTests(unittest.TestCase):
             self.assertEqual(module.check_new_output(out, [source]), out)
             with self.assertRaisesRegex(ValueError, "OVERLAP"):
                 module.check_new_output(source / "inside", [source])
-            with self.assertRaisesRegex(ValueError, "OVERLAP"):
+            with self.assertRaisesRegex(ValueError, "EXISTS"):
                 module.check_new_output(root, [source])
             out.mkdir()
             with self.assertRaisesRegex(ValueError, "EXISTS"):
