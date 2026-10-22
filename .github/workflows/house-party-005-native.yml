@@ -1,0 +1,151 @@
+name: House Party 005 — opt-in genuine local OpenManus guests
+on:
+  workflow_dispatch:
+    inputs:
+      approval:
+        description: "Type I_APPROVE_LOCAL_MODEL to run the 3B model twice in a disposable runner"
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: jarvis-house-005-native-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  live-guests:
+    if: ${{ inputs.approval == 'I_APPROVE_LOCAL_MODEL' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Get original LOADOUT donor (exact reviewed commit)
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/LOADOUT
+          ref: dd5456d45946271e2d20d1dc6145b71576d2380b
+          path: loadout-source
+          persist-credentials: false
+      - name: Get original Workbench ELF (exact reviewed STACK2 029 commit)
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/static-workbench
+          ref: 460b3788d01ec068001b5708654c045d2566532a
+          path: workbench-source
+          persist-credentials: false
+      - name: Get original upstream OpenManus (exact reviewed commit)
+        uses: actions/checkout@v4
+        with:
+          repository: FoundationAgents/OpenManus
+          ref: 3309bf4e416fb1c74b008f3e86494439a31bad53
+          path: openmanus-source
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install disposable pinned worker environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/openmanus-venv"
+          "$RUNNER_TEMP/openmanus-venv/bin/python" -m pip install --disable-pip-version-check --no-cache-dir -r "$GITHUB_WORKSPACE/openmanus-source/requirements.txt"
+          cat > "$GITHUB_WORKSPACE/openmanus-source/config/config.toml" <<'TOML'
+          [llm]
+          api_type = "ollama"
+          model = "qwen2.5:3b"
+          base_url = "http://127.0.0.1:11434/v1"
+          api_key = "ollama"
+          max_tokens = 640
+          temperature = 0.0
+
+          [daytona]
+          daytona_api_key = "disabled-local-placeholder"
+          TOML
+          chmod 0600 "$GITHUB_WORKSPACE/openmanus-source/config/config.toml"
+          env -i PYTHONPATH="$GITHUB_WORKSPACE/openmanus-source" "$RUNNER_TEMP/openmanus-venv/bin/python" - <<'PY'
+          from app.agent.toolcall import ToolCallAgent
+          from app.tool.base import BaseTool
+          from app.tool.terminate import Terminate
+          from app.tool.tool_collection import ToolCollection
+          print("PINNED_OPENMANUS_IMPORT_PASS")
+          PY
+      - name: Start pinned Ollama on loopback
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull ollama/ollama@sha256:e2f0af4a865c61b580cc17a7e2bda3c82083046b74c5a5402ce32a0d84454f9b
+          docker run -d --name jarvis005-ollama --network host \
+            --security-opt=no-new-privileges --cap-drop=ALL \
+            --memory=5g --cpus=2 --env OLLAMA_HOST=127.0.0.1:11434 \
+            ollama/ollama@sha256:e2f0af4a865c61b580cc17a7e2bda3c82083046b74c5a5402ce32a0d84454f9b
+          ready=0
+          for _ in $(seq 1 50); do
+            if curl --fail --silent --max-time 3 http://127.0.0.1:11434/api/tags >/dev/null; then ready=1;break;fi
+            sleep 2
+          done
+          test "$ready" = 1 || { echo "LOCAL_OLLAMA_HOLD"; exit 1; }
+          docker exec jarvis005-ollama ollama pull qwen2.5:3b
+          echo "LOCAL_MODEL_READY"
+      - name: Run two real LOADOUT-gated OpenManus roles + two original ELF copy hatches
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/run-live-guests-005.py \
+            --loadout-root "$GITHUB_WORKSPACE/loadout-source" \
+            --workbench-root "$GITHUB_WORKSPACE/workbench-source" \
+            --openmanus-root "$GITHUB_WORKSPACE/openmanus-source" \
+            --provider-python "$RUNNER_TEMP/openmanus-venv/bin/python" \
+            --output-root "$RUNNER_TEMP/jarvis-party-005" \
+            --approve-local-model yes \
+            --approve-elf-copies yes
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          file = Path(os.environ["RUNNER_TEMP"]) / "jarvis-party-005/jarvis-native-005.json"
+          report = json.loads(file.read_text())
+          assert report["schema"] == "jarvis.house-party-live-testimony/v0"
+          assert len(report["guests"]) == len(report["elf_copies"]) == 2
+          assert report["card_sha256"] == report["elf_copies"][0]["artifact_sha256"]
+          assert report["review_sha256"] == report["elf_copies"][1]["artifact_sha256"]
+          assert all(g["loadout_compiled"] for g in report["guests"])
+          assert all(e["original_elf_verified"] for e in report["elf_copies"])
+          assert report["disposition"] == "HOLD_HUMAN_REVIEW"
+          assert not any(report["authority"].values())
+          print("JARVIS_005_NATIVE_TWO_MODEL_GUESTS_AND_TWO_ELF_COPY_OCCURRENCES_VERIFIED")
+          PY
+      - name: Publish only sanitized, digest-only summary
+        if: success()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path(os.environ["RUNNER_TEMP"]) / "jarvis-party-005/jarvis-native-005.json"
+          report = json.loads(path.read_text())
+          summary = {
+            "schema": "jarvis.house-party-005-ci-summary/v0",
+            "card_sha256": report["card_sha256"],
+            "review_sha256": report["review_sha256"],
+            "party_id": report["party_id"],
+            "guest_roles": [g["role"] for g in report["guests"]],
+            "elf_occurrence_ids": [e["occurrence_id"] for e in report["elf_copies"]],
+            "source_pins": report["native_pins"],
+            "disposition": "HOLD_HUMAN_REVIEW",
+            "model_executed_inside_elf": False,
+            "os_sandbox_verified": False,
+            "no_admission_or_publication": True
+          }
+          (Path(os.environ["RUNNER_TEMP"]) / "jarvis005-summary.json").write_text(
+            json.dumps(summary, indent=2, sort_keys=True) + "\n"
+          )
+          PY
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: jarvis-005-digest-only-summary
+          retention-days: 7
+          path: ${{ runner.temp }}/jarvis005-summary.json
+      - name: Teardown local model
+        if: always()
+        run: docker rm -f jarvis005-ollama >/dev/null 2>&1 || true

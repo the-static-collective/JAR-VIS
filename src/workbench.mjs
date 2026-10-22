@@ -6,6 +6,7 @@ import { LocalJournal } from "./journal.mjs";
 import { doors } from "./doors.mjs";
 import { inspectPublicDoor, publicDoorIds } from "./public-doors.mjs";
 import { composeFixtureGardenParty } from "./house-party.mjs";
+import { inspectNativeTestimony } from "./native-testimony.mjs";
 
 const copy = (v) => structuredClone(v);
 const notFound = (message) => Object.assign(new Error(message), { status: 404 });
@@ -43,6 +44,7 @@ export class Workbench {
     const outcomes = new Map();
     const sourceObservations = new Map();
     const parties = new Map();
+    const nativeObservations = new Map();
     const events = this.#journal.list();
     for (const event of events) {
       const { kind, payload } = event;
@@ -59,12 +61,14 @@ export class Workbench {
         sourceObservations.set(payload.doorId, payload);
       } else if (kind === "PARTY_COMPLETED") {
         parties.set(payload.id, payload);
+      } else if (kind === "NATIVE_REPORTED") {
+        nativeObservations.set(payload.importedId, payload);
       }
     }
-    return { proposals, grants, outcomes, sourceObservations, parties, events };
+    return { proposals, grants, outcomes, sourceObservations, parties, nativeObservations, events };
   }
   state() {
-    const { proposals, grants, outcomes, sourceObservations, parties, events } = this.#replay();
+    const { proposals, grants, outcomes, sourceObservations, parties, nativeObservations, events } = this.#replay();
     const list = [...proposals.values()].reverse().map((proposal) => ({
       ...copy(proposal),
       approvedBy: [...(grants.get(proposal.id)?.values() ?? [])]
@@ -79,6 +83,7 @@ export class Workbench {
       doors: copy(doors),
       sourceObservations: [...sourceObservations.values()].map(copy),
       parties: [...parties.values()].reverse().map(copy),
+      nativeObservations: [...nativeObservations.values()].reverse().map(copy),
       proposals: list,
       outbox: [...outcomes.values()].filter((v) => v.message).map((v) => copy(v.message)),
       events: events.slice(-80).reverse().map(({ id, seq, kind, at, payload }) => ({
@@ -90,9 +95,21 @@ export class Workbench {
         offers: this.#jar.list("offer").length,
         proposals: proposals.size,
         mockRelays: [...outcomes.values()].filter((v) => v.receipt?.kind === "MOCK_RELAYED").length,
-        parties: parties.size
+        parties: parties.size,
+        nativeReports: nativeObservations.size
       }
     };
+  }
+  async importNativeReport(report) {
+    return this.#exclusive(async () => {
+      const observation = inspectNativeTestimony(report, this.#clock());
+      const { nativeObservations } = this.#replay();
+      if (nativeObservations.has(observation.importedId)) {
+        return { observation: copy(nativeObservations.get(observation.importedId)), reused: true };
+      }
+      await this.#journal.append("NATIVE_REPORTED", observation, this.#clock());
+      return { observation: copy(observation), reused: false };
+    });
   }
   async hostFixtureParty() {
     return this.#exclusive(async () => {
@@ -209,7 +226,7 @@ export class Workbench {
         (seen.length ? "Previously observed: " + seen.join(", ") + ". " : "No public source inspected yet. ") +
         "These observations are published descriptions, not live machines, plans, identities, or permissions. The other doors remain unconnected.";
     } else if (/party|elf|manus|loadout|card|jarhead/.test(q)) {
-      answer = "HOUSE PARTY 004 can prepare a synthetic Table & Road card, run a deterministic fixture review, and return HOLD. It does not launch real OpenManus, LOADOUT, or ELF processes. " + state.counters.parties + " fixture party record(s) exist. Live integration needs separately verified native evidence and explicit authority.";
+      answer = "HOUSE PARTY 005 provides an optional local command-line runner for two separate pinned, LOADOUT-gated OpenManus model workers and two original ELF data-copy hatches. Nothing launches automatically from the browser. " + state.counters.parties + " fixture party record(s) and " + state.counters.nativeReports + " imported native report(s) exist. Imported JSON is unverified operator testimony and cannot authorize publication.";
     } else if (/need|offer|garden|match|attention|next|status|what/.test(q) || !q) {
       const matched = state.particulars.needs.length &&
         state.particulars.offers.length;

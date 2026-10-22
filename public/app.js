@@ -179,6 +179,33 @@ function renderParty() {
   replace("#partyResult", header, actors, code, checks, stamp,
     el("p", "tiny", latest.returnText));
 }
+function renderNative() {
+  const report = state.nativeObservations?.[0];
+  if (!report) {
+    replace("#nativeResult", el("p", "description",
+      "No native report imported. The local browser has not started an OpenManus worker."));
+    return;
+  }
+  const area = el("article", "observation native-observation");
+  area.append(el("h4", "", "HOLD · unverified native operator testimony"),
+    el("p", "description", report.disclaimer),
+    el("p", "source-digest", "Imported ID: " + report.importedId),
+    el("p", "source-digest", "Card SHA-256: " + report.cardSha256),
+    el("p", "source-digest", "Review SHA-256: " + report.reviewSha256));
+  const guests = el("div", "party-guests");
+  for (const g of report.claimedGuests) {
+    const item = el("div", "party-guest");
+    item.append(el("strong", "", g.role), el("span", "", g.guestId),
+      el("small", "", "Claimed OpenManus output · independent source verification required"));
+    guests.append(item);
+  }
+  area.append(guests, el("h4", "", "Reported model-authored card"),
+    el("pre", "party-card", report.card),
+    el("h4", "", "Reported independent review"),
+    el("pre", "party-card", report.review),
+    el("p", "tiny", "The operator-supplied JSON is not a cryptographic attestation. No automatic printing, distribution, or publication."));
+  replace("#nativeResult", area);
+}
 function renderEvents() {
   if (!state.events.length) { replace("#eventList", el("p", "description", "No events recorded; nothing crossed.")); return; }
   replace("#eventList", ...state.events.map((event) => {
@@ -201,6 +228,7 @@ function render() {
   renderProposal();
   renderDoors();
   renderParty();
+  renderNative();
   renderEvents();
 }
 async function mockGrant(steward, decision) {
@@ -247,6 +275,18 @@ $("#dispatchButton").addEventListener("click", () => command(async () => {
   toast(result.receipt.kind === "HOLD"
     ? "HOLD — no mock relay recorded."
     : "Only the local mock Kinship outbox was updated.");
+}));
+$("#nativeImportButton").addEventListener("click", () => command(async () => {
+  const file = $("#nativeFile").files?.[0];
+  if (!file) throw new Error("Choose a native report first.");
+  if (file.size > 16 * 1024) throw new Error("Native report is too large (16 KiB maximum).");
+  const text = await file.text();
+  let report;
+  try { report = JSON.parse(text); }
+  catch { throw new Error("File is not valid JSON."); }
+  const result = await call("/api/import-native", report);
+  toast(result.reused ? "Native testimony already recorded." :
+    "Native testimony journaled as UNVERIFIED; nothing admitted or published.");
 }));
 $("#partyButton").addEventListener("click", () => command(async () => {
   const result = await call("/api/house-party", {});

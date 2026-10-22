@@ -20,5 +20,16 @@ jobs:
         with:
           node-version: "22"
       - run: npm test
+      - name: Test native guest boundaries (offline only)
+        run: python3 -m unittest discover -s test -p "test_live_guests_005.py" -v
+      - name: Exact original LOADOUT compiler/membrane donor
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/LOADOUT
+          ref: dd5456d45946271e2d20d1dc6145b71576d2380b
+          path: loadout-source
+          persist-credentials: false
+      - name: Verify actual native LOADOUT interfaces offline (no model)
+        run: PYTHONPATH="$GITHUB_WORKSPACE/loadout-source/src" python3 -m unittest discover -s test -p "test_native_loadout_005.py" -v
       - name: Compile native evidence cold-verifier (does not run a model)
-        run: python3 -m py_compile tools/verify-native-029.py tools/run-native-004.py
+        run: python3 -m py_compile tools/verify-native-029.py tools/run-native-004.py tools/run-live-guests-005.py
