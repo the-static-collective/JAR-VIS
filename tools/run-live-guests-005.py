@@ -184,9 +184,12 @@ def fresh_guest(*, loader, workspace: Path, provider: Path, interpreter: Path,
     result = invoke_effect(
         compiled, intent, {PINNED_BODY_ID: adapter}, current_state=precondition
     )
-    require(result.provider_disposition == "COMPLETED" and
-            result.semantic_authority is False and result.reason is None,
-            "LOADOUT_PROVIDER_EFFECT_HOLD")
+    outcome = str(result.provider_disposition)
+    reason = result.reason.value if result.reason is not None else "NO_REASON"
+    term = adapter.provider_receipts[-1].termination if adapter.provider_receipts else "NO_RECEIPT"
+    require(outcome == "COMPLETED" and result.semantic_authority is False and
+            result.reason is None,
+            "LOADOUT_EFFECT_" + outcome + "_" + reason + "_" + term)
     require(bool(adapter.provider_receipts) and
             adapter.provider_receipts[-1].disposition == "COMPLETED" and
             adapter.provider_receipts[-1].steps_executed > 0,
@@ -238,7 +241,9 @@ def run_party(*, loadout_root: Path, workbench_root: Path,
     loadout = exact_root(loadout_root, LOADOUT_SHA)
     workbench = exact_root(workbench_root, WORKBENCH_SHA)
     provider = exact_root(provider_root, OPENMANUS_SHA)
-    interpreter = provider_python.resolve(strict=True)
+    # Keep the virtualenv launcher path intact. Resolving bin/python symlinks
+    # to the host interpreter drops pyvenv.cfg and the pinned OpenManus deps.
+    interpreter = provider_python.absolute()
     require(interpreter.is_file(), "MODEL_RUNTIME_INTERPRETER_MISSING_HOLD")
     require((provider / "config/config.toml").is_file(), "OPENMANUS_MODEL_CONFIG_MISSING_HOLD")
     require((loadout / "contrib/openmanus/worker.py").is_file(), "ORIGINAL_WORKER_MISSING_HOLD")
@@ -319,8 +324,12 @@ def main() -> int:
         )
     except (ValueError, OSError, subprocess.CalledProcessError,
             subprocess.TimeoutExpired, ImportError, UnicodeError, KeyError) as error:
-        print("JARVIS_005_HOLD: native provider or independent review refused",
-              file=sys.stderr)
+        # Report only bounded, ASCII gate codes; never emit provider stderr,
+        # prompts, raw model output, environment variables, or workspace data.
+        code = str(error)
+        if not re.fullmatch(r"[A-Z0-9_.,:-]{1,140}", code):
+            code = "UNCLASSIFIED_" + type(error).__name__.upper()
+        print("JARVIS_005_HOLD_CODE: " + code, file=sys.stderr)
         return 2
     # Avoid printing source text and model output into routine logs.
     print(json.dumps({
