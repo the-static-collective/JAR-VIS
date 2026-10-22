@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#15251f">
+<title>JAR;VIS — The Attendant Workbench</title><link rel="stylesheet" href="/site.css"><script src="/app.js" defer></script></head>
+<body><div class="shell">
+<aside class="sidebar" aria-label="Workbench navigation">
+  <div class="brand"><div class="brand-mark" aria-hidden="true">;</div><div><div class="brand-name">JAR<span>;</span>VIS</div><div class="brand-sub">THE ATTENDANT</div></div></div>
+  <div class="side-label">LOCAL WORKBENCH / 002</div>
+  <nav class="nav">
+    <a href="#field"><span>◈</span> Field overview <small>01</small></a><a href="#particulars"><span>◫</span> The particulars <small>02</small></a>
+    <a href="#crossing"><span>⋈</span> The crossing <small>03</small></a><a href="#doors"><span>⌘</span> Project doors <small>04</small></a>
+    <a href="#history"><span>≡</span> Receipts & returns <small>05</small></a>
+  </nav>
+  <div class="sidebar-note"><b class="pulse"></b>LOCAL ONLY<br><small>No live project integration</small></div>
+  <div class="sidebar-bottom">JUBILEE / VOLUNTARY<br>INTEGRATION / STEWARDSHIP<br><strong>THE STATIC COLLECTIVE</strong></div>
+</aside>
+<div class="main-area">
+  <header class="topbar"><div class="breadcrumbs">THE STATIC COLLECTIVE <span>/</span> SYSTEMS <span>/</span> JAR;VIS</div><div class="mode-chip"><b class="pulse"></b> GENESIS 002 <span>/</span> SYNTHETIC FIELD</div></header>
+  <main>
+    <section class="hero" id="field">
+      <div class="eyebrow">THE HOUSE TAKES ATTENDANCE — ATTENTION BEFORE AUTOMATION</div>
+      <h1>One attendant.<br><em>Many sovereign rooms.</em></h1>
+      <p>The vessel remembers the particulars. The attendant notices a possible crossing. The people concerned decide whether it happens.</p>
+      <div class="hero-actions"><button id="scanButton" class="button button-primary" type="button">✦ Form proposal ↗</button><a class="button button-ghost" href="#doors">Explore project doors ↓</a></div>
+      <div class="hero-ring" aria-hidden="true"><div class="ring ring-a"></div><div class="ring ring-b"></div><div class="ring ring-c"></div><div class="core">;</div></div>
+      <div class="flow"><span>OBSERVE</span><i></i><span>UNDERSTAND</span><i></i><span>PROPOSE</span><i></i><strong>AUTHORIZE</strong><i></i><span>ACT</span><i></i><span>RECEIPT</span><i></i><span>RETURN</span></div>
+    </section>
+    <section class="metrics" aria-label="Field counters">
+      <div class="metric"><span>NEEDS OBSERVED</span><strong id="needCount">–</strong><small>Fictional source records</small></div>
+      <div class="metric"><span>OFFERS OBSERVED</span><strong id="offerCount">–</strong><small>Fictional source records</small></div>
+      <div class="metric"><span>PROPOSALS</span><strong id="proposalCount">–</strong><small>Not authorizations</small></div>
+      <div class="metric"><span>MOCK RELAYS</span><strong id="relayCount">–</strong><small>Never externally sent</small></div>
+    </section>
+    <div class="dual-grid">
+      <section class="panel" id="particulars"><div class="panel-heading"><div><div class="overline">01 / JAR</div><h2>The particulars</h2></div><span class="badge">DEMO DATA</span></div><p class="description">A local vessel with synthetic records, carrying needs and offers without claiming to own either.</p><div id="particularList" aria-live="polite">Loading field...</div><div class="panel-foot">PARTICULAR ≠ PERMISSION <span>✳</span></div></section>
+      <section class="panel attendant-panel" id="attendant"><div class="panel-heading"><div><div class="overline">02 / VIS</div><h2>Ask the attendant</h2></div><span class="badge badge-warm">RULES ONLY</span></div><p class="description">Ask what needs attention, which doors exist, or why a crossing is held. This prototype uses local deterministic rules, not an LLM.</p>
+      <div class="attendant-log" id="attendantLog" role="log" aria-live="polite"><div class="chat-entry"><strong>JAR;VIS · LOCAL</strong><p>The Garden has a potential crossing. Nothing is sent without separate, explicit simulated approvals. What would you like to inspect?</p></div></div>
+      <div class="quick-asks"><button type="button" data-ask="What needs attention?">What needs attention?</button><button type="button" data-ask="What does Kinship do?">Kinship?</button><button type="button" data-ask="How does authorization work?">The gate?</button></div>
+      <form id="askForm" class="ask-form"><label for="askInput" class="sr-only">Ask the attendant</label><input id="askInput" maxlength="500" placeholder="Ask about the field or the doors..." autocomplete="off" required><button type="submit" aria-label="Ask">↗</button></form><div class="panel-foot">ATTENTION ≠ AUTHORITY <span>✳</span></div>
+      </section>
+    </div>
+    <section class="panel crossing-panel" id="crossing"><div class="panel-heading"><div><div class="overline">03 / THE SEMICOLON</div><h2>The crossing belongs to those concerned.</h2></div><span class="badge">MOCK AUTHORITY</span></div><p class="description">Inspect a proposal, simulate each participant's approval, and deliberately attempt a bounded mock relay. Missing grants return HOLD.</p>
+      <div class="crossing-grid"><div id="proposalInspector" class="proposal-inspector" aria-live="polite"><div class="empty-state"><span>;</span><strong>No proposal formed yet.</strong><p>Use “Form proposal” to ask VIS to find a match. Discovery alone does not cross the gate.</p></div></div>
+      <div class="gate-column"><div class="gate-symbol">JAR <b>;</b> VIS</div><h3>Two stewards. One scope.</h3><div id="grantControls" aria-live="polite"><p>Form a proposal to see the two mock-grant controls.</p></div>
+      <button id="dispatchButton" class="button button-dark" type="button" disabled>Attempt mock crossing ↗</button>
+      <p class="tiny">Simulation controls can be operated by one person. They are <strong>not</strong> proof of real steward consent.</p></div></div>
+      <div class="return-strip" role="status" aria-live="polite"><strong>RETURN //</strong> <span id="returnMessage">No action attempted. The gate is closed by default.</span></div>
+    </section>
+    <section class="panel" id="doors"><div class="panel-heading"><div><div class="overline">04 / THE MANY ROOMS</div><h2>Project doors</h2></div><span class="badge">DIRECTORY ONLY</span></div><p class="description">A map of potential capabilities, not a claim that their repositories, identities, or runtime states are connected.</p><div id="doorGrid" class="door-grid"></div></section>
+    <section class="panel" id="history"><div class="panel-heading"><div><div class="overline">05 / ACCOUNTABLE RETURN</div><h2>Receipts & returns</h2></div><span class="badge badge-warm">LOCAL JOURNAL</span></div><p class="description">Each proposal, simulated grant, HOLD and mock crossing is appended to a hash-chained local journal. The chain is integrity-checkable, not signed.</p><div id="eventList" class="event-list" aria-live="polite">No local events yet.</div></section>
+    <footer>JAR HOLDS WHAT MATTERS. VIS ATTENDS TO WHAT IS POSSIBLE. <strong>THE CROSSING BELONGS TO THOSE CONCERNED.</strong></footer>
+  </main>
+</div></div><div id="toast" class="toast" role="status" aria-live="polite" hidden></div></body></html>
