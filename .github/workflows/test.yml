@@ -1,16 +1,24 @@
-name: Genesis 001 tests
+name: JAR;VIS Genesis tests
 
 on:
   push:
-    branches: [main, genesis-001-voluntary-crossing]
+    branches: [main]
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   node-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
       - run: npm test
+      - name: Compile native evidence cold-verifier (does not run a model)
+        run: python3 -m py_compile tools/verify-native-029.py
