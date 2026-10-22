@@ -62,6 +62,23 @@ python3 tools/verify-native-029.py \
 
 The helper reads original native on-disk evidence. It confirms Workbench/LOADOUT checkout HEADs, invokes the real Workbench `live_source` and `recheck_lineage` functions, and produces only a sanitized digest summary on stdout. **It never starts a model, hatches an ELF, or imports unverified report text into JAR;VIS as trusted state.** An absent local checkout or evidence means HOLD. SHA-256 and local pin checks are not OS sandboxing or human identity proof.
 
+### Operator-triggered real native rehearsal (separate from browser fixture)
+
+When the pinned original donor checkouts, a local Ollama server with `qwen2.5:3b`, and the original OpenManus Python environment are available, the new `tools/run-native-004.py` wraps the **original** Workbench 027 live provider runner, followed by the **original** Workbench 029 ELF lineage runner, then invokes the cold verifier above in a fresh process. It enforces exact inspected Workbench/LOADOUT/OpenManus checkout HEADs, a new non-overlapping private output directory, fixed task-specimen flags, and separate explicit model/ELF consent flags. It cannot be activated from the browser, and carries no cloud-provider credentials from the inherited environment.
+
+```bash
+python3 tools/run-native-004.py \\
+  --workbench-root /path/to/original-workbench-at-exact-pin \\
+  --loadout-root /path/to/LOADOUT-at-exact-pin \\
+  --openmanus-root /path/to/OpenManus-at-exact-pin \\
+  --provider-python /path/to/venv/bin/python \\
+  --output-root /tmp/new-jarvis-native-rehearsal \\
+  --approve-live-model yes \\
+  --approve-elf-copies yes
+```
+
+A real local model invocation is possible with this opt-in runner, but **JAR;VIS does not automatically run it and we have not executed it in this repository's CI**. It deliberately uses the old `OPENMANUS-LIVE-001` frozen specimen rather than falsely claiming that OpenManus generated the Table & Road card. The CLI's emitted sanitized result remains an *observation*, not a trusted live JAR;VIS authorization or an admission into another source project. The donor Workbench/LOADOUT experimental branches still own their original code and admission law.
+
 Original experiment: [static-workbench PR #124](https://github.com/the-static-collective/static-workbench/pull/124). Original LOADOUT donor: [LOADOUT PR #18](https://github.com/the-static-collective/LOADOUT/pull/18). Both were experimental/open when this slice was authored; merging JAR;VIS does not merge those donor branches.
 
 ### What still separates us from the *full* party
