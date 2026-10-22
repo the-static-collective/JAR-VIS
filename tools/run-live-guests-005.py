@@ -241,7 +241,9 @@ def run_party(*, loadout_root: Path, workbench_root: Path,
     loadout = exact_root(loadout_root, LOADOUT_SHA)
     workbench = exact_root(workbench_root, WORKBENCH_SHA)
     provider = exact_root(provider_root, OPENMANUS_SHA)
-    interpreter = provider_python.resolve(strict=True)
+    # Keep the virtualenv launcher path intact. Resolving bin/python symlinks
+    # to the host interpreter drops pyvenv.cfg and the pinned OpenManus deps.
+    interpreter = provider_python.absolute()
     require(interpreter.is_file(), "MODEL_RUNTIME_INTERPRETER_MISSING_HOLD")
     require((provider / "config/config.toml").is_file(), "OPENMANUS_MODEL_CONFIG_MISSING_HOLD")
     require((loadout / "contrib/openmanus/worker.py").is_file(), "ORIGINAL_WORKER_MISSING_HOLD")
