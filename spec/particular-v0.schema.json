@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/the-static-collective/JAR-VIS/spec/particular-v0.schema.json",
+  "title": "JAR particular v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "kind", "steward", "category", "region", "quantity", "unit", "status", "label"],
+  "properties": {
+    "schema": { "const": "jarvis.particular/v0" },
+    "id": { "type": "string", "minLength": 1 },
+    "kind": { "enum": ["need", "offer"] },
+    "steward": { "type": "string", "minLength": 1 },
+    "category": { "type": "string", "minLength": 1 },
+    "region": { "type": "string", "minLength": 1 },
+    "quantity": { "type": "integer", "minimum": 1 },
+    "unit": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["open", "held", "closed"] },
+    "label": { "type": "string", "minLength": 1 }
+  }
+}

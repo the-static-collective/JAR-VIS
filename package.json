@@ -1,0 +1,13 @@
+{
+  "name": "@the-static-collective/jar-vis",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "JAR;VIS Genesis 001: a voluntary local crossing with mock Kinship relay",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "demo": "node src/demo.mjs",
+    "demo:hold": "node src/demo.mjs --hold"
+  }
+}
