@@ -184,9 +184,12 @@ def fresh_guest(*, loader, workspace: Path, provider: Path, interpreter: Path,
     result = invoke_effect(
         compiled, intent, {PINNED_BODY_ID: adapter}, current_state=precondition
     )
-    require(result.provider_disposition == "COMPLETED" and
-            result.semantic_authority is False and result.reason is None,
-            "LOADOUT_PROVIDER_EFFECT_HOLD")
+    outcome = str(result.provider_disposition)
+    reason = result.reason.value if result.reason is not None else "NO_REASON"
+    term = adapter.provider_receipts[-1].termination if adapter.provider_receipts else "NO_RECEIPT"
+    require(outcome == "COMPLETED" and result.semantic_authority is False and
+            result.reason is None,
+            "LOADOUT_EFFECT_" + outcome + "_" + reason + "_" + term)
     require(bool(adapter.provider_receipts) and
             adapter.provider_receipts[-1].disposition == "COMPLETED" and
             adapter.provider_receipts[-1].steps_executed > 0,
