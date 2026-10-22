@@ -112,8 +112,47 @@ function renderDoors() {
     const head = el("div", "door-head");
     head.append(el("span", "", door.family), el("small", "", door.status.toUpperCase()));
     card.append(head, el("h3", "", door.title), el("p", "", door.role), el("div", "door-cap", door.capability));
+    if (door.sourceReadable) {
+      const action = el("button", "mini-button source-button", "Inspect published source ↗");
+      action.type = "button";
+      action.addEventListener("click", () => command(async () => {
+        const result = await call("/api/inspect-door", { doorId: door.id });
+        toast("READ only: " + result.observation.repository + " — no authority or execution admitted.");
+      }));
+      card.append(action);
+    }
+    const observed = state.sourceObservations.find((item) => item.doorId === door.id);
+    if (observed) {
+      card.append(el("p", "source-meta", "LAST READ · " + new Date(observed.observedAt).toLocaleString()));
+    }
     return card;
   }));
+  const region = $("#doorObservation");
+  const observations = state.sourceObservations;
+  if (!observations.length) {
+    region.replaceChildren(el("p", "description", "No external source has been read. Inspect GHoT or planZ explicitly to request a public GitHub document."));
+    return;
+  }
+  const heading = el("h3", "", "Source observations · read only");
+  const notice = el("p", "description", "Previously retrieved public text only. No repository writes, live executor discovery, signed trust, or admission. Re-inspect to check for changes.");
+  const readings = observations.map((reading) => {
+    const article = el("article", "observation");
+    article.append(el("h4", "", reading.repository + " · " + new Date(reading.observedAt).toLocaleString()));
+    const source = el("a", "source-link", reading.source);
+    source.href = reading.source;
+    source.target = "_blank";
+    source.rel = "noopener noreferrer";
+    article.append(source, el("p", "source-digest", "SHA-256 of published bytes: " + reading.contentSha256));
+    const list = el("div", "observed-caps");
+    for (const cap of reading.capabilities) {
+      const row = el("div", "observed-cap");
+      row.append(el("strong", "", cap.label), el("span", "", cap.kind + " · runtime not observed · cannot execute"));
+      list.append(row);
+    }
+    article.append(list);
+    return article;
+  });
+  region.replaceChildren(heading, notice, ...readings);
 }
 function renderEvents() {
   if (!state.events.length) { replace("#eventList", el("p", "description", "No events recorded; nothing crossed.")); return; }
