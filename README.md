@@ -38,7 +38,7 @@ The semicolon is the crossing: **ATTENTION ≠ AUTHORITY**.
 - Append-only JSONL history with hash-chain validation on restart. Not signed, encrypted, or tamper-proof.
 - GHoT and planZ public project documentation are now readable through two pinned doors (with source URL, SHA-256 and observation time). A document does **not** prove a live worker, plan API, trusted identity or authority. Other doors remain planned or mock.
 - Rules-only attendant. House Party 004 prepares a fictional Table & Road card with two separate **fixture labels**, deterministic validation, and HOLD for human review; no actual model or native ELF hatches.
-- An optional CLI can cold-verify existing STACK² 029 native evidence using pinned original Workbench/LOADOUT code, but it does not launch any agent or import authority.
+- Two operator-only native tools now exist: a cold verifier for existing STACK² 029 material, and an explicit exact-pin CLI wrapper able to run the **original** fixed live OpenManus specimen and two original ELF copy hatches when locally provisioned. Neither is launched from the browser or adds authority.
 
 ## Documents
 
@@ -56,7 +56,7 @@ The semicolon is the crossing: **ATTENTION ≠ AUTHORITY**.
 - [Core crossing engine](src/engine.mjs)
 - [Local journal](src/journal.mjs)
 - [Workbench state machine](src/workbench.mjs)
-- [Fixture House Party](src/house-party.mjs) and [optional native 029 cold verifier](tools/verify-native-029.py)
+- [Fixture House Party](src/house-party.mjs), [optional native 029 cold verifier](tools/verify-native-029.py), and [operator-only real-model source-pin runner](tools/run-native-004.py)
 - [Allowlisted public-source inspection](src/public-doors.mjs)
 - [HTTP server](src/server.mjs)
 - [Interactive browser](public/index.html)
@@ -64,7 +64,7 @@ The semicolon is the crossing: **ATTENTION ≠ AUTHORITY**.
 
 ## Native source and limitation
 
-The source-pinned real OpenManus → ELF lineage proof already exists in experimental Workbench PR #124 and LOADOUT PR #18, but the JAR;VIS party UI **does not claim to run those agents**. See [Genesis 004](docs/GENESIS-004.md) for a precise cold verification handoff and the still-missing live task-specific integration.
+The source-pinned real OpenManus → ELF lineage proof already exists in experimental Workbench PR #124 and LOADOUT PR #18. The JAR;VIS party UI **does not run those agents**; an optional command-line native runner can re-exercise the *frozen* original specimen using verified source checkouts and an intentionally provisioned local Ollama model. See [Genesis 004](docs/GENESIS-004.md) for a precise cold verification handoff and the still-missing live task-specific integration.
 
 ## Next crossings
 
