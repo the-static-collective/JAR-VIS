@@ -4,7 +4,7 @@
 
 **Short name:** JAR;VIS  
 **Long semantic signature:** JaAR;rvVIiSs  
-**Status:** Genesis 004 — localhost attendant, public-document doors, and a bounded fixture-only House Party. **Not deployed; no actual OpenManus or ELF occurrence launched from the workbench.**
+**Status:** Genesis 005 — native model guest pipeline available by explicit operator action; no automatic agent launch or publication.
 
 > JAR holds what matters. VIS attends to what is possible. The crossing belongs to those concerned.
 
