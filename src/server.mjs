@@ -28,7 +28,7 @@ async function readJson(req) {
   const parts = [];
   for await (const part of req) {
     total += part.length;
-    if (total > 4096) throw Object.assign(new Error("Body too large"), { status: 413 });
+    if (total > 16 * 1024) throw Object.assign(new Error("Body too large"), { status: 413 });
     parts.push(part);
   }
   let value;
@@ -74,6 +74,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (pathname === "/api/attend") return reply(res, 200, app.attend(body.text));
       if (pathname === "/api/inspect-door") return reply(res, 200, await app.inspectDoor(body.doorId));
       if (pathname === "/api/house-party") return reply(res, 200, await app.hostFixtureParty());
+      if (pathname === "/api/import-native") return reply(res, 200, await app.importNativeReport(body));
       return reply(res, 404, { error: "Not found" });
     } catch (error) {
       const status = Number.isInteger(error.status) && error.status >= 400 && error.status < 500
