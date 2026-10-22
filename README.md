@@ -65,7 +65,7 @@ The semicolon is the crossing: **ATTENTION ≠ AUTHORITY**.
 
 ## Native source and limitation
 
-The source-pinned real OpenManus → ELF lineage proof already exists in experimental Workbench PR #124 and LOADOUT PR #18. The JAR;VIS party UI **does not run those agents**; an optional command-line native runner can re-exercise the *frozen* original specimen using verified source checkouts and an intentionally provisioned local Ollama model. See [Genesis 004](docs/GENESIS-004.md) for a precise cold verification handoff and the still-missing live task-specific integration.
+The source-pinned real OpenManus → ELF lineage proof already exists in experimental Workbench PR #124 and LOADOUT PR #18. The JAR;VIS party UI **does not run those agents**; an optional command-line native runner can re-exercise the *frozen* original specimen using verified source checkouts and an intentionally provisioned local Ollama model. Genesis 005 adds a task-specific operator-only two-worker model integration with real LOADOUT checks and separate original ELF data-copy verification. See [Genesis 005](docs/GENESIS-005.md) for the local model invocation, non-authority report import, and manual-only GitHub Actions workflow. The browser never launches a model or authorizes publication.
 
 ## Next crossings
 
