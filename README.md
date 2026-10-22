@@ -19,7 +19,7 @@ npm test
 npm start
 ~~~
 
-Open **http://127.0.0.1:7789** in a browser on the same machine. The interface includes an interactive field, JAR cards, a deterministic ask-the-attendant panel, proposal/approval controls, **opt-in public-document inspection for GHoT and planZ**, a House Party draft/review panel, and a replayable local history.
+Open **http://127.0.0.1:7789** in a browser on the same machine. The interface includes an interactive field, JAR cards, a deterministic ask-the-attendant panel, proposal/approval controls, **opt-in public-document inspection for GHoT and planZ**, a House Party draft/review panel, manual native testimony return, and a replayable local history.
 
 **All sample data is fictional.** Two simulated approvals require a local operator to type "MOCK YES" separately. They do not authenticate actual stewards or create real consent. The Kinship adapter only records an in-process mock message; no real broadcast or external communications take place.
 
@@ -47,6 +47,7 @@ The semicolon is the crossing: **ATTENTION ≠ AUTHORITY**.
 - [Genesis 002 — Interactive attendant](docs/GENESIS-002.md)
 - [Genesis 003 — First real public-source door](docs/GENESIS-003.md)
 - [Genesis 004 — House Party](docs/GENESIS-004.md)
+- [Genesis 005 — First Live Guests](docs/GENESIS-005.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [reLATTE compatibility boundary](docs/RELATTE-SEAM.md)
 - [Particular schema](spec/particular-v0.schema.json)
@@ -56,7 +57,7 @@ The semicolon is the crossing: **ATTENTION ≠ AUTHORITY**.
 - [Core crossing engine](src/engine.mjs)
 - [Local journal](src/journal.mjs)
 - [Workbench state machine](src/workbench.mjs)
-- [Fixture House Party](src/house-party.mjs), [optional native 029 cold verifier](tools/verify-native-029.py), and [operator-only real-model source-pin runner](tools/run-native-004.py)
+- [Fixture House Party](src/house-party.mjs), [native report importer](src/native-testimony.mjs), [005 two-guest model runner](tools/run-live-guests-005.py), and [004/029 source-checking tools](tools/verify-native-029.py)
 - [Allowlisted public-source inspection](src/public-doors.mjs)
 - [HTTP server](src/server.mjs)
 - [Interactive browser](public/index.html)
