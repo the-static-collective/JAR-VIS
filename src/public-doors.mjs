@@ -21,7 +21,7 @@ const SOURCES = Object.freeze({
 const LIMIT = 128 * 1024;
 const ID = /^[a-z][a-z0-9-]{0,31}$/;
 export const publicDoorIds = Object.freeze(Object.keys(SOURCES));
-export const sourceForDoor = (id) => SOURCES[id] ?? null;
+export const sourceForDoor = (id) => Object.hasOwn(SOURCES, id) ? SOURCES[id] : null;
 
 function parseGhot(text) {
   const section = text.match(/^## V0 executors\s*\n([\s\S]*?)(?=^## |$(?![\s\S]))/m);
