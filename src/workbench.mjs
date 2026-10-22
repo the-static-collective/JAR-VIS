@@ -5,6 +5,7 @@ import {
 import { LocalJournal } from "./journal.mjs";
 import { doors } from "./doors.mjs";
 import { inspectPublicDoor, publicDoorIds } from "./public-doors.mjs";
+import { composeFixtureGardenParty } from "./house-party.mjs";
 
 const copy = (v) => structuredClone(v);
 const notFound = (message) => Object.assign(new Error(message), { status: 404 });
@@ -41,6 +42,7 @@ export class Workbench {
     const grants = new Map();
     const outcomes = new Map();
     const sourceObservations = new Map();
+    const parties = new Map();
     const events = this.#journal.list();
     for (const event of events) {
       const { kind, payload } = event;
@@ -55,12 +57,14 @@ export class Workbench {
         outcomes.set(payload.proposalId, payload);
       } else if (kind === "DOOR_INSPECTED") {
         sourceObservations.set(payload.doorId, payload);
+      } else if (kind === "PARTY_COMPLETED") {
+        parties.set(payload.id, payload);
       }
     }
-    return { proposals, grants, outcomes, sourceObservations, events };
+    return { proposals, grants, outcomes, sourceObservations, parties, events };
   }
   state() {
-    const { proposals, grants, outcomes, sourceObservations, events } = this.#replay();
+    const { proposals, grants, outcomes, sourceObservations, parties, events } = this.#replay();
     const list = [...proposals.values()].reverse().map((proposal) => ({
       ...copy(proposal),
       approvedBy: [...(grants.get(proposal.id)?.values() ?? [])]
@@ -74,6 +78,7 @@ export class Workbench {
       particulars: observe(this.#jar),
       doors: copy(doors),
       sourceObservations: [...sourceObservations.values()].map(copy),
+      parties: [...parties.values()].reverse().map(copy),
       proposals: list,
       outbox: [...outcomes.values()].filter((v) => v.message).map((v) => copy(v.message)),
       events: events.slice(-80).reverse().map(({ id, seq, kind, at, payload }) => ({
@@ -84,9 +89,18 @@ export class Workbench {
         needs: this.#jar.list("need").length,
         offers: this.#jar.list("offer").length,
         proposals: proposals.size,
-        mockRelays: [...outcomes.values()].filter((v) => v.receipt?.kind === "MOCK_RELAYED").length
+        mockRelays: [...outcomes.values()].filter((v) => v.receipt?.kind === "MOCK_RELAYED").length,
+        parties: parties.size
       }
     };
+  }
+  async hostFixtureParty() {
+    return this.#exclusive(async () => {
+      const party = composeFixtureGardenParty({ jar: this.#jar, at: this.#clock() });
+      // Preparation and deterministic review only: no external execution is authorized.
+      await this.#journal.append("PARTY_COMPLETED", party, this.#clock());
+      return { party: copy(party), published: false };
+    });
   }
   async inspectDoor(doorId) {
     return this.#exclusive(async () => {
@@ -194,6 +208,8 @@ export class Workbench {
       answer = "GHoT and planZ have opt-in read-only GitHub source inspection. " +
         (seen.length ? "Previously observed: " + seen.join(", ") + ". " : "No public source inspected yet. ") +
         "These observations are published descriptions, not live machines, plans, identities, or permissions. The other doors remain unconnected.";
+    } else if (/party|elf|manus|loadout|card|jarhead/.test(q)) {
+      answer = "HOUSE PARTY 004 can prepare a synthetic Table & Road card, run a deterministic fixture review, and return HOLD. It does not launch real OpenManus, LOADOUT, or ELF processes. " + state.counters.parties + " fixture party record(s) exist. Live integration needs separately verified native evidence and explicit authority.";
     } else if (/need|offer|garden|match|attention|next|status|what/.test(q) || !q) {
       const matched = state.particulars.needs.length &&
         state.particulars.offers.length;

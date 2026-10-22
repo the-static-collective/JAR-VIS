@@ -154,6 +154,31 @@ function renderDoors() {
   });
   region.replaceChildren(heading, notice, ...readings);
 }
+function renderParty() {
+  const latest = state.parties?.[0];
+  if (!latest) {
+    replace("#partyResult", el("p", "description",
+      "No party has returned yet. Run the fixture to draft a synthetic Table & Road card."));
+    return;
+  }
+  const header = el("div", "party-result-head");
+  header.append(el("strong", "", latest.review.disposition),
+    el("span", "", "Producer: deterministic fixture · no real agent"));
+  const actors = el("div", "party-guests");
+  for (const guest of latest.guests) {
+    const actor = el("div", "party-guest");
+    actor.append(el("strong", "", guest.role),
+      el("span", "", guest.id),
+      el("small", "", "Not OpenManus · Not a native ELF hatch"));
+    actors.append(actor);
+  }
+  const code = el("pre", "party-card", latest.artifact.body);
+  const checks = el("p", "party-checks",
+    Object.entries(latest.review.checks).map(([name, ok]) => name + " " + (ok ? "PASS" : "FAIL")).join(" · "));
+  const stamp = el("p", "source-digest", "SHA-256: " + latest.artifact.sha256);
+  replace("#partyResult", header, actors, code, checks, stamp,
+    el("p", "tiny", latest.returnText));
+}
 function renderEvents() {
   if (!state.events.length) { replace("#eventList", el("p", "description", "No events recorded; nothing crossed.")); return; }
   replace("#eventList", ...state.events.map((event) => {
@@ -175,6 +200,7 @@ function render() {
   renderParticulars();
   renderProposal();
   renderDoors();
+  renderParty();
   renderEvents();
 }
 async function mockGrant(steward, decision) {
@@ -221,6 +247,11 @@ $("#dispatchButton").addEventListener("click", () => command(async () => {
   toast(result.receipt.kind === "HOLD"
     ? "HOLD — no mock relay recorded."
     : "Only the local mock Kinship outbox was updated.");
+}));
+$("#partyButton").addEventListener("click", () => command(async () => {
+  const result = await call("/api/house-party", {});
+  toast(result.party.review.disposition + " — synthetic draft returned. No actual agents or publication.");
+  location.hash = "party";
 }));
 $("#askForm").addEventListener("submit", (event) => {
   event.preventDefault();
