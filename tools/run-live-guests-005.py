@@ -319,8 +319,12 @@ def main() -> int:
         )
     except (ValueError, OSError, subprocess.CalledProcessError,
             subprocess.TimeoutExpired, ImportError, UnicodeError, KeyError) as error:
-        print("JARVIS_005_HOLD: native provider or independent review refused",
-              file=sys.stderr)
+        # Report only bounded, ASCII gate codes; never emit provider stderr,
+        # prompts, raw model output, environment variables, or workspace data.
+        code = str(error)
+        if not re.fullmatch(r"[A-Z0-9_.,:-]{1,140}", code):
+            code = "UNCLASSIFIED_" + type(error).__name__.upper()
+        print("JARVIS_005_HOLD_CODE: " + code, file=sys.stderr)
         return 2
     # Avoid printing source text and model output into routine logs.
     print(json.dumps({
