@@ -107,7 +107,7 @@ test("attendant is deterministic and does not claim live project connections", (
     const workbench = await Workbench.open({ journalPath: path, clock: () => start });
     assert.match(workbench.attend("What is Kinship?").answer, /no real broadcast|No real broadcast/);
     assert.match(workbench.attend("How does authorization work?").answer, /MOCK/);
-    assert.match(workbench.attend("What about planZ?").answer, /none is connected|not connected|Not connected/);
+    assert.match(workbench.attend("What about planZ?").answer, /not live machines|unconnected/);
     assert.throws(() => workbench.attend("x".repeat(501)), /500/);
   }));
 test("server binds loopback, protects writes, and never sends externally", () =>

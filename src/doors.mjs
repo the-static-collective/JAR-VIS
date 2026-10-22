@@ -17,13 +17,13 @@ export const doors = Object.freeze([
   },
   {
     id: "ghot", title: "GHoT", family: "EXECUTION",
-    status: "planned", role: "Capability and body discovery without assigning authority to a processor.",
-    capability: "Not connected", connected: false
+    status: "public source", role: "Read its published executor-pantries documentation. No live BODY is contacted.",
+    capability: "Read-only public documentation; runtime unobserved", connected: false, sourceReadable: true
   },
   {
     id: "planz", title: "planZ", family: "INTENT",
-    status: "planned", role: "Plan census and dispositions; a source index, not an authority engine.",
-    capability: "Not connected", connected: false
+    status: "public source", role: "Read its public mission statement, not internal plans or source-project authority.",
+    capability: "Read-only published purpose; no plan API", connected: false, sourceReadable: true
   },
   {
     id: "abundent", title: "Abundent", family: "RETURN",

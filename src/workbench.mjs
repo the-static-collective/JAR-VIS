@@ -4,6 +4,7 @@ import {
 } from "./engine.mjs";
 import { LocalJournal } from "./journal.mjs";
 import { doors } from "./doors.mjs";
+import { inspectPublicDoor, publicDoorIds } from "./public-doors.mjs";
 
 const copy = (v) => structuredClone(v);
 const notFound = (message) => Object.assign(new Error(message), { status: 404 });
@@ -14,17 +15,20 @@ export class Workbench {
   #jar;
   #journal;
   #clock;
+  #sourceReader;
   #tail = Promise.resolve();
-  constructor({ jar, journal, clock }) {
+  constructor({ jar, journal, clock, sourceReader = inspectPublicDoor }) {
     this.#jar = jar;
     this.#journal = journal;
     this.#clock = clock;
+    this.#sourceReader = sourceReader;
   }
-  static async open({ journalPath, clock = () => new Date().toISOString() }) {
+  static async open({ journalPath, clock = () => new Date().toISOString(), sourceReader = inspectPublicDoor }) {
     return new Workbench({
       jar: gardenJar(),
       journal: await LocalJournal.open(journalPath),
-      clock
+      clock,
+      sourceReader
     });
   }
   #exclusive(callback) {
@@ -36,6 +40,7 @@ export class Workbench {
     const proposals = new Map();
     const grants = new Map();
     const outcomes = new Map();
+    const sourceObservations = new Map();
     const events = this.#journal.list();
     for (const event of events) {
       const { kind, payload } = event;
@@ -48,12 +53,14 @@ export class Workbench {
         grants.get(payload.proposalId)?.delete(payload.steward);
       } else if (kind === "CROSSED") {
         outcomes.set(payload.proposalId, payload);
+      } else if (kind === "DOOR_INSPECTED") {
+        sourceObservations.set(payload.doorId, payload);
       }
     }
-    return { proposals, grants, outcomes, events };
+    return { proposals, grants, outcomes, sourceObservations, events };
   }
   state() {
-    const { proposals, grants, outcomes, events } = this.#replay();
+    const { proposals, grants, outcomes, sourceObservations, events } = this.#replay();
     const list = [...proposals.values()].reverse().map((proposal) => ({
       ...copy(proposal),
       approvedBy: [...(grants.get(proposal.id)?.values() ?? [])]
@@ -66,6 +73,7 @@ export class Workbench {
       mode: "LOCAL / SYNTHETIC / MOCK",
       particulars: observe(this.#jar),
       doors: copy(doors),
+      sourceObservations: [...sourceObservations.values()].map(copy),
       proposals: list,
       outbox: [...outcomes.values()].filter((v) => v.message).map((v) => copy(v.message)),
       events: events.slice(-80).reverse().map(({ id, seq, kind, at, payload }) => ({
@@ -79,6 +87,32 @@ export class Workbench {
         mockRelays: [...outcomes.values()].filter((v) => v.receipt?.kind === "MOCK_RELAYED").length
       }
     };
+  }
+  async inspectDoor(doorId) {
+    return this.#exclusive(async () => {
+      if (typeof doorId !== "string" || !publicDoorIds.includes(doorId)) {
+        throw bad("Door does not expose an allowlisted public source");
+      }
+      let observation;
+      try {
+        observation = await this.#sourceReader(doorId, { now: this.#clock });
+      } catch (error) {
+        // A failed read never gets reclassified as a verified capability.
+        const result = new Error("Public source unavailable or invalid; no discovery admitted");
+        result.status = 502;
+        result.cause = error;
+        throw result;
+      }
+      if (observation?.schema !== "jarvis.public-door-observation/v0" ||
+          observation.doorId !== doorId || observation.access !== "public-read-only" ||
+          observation.admission !== "none" || observation.runtimeConnected !== false ||
+          !Array.isArray(observation.capabilities) || observation.capabilities.length > 32 ||
+          observation.capabilities.some((cap) => cap.callable !== false)) {
+        throw bad("Public source did not satisfy the read-only boundary");
+      }
+      await this.#journal.append("DOOR_INSPECTED", observation, this.#clock());
+      return { observation: copy(observation), admittedAction: false };
+    });
   }
   async proposeNeed(needId) {
     return this.#exclusive(async () => {
@@ -156,7 +190,10 @@ export class Workbench {
     } else if (/relatte|receipt|signature/.test(q)) {
       answer = "These are local JAR;VIS receipts with no signatures. reLATTE signing and receiver admission are separate future integrations. A receipt is not proof of fulfillment.";
     } else if (/ghot|planz|abundent|penny|door|connect/.test(q)) {
-      answer = "I can show the planned doors, but none is connected to live project state. GHoT, planZ, Abundent, PENNY, and reLATTE retain their own authority. Only fictional Garden particulars and a Kinship mock are usable.";
+      const seen = state.sourceObservations.map((v) => v.doorId + " (" + v.observedAt + ")");
+      answer = "GHoT and planZ have opt-in read-only GitHub source inspection. " +
+        (seen.length ? "Previously observed: " + seen.join(", ") + ". " : "No public source inspected yet. ") +
+        "These observations are published descriptions, not live machines, plans, identities, or permissions. The other doors remain unconnected.";
     } else if (/need|offer|garden|match|attention|next|status|what/.test(q) || !q) {
       const matched = state.particulars.needs.length &&
         state.particulars.offers.length;
