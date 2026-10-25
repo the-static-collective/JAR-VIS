@@ -179,6 +179,34 @@ function renderParty() {
   replace("#partyResult", header, actors, code, checks, stamp,
     el("p", "tiny", latest.returnText));
 }
+function renderHeartbeat() {
+  const heartbeat = state.heartbeats?.[0];
+  const list = $("#heartbeatSteps");
+  if (!heartbeat) {
+    list.replaceChildren(el("p", "description", "No local heartbeat projection is available."));
+    $("#heartbeatWitnessButton").disabled = true;
+    return;
+  }
+  const steps = heartbeat.phases.map((phase) => {
+    const article = el("article", "heartbeat-step");
+    article.append(el("strong", "", phase.stage), el("span", "heartbeat-status", phase.status));
+    article.append(el("p", "", phase.detail));
+    return article;
+  });
+  list.replaceChildren(...steps);
+  $("#heartbeatNext").textContent = "NEXT // " + heartbeat.next;
+  const matching = state.proposals.find((proposal) => proposal.id === heartbeat.proposalId);
+  const canWitness = matching?.outcome?.receipt?.kind === "MOCK_RELAYED" &&
+    !heartbeat.fixtureWitness;
+  $("#heartbeatWitnessButton").disabled = !canWitness;
+  $("#heartbeatDisposition").disabled = !canWitness;
+  $("#heartbeatNote").disabled = !canWitness;
+  if (heartbeat.fixtureWitness) {
+    list.append(el("p", "description", "LOCAL RETURN // " +
+      heartbeat.fixtureWitness.disposition + " — " + heartbeat.fixtureWitness.note +
+      " (unverified; not proof of physical completion)."));
+  }
+}
 function renderNative() {
   const report = state.nativeObservations?.[0];
   if (!report) {
@@ -226,6 +254,7 @@ function render() {
   ]) $(id).textContent = state.counters[key];
   renderParticulars();
   renderProposal();
+  renderHeartbeat();
   renderDoors();
   renderParty();
   renderNative();
@@ -288,6 +317,22 @@ $("#nativeImportButton").addEventListener("click", () => command(async () => {
   toast(result.reused ? "Native testimony already recorded." :
     "Native testimony journaled as UNVERIFIED; nothing admitted or published.");
 }));
+$("#heartbeatWitnessForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  command(async () => {
+    const heartbeat = state.heartbeats?.[0];
+    if (!heartbeat?.proposalId) throw new Error("Form a scoped proposal before reporting.");
+    const outcome = await call("/api/heartbeat-witness", {
+      proposalId: heartbeat.proposalId,
+      disposition: $("#heartbeatDisposition").value,
+      note: $("#heartbeatNote").value.trim()
+    });
+    $("#heartbeatNote").value = "";
+    toast(outcome.reused
+      ? "Prior fixture report reused; real fulfillment remains unknown."
+      : "Unverified fixture witness recorded locally. No external publication.");
+  });
+});
 $("#partyButton").addEventListener("click", () => command(async () => {
   const result = await call("/api/house-party", {});
   toast(result.party.review.disposition + " — synthetic draft returned. No actual agents or publication.");
