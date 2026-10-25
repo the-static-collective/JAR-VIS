@@ -19,7 +19,7 @@ npm test
 npm start
 ~~~
 
-Open **http://127.0.0.1:7789** in a browser on the same machine. The interface includes an interactive field, JAR cards, a deterministic ask-the-attendant panel, proposal/approval controls, **opt-in public-document inspection for GHoT and planZ**, a House Party draft/review panel, manual native testimony return, and a replayable local history.
+Open **http://127.0.0.1:7789** in a browser on the same machine. The interface includes an interactive field, JAR cards, a deterministic ask-the-attendant panel, proposal/approval controls, **opt-in public-document inspection for GHoT and planZ**, a House Party draft/review panel, manual native testimony return, and a replayable local history, and a **DISCOVER → COMPOSE → ACT → WITNESS → RETURN** heartbeat for recording clearly labeled fictional fixture outcomes.
 
 **All sample data is fictional.** Two simulated approvals require a local operator to type "MOCK YES" separately. They do not authenticate actual stewards or create real consent. The Kinship adapter only records an in-process mock message; no real broadcast or external communications take place.
 
@@ -36,6 +36,7 @@ The semicolon is the crossing: **ATTENTION ≠ AUTHORITY**.
 - Missing, expired, or revoked demo grants cause HOLD.
 - One mock proposal/action/audience, two distinct steward roles, one explicit dispatch.
 - Append-only JSONL history with hash-chain validation on restart. Not signed, encrypted, or tamper-proof.
+- HEARTBEAT-001 projects the existing scoped crossing into five reusable phases. A local fixture witness may be entered **only after** a previously recorded mock relay; it is unverified operator testimony, never proof of real work.
 - GHoT and planZ public project documentation are now readable through two pinned doors (with source URL, SHA-256 and observation time). A document does **not** prove a live worker, plan API, trusted identity or authority. Other doors remain planned or mock.
 - Rules-only attendant. House Party 004 prepares a fictional Table & Road card with two separate **fixture labels**, deterministic validation, and HOLD for human review; no actual model or native ELF hatches.
 - Two operator-only native tools now exist: a cold verifier for existing STACK² 029 material, and an explicit exact-pin CLI wrapper able to run the **original** fixed live OpenManus specimen and two original ELF copy hatches when locally provisioned. Neither is launched from the browser or adds authority.
@@ -48,13 +49,14 @@ The semicolon is the crossing: **ATTENTION ≠ AUTHORITY**.
 - [Genesis 003 — First real public-source door](docs/GENESIS-003.md)
 - [Genesis 004 — House Party](docs/GENESIS-004.md)
 - [Genesis 005 — First Live Guests](docs/GENESIS-005.md)
+- [Heartbeat 001 — The Missing Inch](docs/HEARTBEAT-001.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [reLATTE compatibility boundary](docs/RELATTE-SEAM.md)
 - [Particular schema](spec/particular-v0.schema.json)
 
 ## Code
 
-- [Core crossing engine](src/engine.mjs)
+- [Core crossing engine](src/engine.mjs) and [reusable heartbeat projection](src/heartbeat.mjs)
 - [Local journal](src/journal.mjs)
 - [Workbench state machine](src/workbench.mjs)
 - [Fixture House Party](src/house-party.mjs), [native report importer](src/native-testimony.mjs), [005 two-guest model runner](tools/run-live-guests-005.py), and [004/029 source-checking tools](tools/verify-native-029.py)
