@@ -88,7 +88,7 @@ export function projectHeartbeat({ match = null, proposal = null, approvedBy = [
       origin: "fictional-local-fixture" },
     proposalId: composed ? proposal.id : null,
     phases: steps,
-    current: steps.find((step) => ["unmatched", "waiting", "hold", "gate-ready-demo", "awaiting-testimony", "unverified-fixture-report"].includes(step.status))?.stage ?? "RETURN",
+    current: reported ? "RETURN" : steps.find((step) => ["unmatched", "waiting", "hold", "gate-ready-demo", "awaiting-testimony"].includes(step.status))?.stage ?? "RETURN",
     next,
     mockApprovals: approvals,
     fixtureWitness: reported ? {
