@@ -72,6 +72,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (pathname === "/api/grant") return reply(res, 200, await app.grant(body));
       if (pathname === "/api/dispatch") return reply(res, 200, await app.dispatch(body.proposalId));
       if (pathname === "/api/attend") return reply(res, 200, app.attend(body.text));
+      if (pathname === "/api/heartbeat-witness") return reply(res, 200, await app.witnessMock(body));
       if (pathname === "/api/inspect-door") return reply(res, 200, await app.inspectDoor(body.doorId));
       if (pathname === "/api/house-party") return reply(res, 200, await app.hostFixtureParty());
       if (pathname === "/api/import-native") return reply(res, 200, await app.importNativeReport(body));
