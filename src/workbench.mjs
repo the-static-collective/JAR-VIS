@@ -1,12 +1,13 @@
 import { gardenJar } from "./fixture.mjs";
 import {
-  observe, propose, makeGrant, cross, MockKinshipRelay
+  observe, understand, propose, makeGrant, cross, MockKinshipRelay
 } from "./engine.mjs";
 import { LocalJournal } from "./journal.mjs";
 import { doors } from "./doors.mjs";
 import { inspectPublicDoor, publicDoorIds } from "./public-doors.mjs";
 import { composeFixtureGardenParty } from "./house-party.mjs";
 import { inspectNativeTestimony } from "./native-testimony.mjs";
+import { projectHeartbeat, fixtureWitness } from "./heartbeat.mjs";
 
 const copy = (v) => structuredClone(v);
 const notFound = (message) => Object.assign(new Error(message), { status: 404 });
@@ -45,6 +46,7 @@ export class Workbench {
     const sourceObservations = new Map();
     const parties = new Map();
     const nativeObservations = new Map();
+    const witnesses = new Map();
     const events = this.#journal.list();
     for (const event of events) {
       const { kind, payload } = event;
@@ -63,12 +65,14 @@ export class Workbench {
         parties.set(payload.id, payload);
       } else if (kind === "NATIVE_REPORTED") {
         nativeObservations.set(payload.importedId, payload);
+      } else if (kind === "FIXTURE_WITNESSED") {
+        witnesses.set(payload.proposalId, payload);
       }
     }
-    return { proposals, grants, outcomes, sourceObservations, parties, nativeObservations, events };
+    return { proposals, grants, outcomes, sourceObservations, parties, nativeObservations, witnesses, events };
   }
   state() {
-    const { proposals, grants, outcomes, sourceObservations, parties, nativeObservations, events } = this.#replay();
+    const { proposals, grants, outcomes, sourceObservations, parties, nativeObservations, witnesses, events } = this.#replay();
     const list = [...proposals.values()].reverse().map((proposal) => ({
       ...copy(proposal),
       approvedBy: [...(grants.get(proposal.id)?.values() ?? [])]
@@ -76,6 +80,16 @@ export class Workbench {
         .map((grant) => grant.issuedBy),
       outcome: copy(outcomes.get(proposal.id) ?? null)
     }));
+    const heartbeats = this.#jar.list("need").map((need) => {
+      const proposal = [...proposals.values()].reverse().find((item) => item.needId === need.id);
+      const approvedBy = [...(grants.get(proposal?.id)?.values() ?? [])]
+        .filter((grant) => Date.parse(grant.expiresAt) > Date.parse(this.#clock()))
+        .map((grant) => grant.issuedBy);
+      return projectHeartbeat({
+        match: understand(this.#jar, need.id), proposal, approvedBy,
+        outcome: outcomes.get(proposal?.id), witness: witnesses.get(proposal?.id)
+      });
+    });
     return {
       schema: "jarvis.workbench-state/v0",
       mode: "LOCAL / SYNTHETIC / MOCK",
@@ -85,6 +99,7 @@ export class Workbench {
       parties: [...parties.values()].reverse().map(copy),
       nativeObservations: [...nativeObservations.values()].reverse().map(copy),
       proposals: list,
+      heartbeats,
       outbox: [...outcomes.values()].filter((v) => v.message).map((v) => copy(v.message)),
       events: events.slice(-80).reverse().map(({ id, seq, kind, at, payload }) => ({
         id, seq, kind, at,
@@ -96,7 +111,8 @@ export class Workbench {
         proposals: proposals.size,
         mockRelays: [...outcomes.values()].filter((v) => v.receipt?.kind === "MOCK_RELAYED").length,
         parties: parties.size,
-        nativeReports: nativeObservations.size
+        nativeReports: nativeObservations.size,
+        fixtureWitnesses: witnesses.size
       }
     };
   }
@@ -117,6 +133,23 @@ export class Workbench {
       // Preparation and deterministic review only: no external execution is authorized.
       await this.#journal.append("PARTY_COMPLETED", party, this.#clock());
       return { party: copy(party), published: false };
+    });
+  }
+  async witnessMock({ proposalId, disposition, note } = {}) {
+    return this.#exclusive(async () => {
+      const { proposals, outcomes, witnesses } = this.#replay();
+      const proposal = proposals.get(proposalId);
+      if (!proposal) throw notFound("Unknown proposal");
+      const existing = witnesses.get(proposalId);
+      if (existing) return { witness: copy(existing), reused: true };
+      let report;
+      try {
+        report = fixtureWitness({
+          proposal, outcome: outcomes.get(proposalId), disposition, note, at: this.#clock()
+        });
+      } catch (error) { throw bad(error.message); }
+      await this.#journal.append("FIXTURE_WITNESSED", report, this.#clock());
+      return { witness: copy(report), reused: false };
     });
   }
   async inspectDoor(doorId) {
@@ -227,6 +260,15 @@ export class Workbench {
         "These observations are published descriptions, not live machines, plans, identities, or permissions. The other doors remain unconnected.";
     } else if (/party|elf|manus|loadout|card|jarhead/.test(q)) {
       answer = "HOUSE PARTY 005 provides an optional local command-line runner for two separate pinned, LOADOUT-gated OpenManus model workers and two original ELF data-copy hatches. Nothing launches automatically from the browser. " + state.counters.parties + " fixture party record(s) and " + state.counters.nativeReports + " imported native report(s) exist. Imported JSON is unverified operator testimony and cannot authorize publication.";
+    } else if (/heartbeat|discover|compose|witness|return|next step|what can i do|where do i start/.test(q)) {
+      const heartbeat = state.heartbeats[0];
+      answer = "DISCOVER → COMPOSE → ACT → WITNESS → RETURN. " +
+        (heartbeat?.next ?? "No source particulars were discovered.") +
+        " This is still a local fictional exercise, not real-world fulfillment.";
+    } else if (/truck|volunteer|cleanup|potluck|campus compute|help somebody/.test(q)) {
+      answer = "That could be an OFFER to connect with a specific NEED, but no such verified record exists in this fictional fixture. " +
+        "Collect an attributable offer, location, availability, and intended audience first; seek separate permission before any real action. " +
+        "JAR;VIS cannot post or match live volunteers yet.";
     } else if (/need|offer|garden|match|attention|next|status|what/.test(q) || !q) {
       const matched = state.particulars.needs.length &&
         state.particulars.offers.length;
