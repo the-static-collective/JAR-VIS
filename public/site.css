@@ -20,3 +20,17 @@
 
 /* GENESIS 005 / operator-imported native testimony */
 .native-import{border:1px solid #d4e3cb;background:#edf4e7;border-radius:8px;padding:17px;display:grid;grid-template-columns:1.5fr minmax(200px,.8fr);gap:18px;margin-bottom:16px}.native-import h3{font:23px Georgia,serif;margin:8px 0}.native-import p{font-size:11px;line-height:1.75;color:#547059}.native-import code{font-size:10px}.native-import-actions{display:flex;flex-direction:column;gap:9px;justify-content:center}.native-import-actions label{font-size:10px;font-weight:800;color:#608066}.native-import-actions input{font-size:10px;max-width:100%}.native-import-actions .button{margin:0}.native-result{margin:0 0 13px}.native-observation h4{font:20px Georgia,serif;margin:13px 0}@media(max-width:690px){.native-import{grid-template-columns:1fr}}
+
+
+/* HEARTBEAT-001: operator-visible distinction between a proposal and a result */
+.heartbeat-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.heartbeat-step{border:1px solid #d7e4d1;background:#f2f6ed;padding:14px;border-radius:8px;min-width:0}
+.heartbeat-step strong{font-size:10px;letter-spacing:.08em;color:#355943;display:block}
+.heartbeat-step .heartbeat-status{display:inline-block;margin:9px 0;padding:5px 7px;border-radius:4px;background:#e6efd8;color:#566f4b;font-size:9px;overflow-wrap:anywhere}
+.heartbeat-step p{font-size:11px;line-height:1.65;color:#708571;overflow-wrap:anywhere}
+.heartbeat-witness{display:flex;flex-direction:column;gap:8px;border-top:1px solid #d8e5d4;margin-top:18px;padding-top:15px;max-width:520px}
+.heartbeat-witness label{font-size:11px;font-weight:700;color:#617e64}
+.heartbeat-witness input,.heartbeat-witness select{font:inherit;font-size:12px;padding:11px;border-radius:6px;border:1px solid #cbdcc5;background:#fff;color:#29412e;max-width:100%}
+.heartbeat-witness .button{align-self:start;width:auto}
+@media(max-width:1100px){.heartbeat-steps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:680px){.heartbeat-steps{grid-template-columns:1fr}}
