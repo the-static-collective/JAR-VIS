@@ -20,6 +20,11 @@ jobs:
         with:
           node-version: "22"
       - run: npm test
+      - name: Live reviewer portal reversible synthetic QA (feature branch only)
+        if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
+        env:
+          RUN_LIVE_REVIEWER_QA: "1"
+        run: node --test test-live/reviewer-gateway.test.mjs
       - name: Test Post Office 001 gates and mock dispatch (offline only)
         run: node --test post-office/post-office.test.mjs
       - name: Test native guest boundaries (offline only)
