@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#172822"><title>Tomorrow's Work · JAR;VIS</title>
+<link rel="stylesheet" href="/inherit.css"><script src="/inherit.js" defer></script></head>
+<body>
+<header class="mast"><a href="/" class="back">← JAR;VIS Workbench</a><span class="badge">LOCAL OPERATOR NOTEBOOK · 001</span></header>
+<main>
+  <section class="hero">
+    <p class="overline">WORK THAT INHERITS</p>
+    <h1>Tomorrow begins<br><em>further along.</em></h1>
+    <p>Turn a possible connection into an acknowledged commitment, a reported result, a reviewed claim, and a reusable invitation. Nothing is sent to anyone automatically.</p>
+    <div class="path" aria-label="Work inheritance phases"><span>WEAVE</span><b>→</b><span>COMMIT</span><b>→</b><span>REPORT + REVIEW</span><b>→</b><span>WE CAN</span><b>→</b><span>YOU CAN</span></div>
+  </section>
+  <div class="warning" role="note"><strong>Local and unverified.</strong> Names are aliases, not authenticated identities. Review is an operator-entered claim, <strong>not</strong> independent proof. No public posting, requests for help, or field fulfillment occurs here. Do not enter names, case details, health data, addresses, or confidential evidence.</div>
+  <section class="statistics" id="stats" aria-label="Local work counters"></section>
+  <div class="layout">
+    <section class="panel">
+      <div class="section-heading"><div><p class="overline">01 · NOTICE A NEED</p><h2>Start a weave</h2></div></div>
+      <form id="newForm">
+        <label>Work title <input name="title" minlength="2" maxlength="100" placeholder="Arrange a sample milk delivery" required></label>
+        <label>Need to address <textarea name="need" minlength="2" maxlength="500" placeholder="What actually needs to change?" required></textarea></label>
+        <div class="row"><label>Region (general only) <input name="region" minlength="2" maxlength="100" placeholder="Southern Minnesota" required></label>
+        <label>Steward alias <input name="steward" minlength="2" maxlength="100" placeholder="Volunteer A" required></label></div>
+        <button type="submit">Record possible work →</button>
+      </form>
+    </section>
+    <section class="panel">
+      <div class="section-heading"><div><p class="overline">02 · FIND THE FRONTIER</p><h2>Choose a weave</h2></div></div>
+      <div id="records" class="records" aria-live="polite"></div>
+    </section>
+  </div>
+  <section class="panel journey" id="journey" hidden>
+    <div class="section-heading"><div><p class="overline">03 · TAKE THE NEXT STEP</p><h2 id="chosenTitle"></h2><p id="chosenStatus"></p></div><button id="exportButton" type="button" class="secondary">Export local JSON</button></div>
+    <div id="timeline" class="timeline"></div>
+    <section id="commitSection" hidden>
+      <h3>Voluntary commitment</h3><p>The operator records the steward's stated choice. This does not verify their identity or consent.</p>
+      <form id="commitForm"><label>Steward alias <input name="actor" minlength="2" maxlength="100" required></label><label class="check"><input type="checkbox" name="voluntary" required> I am recording an explicit voluntary decision, not inferring one.</label><button type="submit">Record stated commitment</button></form>
+    </section>
+    <section id="reportSection" hidden>
+      <h3>Report what happened</h3><p>A report is testimony, not independent evidence.</p>
+      <form id="reportForm"><label>Reported outcome <select name="outcome"><option value="completed">Completed (claimed)</option><option value="partial">Partial</option><option value="blocked">Blocked</option></select></label><label>What happened <textarea name="note" minlength="2" maxlength="500" required></textarea></label><label>Non-sensitive evidence reference (optional) <input name="evidenceRef" maxlength="300" placeholder="Local document code; never confidential information"></label><button type="submit">Record unverified report</button></form>
+    </section>
+    <section id="reviewSection" hidden>
+      <h3>Independent review, recorded locally</h3><p>Reviewer must use a different alias. This form cannot authenticate people or prove that verification occurred.</p>
+      <form id="reviewForm"><label>Reviewer alias <input name="reviewer" minlength="2" maxlength="100" required></label><label>Decision <select name="decision"><option value="needs-more">Needs more evidence (HOLD)</option><option value="accept-report">Accept report as reviewed claim</option></select></label><label>Review rationale <textarea name="note" minlength="2" maxlength="500" required></textarea></label><button type="submit">Record review</button></form>
+    </section>
+    <section id="returnSection" hidden>
+      <h3>Return a reusable candidate</h3><p>Only an accepted, completed report can yield a candidate. It is not automatically published or labeled independently verified.</p>
+      <form id="returnForm"><label>Method somebody else could repeat <textarea name="method" minlength="2" maxlength="1000" required></textarea></label><label>Invitation: what can the next person do? <textarea name="nextInvitation" minlength="2" maxlength="500" required></textarea></label><button type="submit">Make a local WE CAN → YOU CAN card</button></form>
+    </section>
+    <p id="nextStep" class="next-step"></p>
+  </section>
+</main>
+<div id="toast" class="toast" role="status" hidden></div>
+<footer>JAR;VIS · Attention ≠ Authority · Proposal ≠ Completion · Review ≠ Proof · No automatic publication</footer>
+</body></html>
