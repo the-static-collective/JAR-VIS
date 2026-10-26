@@ -16,6 +16,12 @@ The local operator notebook at **[http://127.0.0.1:7789/inherit](http://127.0.0.
 
 See [Work That Inherits 001](docs/WORK-THAT-INHERITS-001.md) for the workflow, boundaries, synthetic milk-route scenario, and pilot acceptance criteria.
 
+## WORK-THAT-INHERITS-002 — public reviewer discovery
+
+The [live reviewer and stewardship invitation portal](https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/work-inherits-reviewers) now serves owner-approved open role requests, with **private opt-in applications, conflict self-reporting, optional consented contact, scoped availability and one-time withdrawal keys**. Four initial roles are Static Collective experiments only; no third-party partner is enrolled. The public portal **does not verify identity or independence**, admit task work or publish private reports. A separate local JAR;VIS reviewer-discovery task appears once a hypothetical steward commitment has been recorded.
+
+[How it works, what is and is not live, and the operator screening procedure](docs/WORK-THAT-INHERITS-002.md)
+
 ## Try the local attendant
 
 Node.js 20+ and no third-party runtime packages required.

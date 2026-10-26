@@ -114,8 +114,26 @@ function renderJourney() {
     "Local candidate ready for inspection or export. It is not externally published or independently verified.";
   $("nextStep").textContent = text;
 }
+function renderReviewerNeeds() {
+  const box = $("reviewerNeeds");
+  box.replaceChildren();
+  if (!state.reviewerSeats?.length) {
+    box.append(node("p", "No active local reviewer-discovery seats. A voluntary task commitment creates one; a recorded review closes it.", "empty"));
+    return;
+  }
+  for (const seat of state.reviewerSeats) {
+    const article = node("article", "", "step");
+    article.append(
+      node("span", seat.priority.replaceAll("_", " ")),
+      node("p", seat.reason + " · General region: " + seat.generalRegion),
+      node("p", "HOLD: no person assigned, no identity verified, no external publication.")
+    );
+    box.append(article);
+  }
+}
 function render() {
   renderCounters();
+  renderReviewerNeeds();
   renderRecords();
   renderJourney();
 }
