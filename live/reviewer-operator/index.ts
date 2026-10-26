@@ -1,6 +1,7 @@
 // WORK-THAT-INHERITS-003 · CROSSPANEL OPERATOR / explicitly scoped, private.
 import { createClient } from "npm:@supabase/supabase-js@2.78.0";
 import { SITE } from "./site.ts";
+import { planTriage, TRIAGE_DECISIONS } from "./policy.mjs";
 const PROJECT_URL = Deno.env.get("SUPABASE_URL") || "";
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
 if(!PROJECT_URL || !SERVICE_KEY) throw new Error("OPERATOR_CONFIGURATION_REQUIRED");
@@ -11,15 +12,7 @@ const CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-i
 const TOKEN = /^Bearer ([A-Za-z0-9_-]{43})$/;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const PII = /[\w.+-]+@[\w.-]+\.[a-z]{2,}|(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[-. ]?\d{4}|https?:\/\/|www\.|\b(?:ssn|social security|password|private key|auth token|api key)\b/i;
-const WORK = {
- start:["PENDING","SCREENING","REVIEW_STARTED"],
- conflict_clear:["SCREENING","SCREENING","CONFLICT_CLEARED"],
- conflict_hold:["SCREENING","SCREENING","CONFLICT_HOLD"],
- invite:["SCREENING","INVITED","INVITATION_REQUESTED"],
- accept:["INVITED","ACCEPTED","ACCEPTANCE_RECORDED"],
- decline:[null,"DECLINED","DECLINED"],
- close:[null,"CLOSED","CLOSED"]
-};
+
 class Err extends Error{ constructor(msg,status=400){super(msg);this.status=status;} }
 const reply=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:HEAD});
 async function hash(x){const b=new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(x)));return [...b].map(n=>n.toString(16).padStart(2,"0")).join("");}
@@ -70,26 +63,15 @@ async function listing(){
    truncated:entries.length===100};
 }
 async function triage(op,b){
- if(typeof b.id!=="string"||!UUID.test(b.id)||typeof b.decision!=="string"||!(b.decision in WORK))throw new Err("INVALID_TRIAGE");
- const [required,to,audit]=WORK[b.decision];
+ if(typeof b.id!=="string"||!UUID.test(b.id)||typeof b.decision!=="string"||!TRIAGE_DECISIONS.includes(b.decision))throw new Err("INVALID_TRIAGE");
  const explanation=note(b.note),now=new Date().toISOString();
  const {data:current,error:ce}=await db.from("inheritance_interest")
  .select("id,role,status,independence,conflict_disposition,contact_consent").eq("id",b.id).maybeSingle();
  if(ce)throw new Err("PRIVATE_READ_UNAVAILABLE",503);
  if(!current||current.status==="WITHDRAWN")throw new Err("MISSING_OR_WITHDRAWN",404);
- if((required&&current.status!==required)||
-   (!required&&!(b.decision==="decline"?["PENDING","SCREENING","INVITED","ACCEPTED"].includes(current.status):
-      ["ACCEPTED","DECLINED"].includes(current.status))))
-   throw new Err("INVALID_STAGE_FOR_TRANSITION",409);
- if(b.decision==="invite"){
-  if(current.conflict_disposition!=="NO_KNOWN_CONFLICT_REVIEWED")throw new Err("CONFLICT_REVIEW_REQUIRED",409);
-  if(b.humanContactConfirmed!==true)throw new Err("HUMAN_INVITATION_ATTESTATION_REQUIRED",400);
- }
- if(b.decision==="accept"&&b.humanConsentConfirmed!==true)throw new Err("RECIPIENT_ACCEPTANCE_ATTESTATION_REQUIRED",400);
- if(b.decision==="conflict_clear"&&b.conflictCheckConfirmed!==true)throw new Err("CONFLICT_SCREENING_ATTESTATION_REQUIRED",400);
- const updates: Record<string, unknown> = {status:to,triage_note:explanation,triage_actor:"scoped:"+op.id,triaged_at:now};
- if(b.decision==="conflict_clear")updates.conflict_disposition="NO_KNOWN_CONFLICT_REVIEWED";
- if(b.decision==="conflict_hold")updates.conflict_disposition="CONFLICT_HOLD";
+ const plan=planTriage(current,b.decision,b);
+ if(!plan.allowed)throw new Err(plan.why,["INVALID_STAGE_FOR_TRANSITION","CONFLICT_REVIEW_REQUIRED","MISSING_OR_WITHDRAWN"].includes(plan.why)?409:400);
+ const updates: Record<string, unknown> = {...plan.patch,triage_note:explanation,triage_actor:"scoped:"+op.id,triaged_at:now};
  if(b.decision==="invite")updates.invitation_recorded_at=now;
  if(b.decision==="accept")updates.acceptance_recorded_at=now;
  // No action can ever set 'independently_verified' to true.
@@ -98,7 +80,7 @@ async function triage(op,b){
  if(we)throw new Err("TRIAGE_STORAGE_UNAVAILABLE",503);
  if(!changed)throw new Err("STALE_OR_WITHDRAWN",409);
  // Audit is best-effort: user action is preserved even if audit write fails.
- await db.from("inheritance_audit").insert({interest_id:b.id,action:audit,actor:"scoped:"+op.id,note:""});
+ await db.from("inheritance_audit").insert({interest_id:b.id,action:plan.audit,actor:"scoped:"+op.id,note:""});
  return {ok:true,id:changed.id,status:changed.status,conflict:changed.conflict_disposition,
    independentlyVerified:false,publiclyPublished:false,
    reminder:"Recorded operator assertion only; no automatic outreach, reviewer admission or completed work."};
