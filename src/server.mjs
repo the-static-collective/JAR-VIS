@@ -2,10 +2,13 @@ import { createServer } from "node:http";
 import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { Workbench } from "./workbench.mjs";
+import { InheritanceBoard } from "./inheritance.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/app.js", [new URL("../public/app.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/inherit", [new URL("../public/inherit.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/inherit.js", [new URL("../public/inherit.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/site.css", [new URL("../public/site.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
@@ -40,9 +43,10 @@ async function readJson(req) {
   return value;
 }
 
-export async function startWorkbenchServer({ journalPath, port = 7789, workbench } = {}) {
+export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard } = {}) {
   if (!workbench && !journalPath) throw new Error("journalPath required");
   const app = workbench ?? await Workbench.open({ journalPath });
+  const inherit = inheritanceBoard ?? (journalPath ? await InheritanceBoard.open({ journalPath: journalPath + ".inheritance.jsonl" }) : null);
   const csrf = randomBytes(24).toString("hex");
   let boundPort;
   const server = createServer(async (req, res) => {
@@ -58,6 +62,8 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/inheritance") return inherit ?
+          reply(res, 200, { ...inherit.state(), csrfToken: csrf }) : reply(res, 503, { error: "Inheritance board not configured" });
         const staticEntry = staticFiles.get(pathname);
         if (!staticEntry) return reply(res, 404, { error: "Not found" });
         const [path, type] = staticEntry;
@@ -68,6 +74,18 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res, 403, { error: "Missing or invalid local anti-CSRF token" });
       }
       const body = await readJson(req);
+      if (pathname.startsWith("/api/inheritance/")) {
+        if (!inherit) return reply(res, 503, { error: "Inheritance board not configured" });
+        const operations = {
+          "/api/inheritance/propose": () => inherit.propose(body),
+          "/api/inheritance/commit": () => inherit.commit(body),
+          "/api/inheritance/report": () => inherit.report(body),
+          "/api/inheritance/review": () => inherit.review(body),
+          "/api/inheritance/return": () => inherit.returnCapability(body)
+        };
+        if (!operations[pathname]) return reply(res, 404, { error: "Not found" });
+        return reply(res, 200, await operations[pathname]());
+      }
       if (pathname === "/api/propose") return reply(res, 200, await app.proposeNeed(body.needId));
       if (pathname === "/api/grant") return reply(res, 200, await app.grant(body));
       if (pathname === "/api/dispatch") return reply(res, 200, await app.dispatch(body.proposalId));
