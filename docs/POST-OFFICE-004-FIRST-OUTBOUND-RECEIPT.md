@@ -36,3 +36,16 @@ The HTTP request was made exactly once by the operator. The Resend sender sets a
 **Owner's final proof:** Check the recipient inbox (including spam) for the subject above; inspect displayed From, return-path, DKIM/SPF authentication if available; reply to `us@abundent.org` and confirm reply arrival. Only then mark **DELIVERED / REPLIED** with attributable owner witness. This file does not claim those outcomes.
 
 **Next release:** individualized opt-in/permissioned outreach from Post Office 001 drafts; no bulk broadcast or community recipient list without verified consent and delivery/suppression controls.
+
+## Owner field update — 2026-10-26, after first send
+
+After receiving the instruction to locate the outbound self-test and reply, the owner reported: **“i sent it”**. In conversation context, this is an **owner-reported reply sent** to the test message. It is consistent with the original outbound message having arrived, but this public ledger does not contain or expose the owner’s private message contents or inbox access.
+
+**Evidence statuses:**
+
+- **Outbound API accepted:** confirmed by Vercel's HTTP 202 and recorded Resend ID above.
+- **Test mail viewed/received by owner:** implied by the owner's reply action; not independently inspected.
+- **Reply submitted by owner:** owner-reported (“i sent it”).
+- **Reply delivered back through `us@abundent.org` and observed in Proton:** **not yet separately confirmed**. A message in Sent is not by itself evidence of return-path delivery.
+
+**Remaining verification:** Check the Proton inbox for the returned reply (a distinct incoming message, not only the Sent-folder copy). If found, record the owner's observation as the completed outbound → inbound round trip; otherwise investigate with minimal disclosure.
