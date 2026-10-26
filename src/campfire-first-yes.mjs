@@ -265,7 +265,8 @@ export function makeCampfireFirstYesBridge({
    let parsed;
    try{parsed=JSON.parse(body);}catch{throw Error('FIREBOX_INVALID_JSON');}
    if(parsed.ok!==true)throw Error('FIREBOX_REJECTED_READ');
-   return composeFirstYes(parsed,{question});
+   const kit=composeFirstYes(parsed,{question});
+   return {...kit,markdown:renderFirstYes(kit)};
   },
   location:'LOCAL_PRIVATE_OWNER_READ_ONLY',
   dataFlow:'FIREBOX_TO_JARVIS_PREPARED_DRAFT_ONLY'
