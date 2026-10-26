@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { InheritanceBoard } from "../src/inheritance.mjs";
 import { startWorkbenchServer } from "../src/server.mjs";
 
@@ -119,3 +121,9 @@ test("HTTP exposes a useful notebook on loopback, with host/origin and anti-CSRF
     assert.equal(after.records[0].verified, false);
   } finally { await server.close(); }
 }));
+
+
+test("operator browser script is syntactically valid JavaScript", () => {
+  const script = fileURLToPath(new URL("../public/inherit.js", import.meta.url));
+  assert.doesNotThrow(() => execFileSync(process.execPath, ["--check", script], { stdio: "pipe" }));
+});
