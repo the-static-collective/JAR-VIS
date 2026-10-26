@@ -1,4 +1,4 @@
-export const SITE = String.raw\`<!doctype html>
+export const SITE = String.raw`<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tomorrow's Work — The Static Collective</title>
 <meta name="description" content="Help build the work that tomorrow inherits. Volunteer as an independent-review candidate, steward, or connector.">
@@ -122,4 +122,4 @@ $("withdrawForm").addEventListener("submit",async(e)=>{
  catch(err){message("withdrawFeedback","Could not withdraw: "+err.message);}
 });
 load();
-</script></body></html>\`;
+</script></body></html>`;
