@@ -6,7 +6,7 @@
 
 This is a **JAR;VIS outbound adapter**, not a new master contacts database. Abundent / webZ is the public invitation door; the existing Supabase contact form holds opt-in correspondence, Buttondown `luv` remains a separate newsletter experiment. Do not import contacts from a public event, scrape a roster, treat a business card as marketing-list permission, or infer a partnership. One recipient, one intended conversation, one human-approved text, one receipt.
 
-The proposed sender is `hello@abundent.org` (the actual domain is **abundent.org**, not abundant.org). Porkbun currently has no hosted mailbox or email forwards. Cloudflare is authoritative for live DNS. Neither sender authentication, an inbox, nor sending credentials were present at inspection. Sending is not activated by this PR.
+The operator-selected correspondence address is **`us@abundent.org`** (the actual domain is **abundent.org**, not abundant.org). **Inbound forwarding was created at Porkbun on October 26, 2026.** It points to an owner-designated Proton Mail inbox; its private destination is not reproduced in this public repository. Cloudflare is authoritative for live DNS. The two Porkbun MX records (fwd1 priority 10; fwd2 priority 20) and Porkbun SPF record were installed in Cloudflare and verified there. **Actual end-to-end delivery has not yet been tested.** This is receive-only forwarding; outbound sender domain verification and provider credentials are still missing. No external dispatch has been authorized or performed.
 
 ## What the runnable tool proves
 
@@ -46,16 +46,16 @@ node post-office/post-office.mjs --queue /secure/outreach.json --receipts /secur
 
 # Only after a verified sending domain, sender access, real consent, and human approval
 POST_OFFICE_APPROVE=field-introductions-2026-10-26 \
-EMAIL_FROM='Lu <hello@abundent.org>' RESEND_API_KEY=... \
+EMAIL_FROM='Lu <us@abundent.org>' RESEND_API_KEY=... \
 node post-office/post-office.mjs --queue /secure/outreach.json --receipts /secure/receipts.jsonl --send
 ```
 
 ## Launch gates (not yet met)
 
-1. Decide receiving route: Porkbun paid mailbox ($36/year) or a free forward to a designated owner mailbox. Forwarding can **receive but not send**. If using Porkbun, apply required MX/SPF changes on **live Cloudflare DNS** after reviewing existing records. DKIM + DMARC for outbound sender must be verified independently; do not copy unprovided provider-specific records.
+1. **Inbound route configured:** Porkbun forwarding `us@abundent.org` to an owner-controlled inbox; Cloudflare MX/SPF records created and read back on October 26. **Next field gate:** send a test message from an unrelated email address, verify arrival in the destination inbox, then reply and inspect what sender appears. Forwarding can **receive but not send**; ordinary Proton Mail replies will reveal the underlying sending address. DKIM and DMARC for a future independent outbound provider must be verified independently; do not copy unprovided provider-specific records.
 2. Connect a reputable authenticated outbound provider and verify `abundent.org`. API credentials stay in secrets, never chat, public code, or GitHub commit. If a provider is not authorized, retain HOLD.
 3. Prepare a private list: who, verified email, why this person, where follow-up permission came from, personal draft, approved schedule. Sensitive survivor disclosures and confidential information stay off general outreach.
-4. Perform a **self-test** to the owner's verified mailbox. Check provider acceptance, actual inbox arrival, and successful reply to the intended `hello@` address. Then send 1–3 individualized emails, not a blind blast.
+4. Perform a **self-test** to the owner's verified mailbox. Check provider acceptance, actual inbox arrival, and successful reply to the intended `us@` address. Then send 1–3 individualized emails, not a blind blast.
 5. Log accepted ID, delivery/bounce when supported, replies, follow-up preference, unsubscribe/suppression; never mark "delivered" from an API-accepted receipt alone.
 
 ## First invitation packet — intended as personal notes, not a newsletter blast
