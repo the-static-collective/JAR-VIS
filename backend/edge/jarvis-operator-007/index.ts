@@ -1,1 +1,2 @@
-// BACKEND-007 operator gateway. Implementation forthcoming.
+// BACKEND-007
+export const panelVersion = '007';
