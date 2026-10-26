@@ -9,6 +9,7 @@ const staticFiles = new Map([
   ["/app.js", [new URL("../public/app.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/inherit", [new URL("../public/inherit.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/inherit.js", [new URL("../public/inherit.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/inherit.css", [new URL("../public/inherit.css", import.meta.url), "text/css; charset=utf-8"]],
   ["/site.css", [new URL("../public/site.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
