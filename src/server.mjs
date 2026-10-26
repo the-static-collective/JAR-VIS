@@ -40,7 +40,7 @@ async function readJson(req) {
   return value;
 }
 
-export async function startWorkbenchServer({ journalPath, port = 7789, workbench } = {}) {
+export async function startWorkbenchServer({ journalPath, port = 7789, workbench, campfireBridge = null } = {}) {
   if (!workbench && !journalPath) throw new Error("journalPath required");
   const app = workbench ?? await Workbench.open({ journalPath });
   const csrf = randomBytes(24).toString("hex");
@@ -72,6 +72,10 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (pathname === "/api/grant") return reply(res, 200, await app.grant(body));
       if (pathname === "/api/dispatch") return reply(res, 200, await app.dispatch(body.proposalId));
       if (pathname === "/api/attend") return reply(res, 200, app.attend(body.text));
+      if (pathname === "/api/campfire/first-yes") {
+        if (!campfireBridge) return reply(res, 503, {error:"No private owner Firebox configured. Start a local Campfire and set JARVIS_CAMPFIRE_KEY_FILE."});
+        return reply(res, 200, await campfireBridge.prepare(body.question));
+      }
       if (pathname === "/api/heartbeat-witness") return reply(res, 200, await app.witnessMock(body));
       if (pathname === "/api/inspect-door") return reply(res, 200, await app.inspectDoor(body.doorId));
       if (pathname === "/api/house-party") return reply(res, 200, await app.hostFixtureParty());

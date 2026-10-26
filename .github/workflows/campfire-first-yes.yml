@@ -1,0 +1,40 @@
+name: First Yes · real Firebox → JAR;VIS
+on:
+  push:
+    branches:
+      - feat/campfire-first-yes-gateway-001
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  owner-read-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - name: Checkout JAR;VIS
+        uses: actions/checkout@v4
+      - name: Checkout actual NanaSpork Firebox at immutable revision
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/BananaSpork
+          ref: b8c41390da3f35997d329354a467e807f603f0da
+          path: source-firebox
+          persist-credentials: false
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and original JAR;VIS regression
+        run: |
+          node --check src/campfire-first-yes.mjs
+          node --check src/server.mjs
+          node --check public/app.js
+          npm test
+      - name: Cross-project REAL SQLite backend HTTP test
+        env:
+          CAMPFIRE_NATIVE_BACKEND_PATH: ${{ github.workspace }}/source-firebox/campfire-backend/server.mjs
+        run: |
+          node --test test/campfire-first-yes.test.mjs

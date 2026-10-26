@@ -8,7 +8,7 @@
   <nav class="nav">
     <a href="#field"><span>◈</span> Field overview <small>01</small></a><a href="#particulars"><span>◫</span> The particulars <small>02</small></a>
     <a href="#crossing"><span>⋈</span> The crossing <small>03</small></a><a href="#heartbeat"><span>♡</span> Heartbeat <small>04</small></a><a href="#doors"><span>⌘</span> Project doors <small>04</small></a>
-    <a href="#party"><span>✳</span> House party <small>05</small></a><a href="#history"><span>≡</span> Receipts & returns <small>06</small></a>
+    <a href="#party"><span>✳</span> House party <small>05</small></a><a href="#first-yes"><span>✳</span> The First Yes <small>07</small></a><a href="#history"><span>≡</span> Receipts & returns <small>06</small></a>
   </nav>
   <div class="sidebar-note"><b class="pulse"></b>LOCAL WORKBENCH<br><small>Opt-in GitHub public reads; no external writes</small></div>
   <div class="sidebar-bottom">JUBILEE / VOLUNTARY<br>INTEGRATION / STEWARDSHIP<br><strong>THE STATIC COLLECTIVE</strong></div>
@@ -84,6 +84,28 @@
         </div>
         <div class="party-results"><h3>Guests &amp; return</h3><div id="partyResult" aria-live="polite"><p class="description">No party has returned yet. Press the button to create two locally attributable fixture occurrences.</p></div></div>
       </div>
+    </section>
+    <section class="panel" id="first-yes">
+      <div class="panel-heading"><div><div class="overline">07 / CAMPFIRE × JAR;VIS · PERMISSIONED CROSSING</div>
+        <h2>The First Yes Desk</h2></div><span class="badge badge-warm">PRIVATE OWNER READ · UNSENT</span></div>
+      <p class="description">JAR;VIS can now ask <strong>our own Campfire backend</strong> what its source counts actually support, then prepare one useful work card. You choose when to inspect it. The private administrator key stays on this computer and never goes to your browser; message bodies and member credentials are never fetched for this work.</p>
+      <div class="native-import">
+        <div><div class="overline">ONE QUESTION → ONE PREPARED ARTIFACT</div><h3>What could we make possible in the next 24 hours?</h3>
+          <p>Only the host operator can open the private Attention Desk. This is not the old fictional Garden fixture; it depends on an actually running owner Firebox. A source count is not permission to recruit, assign a task, publish information, or say aid was delivered.</p>
+          <label for="firstYesQuestion">Your optional, non-sensitive question</label>
+          <input id="firstYesQuestion" type="text" maxlength="240" value="What useful thing could we prepare in the next 24 hours?" autocomplete="off">
+          <p class="tiny">Do not type names, contact details, private household stories, or sensitive survivor information.</p>
+        </div>
+        <div class="native-import-actions">
+          <button type="button" id="firstYesPrepare" class="button button-primary">Prepare one useful work card →</button>
+          <button type="button" id="firstYesDownload" class="button button-dark" disabled>Download printable work card</button>
+          <p id="firstYesStatus" class="description" role="status">Nothing requested. No invitations sent.</p>
+        </div>
+      </div>
+      <div id="firstYesResult" class="native-result" aria-live="polite">
+        <p class="description">Press <strong>Prepare</strong> to ask the local Firebox for a single evidence-labeled suggestion. The card will tell you what can be prepared, who must agree, and how to recognize a real result.</p>
+      </div>
+      <p class="description"><strong>Constitution:</strong> observation ≠ authority; proposal ≠ assignment; owner acceptance ≠ physical delivery; prepared work ≠ completed work. This button does not write to either backend's journal.</p>
     </section>
     <section class="panel" id="history"><div class="panel-heading"><div><div class="overline">05 / ACCOUNTABLE RETURN</div><h2>Receipts & returns</h2></div><span class="badge badge-warm">LOCAL JOURNAL</span></div><p class="description">Each proposal, simulated grant, HOLD and mock crossing is appended to a hash-chained local journal. The chain is integrity-checkable, not signed. A source read records its URL, content hash, and observation time, never approval.</p><div id="eventList" class="event-list" aria-live="polite">No local events yet.</div></section>
     <footer>JAR HOLDS WHAT MATTERS. VIS ATTENDS TO WHAT IS POSSIBLE. <strong>THE CROSSING BELONGS TO THOSE CONCERNED.</strong></footer>

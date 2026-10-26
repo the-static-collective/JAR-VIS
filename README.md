@@ -10,6 +10,14 @@
 
 JAR;VIS is an attendant across independently owned projects, not a master AI, global database, or replacement for the systems it serves. It observes fictional particulars, explains potential connections, proposes bounded actions, requests simulated authorization, and records what happened — including HOLD.
 
+## FIRST YES 001 · Campfire Attention → JAR;VIS work card
+
+There is now a real, opt-in crossing from the locally running NanaSpork Firebox Attention Desk to the JAR;VIS browser. A deliberate button reads only aggregate source state, then prepares a local, printable, unsent next-24-hour work card identifying one possible action, required human permission and evidence standards.
+
+Start BananaSpork locally with `node campfire-backend/start.mjs`, then run `npm start` here and visit **http://127.0.0.1:7789/#first-yes**. The browser does not receive the private operator key, chat bodies or internal circle IDs. Existing fictional scenarios remain fictional. No real help, invitation, public publication or automatic execution is claimed.
+
+See [First Yes 001 operator guide](docs/FIRST-YES-001-CAMPFIRE.md) and [NanaSpork's draft owned backend](https://github.com/the-static-collective/BananaSpork/pull/20).
+
 ## Try the local attendant
 
 Node.js 20+ and no third-party runtime packages required.
