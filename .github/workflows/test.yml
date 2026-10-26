@@ -25,6 +25,11 @@ jobs:
         env:
           RUN_LIVE_REVIEWER_QA: "1"
         run: node --test test-live/reviewer-gateway.test.mjs
+      - name: Live scoped operator isolation (no credentials)
+        if: github.event_name == 'pull_request' && github.head_ref == 'feat/operator-crosspanel-003'
+        env:
+          RUN_LIVE_OPERATOR_QA: "1"
+        run: node --test test-live/operator-gateway.test.mjs
       - name: Test Post Office 001 gates and mock dispatch (offline only)
         run: node --test post-office/post-office.test.mjs
       - name: Test native guest boundaries (offline only)
