@@ -49,3 +49,16 @@ After receiving the instruction to locate the outbound self-test and reply, the 
 - **Reply delivered back through `us@abundent.org` and observed in Proton:** **not yet separately confirmed**. A message in Sent is not by itself evidence of return-path delivery.
 
 **Remaining verification:** Check the Proton inbox for the returned reply (a distinct incoming message, not only the Sent-folder copy). If found, record the owner's observation as the completed outbound → inbound round trip; otherwise investigate with minimal disclosure.
+
+
+## Owner field verification — successful round trip
+
+The owner confirmed **“yup!”** when specifically asked whether the reply appeared **as a new incoming message in the Proton inbox, not merely as a message in Sent**.
+
+**Field outcome: ROUND TRIP VERIFIED BY OWNER — October 26, 2026.**
+
+The chain was tested in practice: `us@abundent.org` → Resend sending → owner's Proton mailbox → reply to `us@abundent.org` → Porkbun forwarding → owner-observed incoming Proton message.
+
+This is a **user-witnessed functional return-path test**, not an independent assistant inspection of the inbox, full header authentication, guaranteed delivery for other recipients, or authorization to send outreach to third parties. The initial Resend API provider receipt remains separately attributable above. No recipient mailbox address or message body is committed in public files.
+
+**Next gates:** controlled one-recipient introductions, clear owner approval and permission basis, reply management, and consent-based subscription/unsubscribe before any campaign. Public GitHub documents must never include personal contact lists.
