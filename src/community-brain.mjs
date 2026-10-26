@@ -112,7 +112,7 @@ const gates=[
   prohibited:"Do not import testimony, screenshots, children’s details, custody records or contacts into public JAR;VIS/GRAFT.",
   status:"OPEN_DESIGN_SEAT_UNFILLED",requiresHumanApproval:true,sourceIds:["SH-028"]
  }
-].map(x=>Object.freeze({...x,sourceIds:Object.freeze(x.sourceIds)})));
+].map(x=>Object.freeze({...x,sourceIds:Object.freeze(x.sourceIds)}));
 
 export const BRAIN_SEATS=Object.freeze(gates);
 const seatIndex=new Map(BRAIN_SEATS.map(x=>[x.id,x]));
