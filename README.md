@@ -10,6 +10,16 @@
 
 JAR;VIS is an attendant across independently owned projects, not a master AI, global database, or replacement for the systems it serves. It observes fictional particulars, explains potential connections, proposes bounded actions, requests simulated authorization, and records what happened — including HOLD.
 
+## Community Brain 006 · Still Here and missing helper roles
+
+The local JAR;VIS workbench now includes a **source-bound, read-only Community Brain** for the new independent Still Here survivor-support proposal. The opening trio is one trusted **Founding Companion**, a qualified **survivor advocacy consultation**, and **nonprofit/startup legal advice**; individual family-law matters remain completely separate. Other unfilled capability seats cover privacy and safety, human moderation, peer-presence design, and private chronology tools.
+
+The brain does **not** collect survivor stories, appoint volunteers, contact partner organizations, match peers, verify personal evidence, grant moderator access, or run a staffed service. Published project code and independent organizational websites are not proofs of real-world outcomes or partnerships.
+
+Inside the localhost workbench use the new **Community brain** section or `GET /api/brain?focus=start` to explore **start, support, safety, moderate, legal, documents, volunteer**. The existing deterministic Ask attendant also recognizes Still Here / survivor group / moderator recruitment questions, while leaving every consequential crossing under human permission.
+
+See [COMMUNITY-BRAIN-006](docs/COMMUNITY-BRAIN-006.md) for the exact role, source, and privacy contracts. Draft webZ release references remain staged, not automatically deployed here.
+
 ## Try the local attendant
 
 Node.js 20+ and no third-party runtime packages required.
