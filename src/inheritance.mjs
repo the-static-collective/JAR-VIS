@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { LocalJournal } from "./journal.mjs";
+import { deriveReviewSeat } from "./reviewer-discovery.mjs";
 
 // Work That Inherits 001: a LOCAL operator notebook, not a public intake or identity service.
 // A review is a recorded assertion. Neither a hash nor a reviewer alias establishes physical truth.
@@ -70,6 +71,7 @@ export class InheritanceBoard {
       schema: "jarvis.work-inherits/v0",
       mode: "LOCAL_ONLY / UNAUTHENTICATED / NO_EXTERNAL_EFFECT",
       records,
+      reviewerSeats: records.map((record) => deriveReviewSeat(record)).filter(Boolean),
       counters: {
         weaves: records.length,
         commitments: records.filter((r) => r.commitment).length,
