@@ -71,16 +71,18 @@ async function triage(op,b){
  if(!current||current.status==="WITHDRAWN")throw new Err("MISSING_OR_WITHDRAWN",404);
  const plan=planTriage(current,b.decision,b);
  if(!plan.allowed)throw new Err(plan.why,["INVALID_STAGE_FOR_TRANSITION","CONFLICT_REVIEW_REQUIRED","MISSING_OR_WITHDRAWN"].includes(plan.why)?409:400);
- const updates: Record<string, unknown> = {...plan.patch,triage_note:explanation,triage_actor:"scoped:"+op.id,triaged_at:now};
- if(b.decision==="invite")updates.invitation_recorded_at=now;
- if(b.decision==="accept")updates.acceptance_recorded_at=now;
- // No action can ever set 'independently_verified' to true.
- const {data:changed,error:we}=await db.from("inheritance_interest").update(updates).eq("id",b.id)
-   .eq("status",current.status).select("id,status,conflict_disposition,independently_verified").maybeSingle();
- if(we)throw new Err("TRIAGE_STORAGE_UNAVAILABLE",503);
+ // One SQL transaction: compare-and-swap the stage, then append its audit.
+ // A failed audit rolls back the update. The RPC is granted only to service_role.
+ const {data,error:we}=await db.rpc("inheritance_commit_triage",{
+  p_id:b.id,p_expected:current.status,p_status:plan.patch.status,
+  p_conflict:plan.patch.conflict_disposition||null,p_actor:"scoped:"+op.id,
+  p_note:explanation,p_audit_action:plan.audit,
+  p_invited:b.decision==="invite",p_accepted:b.decision==="accept"
+ });
+ if(we)throw new Err(we.message?.includes("STALE_OR_WITHDRAWN")?"STALE_OR_WITHDRAWN":"TRIAGE_STORAGE_UNAVAILABLE",
+    we.message?.includes("STALE_OR_WITHDRAWN")?409:503);
+ const changed=Array.isArray(data)?data[0]:null;
  if(!changed)throw new Err("STALE_OR_WITHDRAWN",409);
- // Audit is best-effort: user action is preserved even if audit write fails.
- await db.from("inheritance_audit").insert({interest_id:b.id,action:plan.audit,actor:"scoped:"+op.id,note:""});
  return {ok:true,id:changed.id,status:changed.status,conflict:changed.conflict_disposition,
    independentlyVerified:false,publiclyPublished:false,
    reminder:"Recorded operator assertion only; no automatic outreach, reviewer admission or completed work."};
