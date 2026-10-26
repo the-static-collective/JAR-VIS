@@ -4,6 +4,7 @@ let state = null;
 let csrfToken = "";
 let chosen = null;
 let toastTimeout;
+let preparedFirstYes = null;
 
 function el(tag, className, text) {
   const n = document.createElement(tag);
@@ -347,4 +348,70 @@ $("#askForm").addEventListener("submit", (event) => {
 document.querySelectorAll("[data-ask]").forEach((button) => {
   button.addEventListener("click", () => ask(button.dataset.ask));
 });
+function renderFirstYesKit(kit) {
+  const target=$("#firstYesResult");
+  if(!kit||kit.schema!=="jarvis.campfire-first-yes/v0"||
+     !["LOCAL_DRAFT_NOT_SENT","HOLD_SOURCE_INTEGRITY"].includes(kit.standing)) {
+    throw new Error("The returned work card was not a valid First Yes proposal.");
+  }
+  const heading=el("h3","",kit.firstYes.heading);
+  const status=el("p","",kit.standing+" · Nothing sent or executed.");
+  const explain=el("p","description",
+   "This came from an administrator-approved read of this host's Campfire Attention Desk. It is a proposal, not independent evidence.");
+  const labels=[
+    ["The question you asked",kit.operatorQuestion],
+    ["Why the Firebox proposed this",kit.firstYes.observed],
+    ["What could be prepared",kit.firstYes.prepare],
+    ["Who must decide",kit.firstYes.permission],
+    ["What would count as evidence",kit.firstYes.whatWouldCount],
+    ["Optional invitation draft — UNSENT",kit.firstYes.voluntaryInvitationDraft||"No invitation while integrity is in HOLD."],
+    ["Evidence fingerprint (not an authority receipt)",kit.provenance.sourceDigest]
+  ];
+  const list=el("div","first-yes-card");
+  for(const [title,text] of labels){
+    const article=el("article","first-yes-item");
+    article.append(el("strong","",title),el("p","",text));
+    list.append(article);
+  }
+  target.replaceChildren(heading,status,explain,list);
+  $("#firstYesDownload").disabled=false;
+  $("#firstYesStatus").textContent=kit.standing==="HOLD_SOURCE_INTEGRITY"
+    ?"HALT: investigate local logbook integrity. The prepared card contains no invitation."
+    :"A reviewed-only work card is prepared locally. You decide whether to act.";
+}
+$("#firstYesPrepare").addEventListener("click", async () => {
+  preparedFirstYes=null;
+  $("#firstYesDownload").disabled=true;
+  $("#firstYesStatus").textContent="Reading the owner Firebox only when requested…";
+  try{
+    const output=await call("/api/campfire/first-yes",{question:$("#firstYesQuestion").value});
+    if(output?.boundaries?.authorization!=="NONE_IMPORTED"||
+       output?.boundaries?.invitationSent!==false||
+       output?.boundaries?.backendMutation!==false||
+       typeof output.markdown!=="string")
+      throw new Error("A safe work card could not be confirmed.");
+    preparedFirstYes=output;
+    renderFirstYesKit(output);
+  }catch(err){
+    $("#firstYesStatus").textContent=err.message+
+     " The Firebox remains unchanged; check that it is running and the local operator key is accessible.";
+    $("#firstYesResult").replaceChildren(el("p","description",
+      "No work card prepared. No private records, invitations, or participant data were sent."));
+  }
+});
+$("#firstYesQuestion").addEventListener("input",()=>{
+  preparedFirstYes=null;
+  $("#firstYesDownload").disabled=true;
+  $("#firstYesStatus").textContent="Question changed. Read the source again to prepare a new work card.";
+});
+$("#firstYesDownload").addEventListener("click",()=>{
+  if(!preparedFirstYes||!preparedFirstYes.markdown)return;
+  const blob=new Blob([preparedFirstYes.markdown],{type:"text/markdown;charset=utf-8"});
+  const uri=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=uri;a.download="campfire-first-yes-unsent.md";
+  document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(uri),1000);
+  $("#firstYesStatus").textContent="Local printable work card downloaded. No invitation was sent and no result was published.";
+});
+
 refresh().catch((error) => toast(error.message + " — check the local server."));
