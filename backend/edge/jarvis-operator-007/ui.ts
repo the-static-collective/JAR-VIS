@@ -1,6 +1,6 @@
 // Mobile-first operator porch, with NO private data or secret embedded.
 // Credentials are kept in tab memory; never stored in URL or localStorage.
-export const page=String.raw\`<!doctype html><html lang="en"><head><meta charset="utf-8">
+export const page=String.raw`<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>JAR;VIS Operator Porch</title>
 <style>
 :root{color-scheme:dark;font:16px system-ui;background:#101b16;color:#e7efe2}*{box-sizing:border-box}
@@ -30,8 +30,8 @@ button:disabled{opacity:.5}.item{border-top:1px solid #3f5946;padding:14px 0;ove
 <section><h2>Decisions</h2><div id="jobs"></div></section>
 <section><h2>Receipt trail</h2><div id="receipts"></div></section>
 </div><footer class="muted">Attention is not authority. Return is not admission. Fictional tasks only; no contact, publication, or external delivery.</footer>
-</main><script defer src="/functions/v1/jarvis-operator-007/ui.js"></script></body></html>\`;
-export const client=String.raw\`'use strict';
+</main><script defer src="/functions/v1/jarvis-operator-007/ui.js"></script></body></html>`;
+export const client=String.raw`'use strict';
 (()=>{let access='';
 const get=id=>document.getElementById(id);
 const element=(tag,text)=>{const e=document.createElement(tag);e.textContent=String(text??'');return e;};
@@ -79,4 +79,4 @@ get('create').addEventListener('submit',async ev=>{ev.preventDefault();
  try{const result=await send('enqueue',{key,label});get('label').value='';get('notice').textContent='Stored as '+result.status+'.';await refresh();}
  catch(e){get('notice').textContent=e.message;}
 });
-})();\`;
+})();`;
