@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#15251f">
-<title>JAR;VIS — The Attendant Workbench</title><link rel="stylesheet" href="/site.css"><script src="/app.js" defer></script></head>
+<title>JAR;VIS — The Attendant Workbench</title><link rel="stylesheet" href="/site.css"><script src="/app.js" defer></script><script src="/brain.js" defer></script></head>
 <body><div class="shell">
 <aside class="sidebar" aria-label="Workbench navigation">
   <div class="brand"><div class="brand-mark" aria-hidden="true">;</div><div><div class="brand-name">JAR<span>;</span>VIS</div><div class="brand-sub">THE ATTENDANT</div></div></div>
@@ -8,7 +8,7 @@
   <nav class="nav">
     <a href="#field"><span>◈</span> Field overview <small>01</small></a><a href="#particulars"><span>◫</span> The particulars <small>02</small></a>
     <a href="#crossing"><span>⋈</span> The crossing <small>03</small></a><a href="#heartbeat"><span>♡</span> Heartbeat <small>04</small></a><a href="#doors"><span>⌘</span> Project doors <small>04</small></a>
-    <a href="#party"><span>✳</span> House party <small>05</small></a><a href="#history"><span>≡</span> Receipts & returns <small>06</small></a>
+    <a href="#party"><span>✳</span> House party <small>05</small></a><a href="#community-brain"><span>✳</span> Community brain <small>OPEN</small></a><a href="#history"><span>≡</span> Receipts & returns <small>06</small></a>
   </nav>
   <div class="sidebar-note"><b class="pulse"></b>LOCAL WORKBENCH<br><small>Opt-in GitHub public reads; no external writes</small></div>
   <div class="sidebar-bottom">JUBILEE / VOLUNTARY<br>INTEGRATION / STEWARDSHIP<br><strong>THE STATIC COLLECTIVE</strong></div>
@@ -84,6 +84,34 @@
         </div>
         <div class="party-results"><h3>Guests &amp; return</h3><div id="partyResult" aria-live="polite"><p class="description">No party has returned yet. Press the button to create two locally attributable fixture occurrences.</p></div></div>
       </div>
+    </section>
+    <section class="panel brain-panel" id="community-brain" aria-labelledby="brain-title">
+      <div class="panel-heading"><div><div class="overline">BRAIN-006 / THE WORK CREATES THE ROLES</div>
+        <h2 id="brain-title">Who could help make the next step possible?</h2></div>
+        <span class="badge badge-warm">PUBLIC / UNFILLED</span></div>
+      <p class="description">JAR;VIS now remembers the new Still Here survivor-community proposal and the Workboard's bottleneck-to-recruitment design. Start with <strong>one trusted friend</strong>, consult <strong>an experienced survivor advocate</strong>, and seek <strong>qualified nonprofit legal guidance</strong>. Nobody has been appointed or contacted by JAR;VIS.</p>
+      <p class="description">Still Here is an <strong>independent, unstaffed prototype</strong> focused on isolated survivors, especially fathers facing abusive relationships and difficult co-parenting. All genders are welcome. This is not a legal service, public testimony repository, or live peer-support group. Personal custody/legal support stays separate from the group.</p>
+      <label class="brain-label" for="brain-focus">Which kind of missing capability?</label>
+      <select id="brain-focus" aria-controls="brain-cards">
+        <option value="start">First three people / founding</option>
+        <option value="support">Survivor-centered listening design</option>
+        <option value="safety">Privacy and safeguarding</option>
+        <option value="moderate">Human moderation bottleneck</option>
+        <option value="legal">Legal lanes kept separate</option>
+        <option value="documents">Private chronology and tools</option>
+        <option value="volunteer">Volunteer design invitations</option>
+      </select>
+      <p id="brain-status" class="description" role="status" aria-live="polite">Reading public, unfilled capability needs…</p>
+      <div id="brain-cards" class="brain-cards"></div>
+      <div class="brain-footnote"><strong>What happens next:</strong> Name a specific blocker → make a bounded, optional open seat → ask a willing human → obtain separate permission where needed → test a fictional or safely authorized trial → return only reviewed, privacy-safe learning. A refusal is a valid return.</div>
+      <p class="description"><strong>Privacy:</strong> Do not put allegations, survivor stories, identifying child/custody information, legal documents, or volunteer contact details into this brain. This page accepts only fixed topic choices. Existing JAR;VIS demo approvals remain MOCK, not permission to support real people.</p>
+      <div class="brain-linkbar">
+        <a href="https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/porch-doors" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Still Here · public design preview ↗</a>
+        <a href="https://github.com/the-static-collective/webZ/pull/133" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Source proposal ↗</a>
+      </div>
+      <details><summary>Public source register · independent links are options, not endorsements</summary>
+        <div id="brain-sources" class="brain-sources"></div>
+      </details>
     </section>
     <section class="panel" id="history"><div class="panel-heading"><div><div class="overline">05 / ACCOUNTABLE RETURN</div><h2>Receipts & returns</h2></div><span class="badge badge-warm">LOCAL JOURNAL</span></div><p class="description">Each proposal, simulated grant, HOLD and mock crossing is appended to a hash-chained local journal. The chain is integrity-checkable, not signed. A source read records its URL, content hash, and observation time, never approval.</p><div id="eventList" class="event-list" aria-live="polite">No local events yet.</div></section>
     <footer>JAR HOLDS WHAT MATTERS. VIS ATTENDS TO WHAT IS POSSIBLE. <strong>THE CROSSING BELONGS TO THOSE CONCERNED.</strong></footer>

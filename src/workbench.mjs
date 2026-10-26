@@ -8,6 +8,7 @@ import { inspectPublicDoor, publicDoorIds } from "./public-doors.mjs";
 import { composeFixtureGardenParty } from "./house-party.mjs";
 import { inspectNativeTestimony } from "./native-testimony.mjs";
 import { projectHeartbeat, fixtureWitness } from "./heartbeat.mjs";
+import { communityBrain, communityBrainAnswer } from "./community-brain.mjs";
 
 const copy = (v) => structuredClone(v);
 const notFound = (message) => Object.assign(new Error(message), { status: 404 });
@@ -93,6 +94,7 @@ export class Workbench {
     return {
       schema: "jarvis.workbench-state/v0",
       mode: "LOCAL / SYNTHETIC / MOCK",
+      communityBrain: communityBrain({ focus: "start" }),
       particulars: observe(this.#jar),
       doors: copy(doors),
       sourceObservations: [...sourceObservations.values()].map(copy),
@@ -245,6 +247,10 @@ export class Workbench {
   attend(question) {
     if (typeof question !== "string" || question.length > 500) throw bad("Question must be 500 characters or less");
     const q = question.trim().toLowerCase();
+    // The project brain only reasons over public, editorial capability gaps.
+    // Never save, repeat, infer, or route a person's allegation to community memory.
+    const communityReply = communityBrainAnswer(question);
+    if (communityReply) return communityReply;
     const state = this.state();
     let answer;
     if (/consent|authoriz|approv|permission|gate|semicolon/.test(q)) {

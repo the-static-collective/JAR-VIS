@@ -2,10 +2,12 @@ import { createServer } from "node:http";
 import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { Workbench } from "./workbench.mjs";
+import { communityBrain, BRAIN_FOCI } from "./community-brain.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/app.js", [new URL("../public/app.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/brain.js", [new URL("../public/brain.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/site.css", [new URL("../public/site.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
@@ -58,6 +60,17 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/brain") {
+          // Strictly fixed topic keys. Never accept a narrative, case fact, name,
+          // or free-text query into a public or persistent knowledge store.
+          const params = new URL(req.url, "http://" + host).searchParams;
+          if ([...params.keys()].some(key => key !== "focus") || params.getAll("focus").length > 1) {
+            return reply(res, 400, { error: "Only one fixed focus is accepted" });
+          }
+          const focus = params.get("focus") ?? "start";
+          if (!BRAIN_FOCI.includes(focus)) return reply(res, 400, { error: "Unknown brain focus" });
+          return reply(res, 200, communityBrain({ focus }));
+        }
         const staticEntry = staticFiles.get(pathname);
         if (!staticEntry) return reply(res, 404, { error: "Not found" });
         const [path, type] = staticEntry;
