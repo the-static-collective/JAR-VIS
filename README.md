@@ -10,6 +10,12 @@
 
 JAR;VIS is an attendant across independently owned projects, not a master AI, global database, or replacement for the systems it serves. It observes fictional particulars, explains potential connections, proposes bounded actions, requests simulated authorization, and records what happened — including HOLD.
 
+## Tomorrow's Work — Work That Inherits 001
+
+The local operator notebook at **[http://127.0.0.1:7789/inherit](http://127.0.0.1:7789/inherit)** can now record a possible community task → a steward's stated voluntary commitment → an unverified report → a separate operator-recorded review → a reusable candidate method and invitation. It persists in an independent append-only journal, survives restarts, and never auto-publishes, notifies, executes, or promotes testimony to verified fact. This is **not** a public platform or authenticated real-world participation service.
+
+See [Work That Inherits 001](docs/WORK-THAT-INHERITS-001.md) for the workflow, boundaries, synthetic milk-route scenario, and pilot acceptance criteria.
+
 ## Try the local attendant
 
 Node.js 20+ and no third-party runtime packages required.
