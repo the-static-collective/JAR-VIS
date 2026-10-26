@@ -4,7 +4,7 @@
  * Test: node --test post-office/post-office.test.mjs
  *
  * Prepare: node post-office/post-office.mjs --queue /private/queue.json --receipts /private/receipts.jsonl
- * Transmit: POST_OFFICE_APPROVE=<campaign> RESEND_API_KEY=... EMAIL_FROM='Lu <hello@abundent.org>' \
+ * Transmit: POST_OFFICE_APPROVE=<campaign> RESEND_API_KEY=... EMAIL_FROM='Lu <us@abundent.org>' \
  *           node post-office/post-office.mjs --queue /private/queue.json --receipts /private/receipts.jsonl --send
  */
 import { readFile, appendFile, mkdir } from 'node:fs/promises';
