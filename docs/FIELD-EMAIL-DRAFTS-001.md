@@ -97,4 +97,4 @@ The Static Collective
 [Provider-managed unsubscribe link REQUIRED before sending to subscribers.]
 
 ## Outbound status, October 26
-Sender: unconfigured · DNS sending records: not provisioned · confirmed reply mailbox: none · campaigns submitted: 0 · scheduled: 0 · external deliveries witnessed: 0.
+Address: us@abundent.org · inbound forward created with Porkbun · live Cloudflare MX and SPF records installed and read back · no end-to-end delivery witness yet · outbound sending-domain verification and provider credentials not provisioned · campaigns submitted: 0 · scheduled: 0 · external deliveries witnessed: 0. The private destination of the forward is held at Porkbun, not in GitHub.
