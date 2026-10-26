@@ -87,7 +87,7 @@ async function triage(op,b){
  }
  if(b.decision==="accept"&&b.humanConsentConfirmed!==true)throw new Err("RECIPIENT_ACCEPTANCE_ATTESTATION_REQUIRED",400);
  if(b.decision==="conflict_clear"&&b.conflictCheckConfirmed!==true)throw new Err("CONFLICT_SCREENING_ATTESTATION_REQUIRED",400);
- const updates={status:to,triage_note:explanation,triage_actor:"scoped:"+op.id,triaged_at:now};
+ const updates: Record<string, unknown> = {status:to,triage_note:explanation,triage_actor:"scoped:"+op.id,triaged_at:now};
  if(b.decision==="conflict_clear")updates.conflict_disposition="NO_KNOWN_CONFLICT_REVIEWED";
  if(b.decision==="conflict_hold")updates.conflict_disposition="CONFLICT_HOLD";
  if(b.decision==="invite")updates.invitation_recorded_at=now;
