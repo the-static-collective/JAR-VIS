@@ -62,7 +62,7 @@ test("all opening roles remain draft, source-bound and never operationally staff
   assert.ok(seat.blocker.length>50&&seat.safeFirst.length>50);
   assert.ok(seat.prohibited.length>50&&seat.authority.length>50);
   assert.ok(seat.sourceIds.every(id=>BRAIN_SOURCES.some(s=>s.id===id)));
-  assert.doesNotMatch(seat.status,/FILLED|OPERATING|APPROVED$/);
+  assert.ok(["OPEN_INVITATION_UNFILLED","CONSULTATION_NOT_REQUESTED","PRIVATE_OPTION_NOT_ENROLLED","OPEN_DESIGN_SEAT_UNFILLED","KNOWN_IMPLEMENTATION_GAP_UNFILLED"].includes(seat.status));
  }
  assert.deepEqual(BRAIN_FOCI,["start","legal","support","safety","moderate","documents","volunteer"]);
  assert.throws(()=>communityBrain({focus:"arbitrary"}));
