@@ -2,11 +2,11 @@
 // Public safe seats only; private pending applications; review never auto-verified.
 import { createClient } from "npm:@supabase/supabase-js@2.78.0";
 import { SITE } from "./site.ts";
-const URL = Deno.env.get("SUPABASE_URL") || "";
+const PROJECT_URL = Deno.env.get("SUPABASE_URL") || "";
 const KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-if (!URL || !KEY) throw new Error("SERVER_CONFIGURATION_MISSING");
-const db = createClient(URL, KEY, { auth: { persistSession: false, autoRefreshToken: false } });
-const ORIGIN = new URL(URL).origin;
+if (!PROJECT_URL || !KEY) throw new Error("SERVER_CONFIGURATION_MISSING");
+const db = createClient(PROJECT_URL, KEY, { auth: { persistSession: false, autoRefreshToken: false } });
+const ORIGIN = new URL(PROJECT_URL).origin;
 const HEAD = { "cache-control": "no-store", "referrer-policy": "no-referrer", "x-content-type-options": "nosniff", "permissions-policy":"camera=(),microphone=(),geolocation=()" };
 const CSP = "default-src 'none'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; form-action 'self'; img-src 'self' data:";
 const PERSONAL = /[\w.+-]+@[\w.-]+\.[a-z]{2,}|(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|https?:\/\/|www\./i;
