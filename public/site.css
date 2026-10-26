@@ -34,3 +34,12 @@
 .heartbeat-witness .button{align-self:start;width:auto}
 @media(max-width:1100px){.heartbeat-steps{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:680px){.heartbeat-steps{grid-template-columns:1fr}}
+
+/* FIRST-YES-001 · human-readable, read-only work preparation */
+.first-yes-card{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:12px;margin-top:15px}
+.first-yes-item{background:#f2f7ed;border:1px solid #cad9c4;border-radius:9px;padding:15px;overflow-wrap:anywhere}
+.first-yes-item strong{display:block;color:#1c4831;font-size:12px;text-transform:uppercase;letter-spacing:.07em}
+.first-yes-item p{line-height:1.7;font-size:13px;color:#365044;margin:9px 0 0}
+#firstYesQuestion{display:block;box-sizing:border-box;width:100%;padding:12px;border:1px solid #bed5b8;border-radius:7px;margin:9px 0;font:inherit;color:#233c2b}
+#firstYesStatus{overflow-wrap:anywhere}
+@media(max-width:760px){.first-yes-card{grid-template-columns:1fr}}
