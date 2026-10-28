@@ -2,6 +2,7 @@
 // Only a named public ref/commit is seen. Never infer deployment, permission or work performed.
 import {readFile,writeFile} from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
+import {runQueue} from './change-candidates.mjs';
 
 export const WATCHED=Object.freeze([
  {repo:'webZ',ref:'main',tags:['abundent','jubilee','porchlight','garden','switchboard','becoming']},
@@ -75,7 +76,9 @@ async function main(){
  try{previous=validateSnapshot(JSON.parse(await readFile(OUTPUT,'utf8')))}catch{/* first scan or old invalid file: no invented history */}
  const snapshot=await collect({previous,token:process.env.GITHUB_TOKEN||''});
  if(snapshot.sources.every(s=>s.status==='HOLD'))throw Error('ALL_SOURCES_HOLD_NO_PUBLICATION');
+ const queue=await runQueue({previous,current:snapshot,token:process.env.GITHUB_TOKEN||''});
  await writeFile(OUTPUT,JSON.stringify(snapshot,null,2)+'\n','utf8');
+ process.stdout.write('Change review: '+queue.candidates.filter(c=>c.state==='PENDING_REVIEW').length+' pending, '+queue.candidates.filter(c=>c.state==='HOLD_COMPARE').length+' HOLD.\n');
  process.stdout.write('Source pointer observation: '+snapshot.sources.filter(s=>s.status==='OBSERVED_HEAD').length+
   ' READ, '+snapshot.sources.filter(s=>s.status==='HOLD').length+' HOLD, '+snapshot.events.length+' bounded observed movements.\n');
 }
