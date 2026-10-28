@@ -1,6 +1,6 @@
 {
   "schema": "static-collective/recent-work-feed-v1",
-  "release": "RECENT-2026-10-28-005",
+  "release": "RECENT-2026-10-28-006",
   "reviewedOn": "2026-10-28",
   "authority": "PUBLIC_EDITORIAL_SOURCE_NOT_PARTNER_AUTHORITY",
   "disclosure": "This curated, dated catalog is not a live availability feed, service enrollment, or verified community roster. Source commits identify public project text; they do not establish partnerships, permission, field completion or canonical adoption. Every community and project retains its own authority.",
@@ -391,6 +391,36 @@
       ],
       "publicUrl": "https://apps.abundent.org/bridge/",
       "source": "https://github.com/the-static-collective/webZ/blob/8b36ba2940d793e73efedc936c01d6b6e6f41d58/docs/BRIDGE-001.md"
+    },
+    {
+      "id": "ATLAS-BRIDGE-002",
+      "title": "Between Rooms · Constellation Atlas of 89 public project doors",
+      "state": "PUBLIC_PROTOTYPE",
+      "summary": "A dated public Git map snapshot with 89 repository addresses, 34 explicitly scoped role notes, five source-declared relations and six candidate compositions including GHoT energy-aware compute, LOADOUT, GRAFT, and accountable institutional invitations. The static atlas does not execute projects or establish partner/canon status.",
+      "firstCheck": "Which single source-owned capability, exact version, willing local steward and destination reviewer should be independently authorized for one bounded crossing?",
+      "tags": [
+        "atlas",
+        "bridge",
+        "institutions",
+        "ghot",
+        "energy",
+        "compute",
+        "loadout",
+        "cannon",
+        "grO",
+        "garden",
+        "free-graph",
+        "graft",
+        "relatte",
+        "planz",
+        "jarvis",
+        "civic",
+        "music",
+        "food",
+        "proof"
+      ],
+      "publicUrl": "https://apps.abundent.org/bridge/atlas/",
+      "source": "https://github.com/the-static-collective/webZ/blob/29b2b1a8ba618ff46d404142749a057203d22381/docs/BRIDGE-ATLAS-002.md"
     }
   ]
 }
