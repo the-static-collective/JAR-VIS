@@ -5,7 +5,7 @@ import {
 import { LocalJournal } from "./journal.mjs";
 import { doors } from "./doors.mjs";
 import { inspectPublicDoor, publicDoorIds } from "./public-doors.mjs";
-import { readPlanZAttention, findPlanAttention } from "./planz-attention.mjs";
+import { readPlanZAttention, findPlanAttention, PLANZ_URL, validatePlanZFeed } from "./planz-attention.mjs";
 import { composeFixtureGardenParty } from "./house-party.mjs";
 import { inspectNativeTestimony } from "./native-testimony.mjs";
 import { projectHeartbeat, fixtureWitness } from "./heartbeat.mjs";
@@ -168,6 +168,7 @@ export class Workbench {
         problem.status = 502; problem.cause = error; throw problem;
       }
       if(observation?.schema!=="jarvis.planz-attention-observation/v0" ||
+         observation.source!==PLANZ_URL ||
          observation.access!=="public-read-only" || observation.admission!=="none" ||
          observation.runtimeConnected!==false || observation.authority!=="INDEX_ONLY" ||
          !/^[0-9a-f]{64}$/.test(observation.contentSha256??"") ||
@@ -177,6 +178,8 @@ export class Workbench {
             x.thirdPartyApproval!=="NOT_ESTABLISHED")){
         throw bad("planZ index violated read-only HOLD boundary");
       }
+      try { validatePlanZFeed({schema:"planz/public-attention-v1",edition:observation.edition,reviewedOn:observation.reviewedOn,authority:observation.authority,entries:observation.records}); }
+      catch { throw bad("planZ index records did not pass independent source-shape validation"); }
       await this.#journal.append("PLANZ_INDEX_INSPECTED", observation, this.#clock());
       return { observation: copy(observation), admittedAction:false };
     });
@@ -282,7 +285,7 @@ export class Workbench {
       answer = "Kinship has a process-local mock adapter only. " + state.counters.mockRelays + " simulated crossing(s) are in the local journal. No real broadcast, website post, or external message occurs.";
     } else if (/relatte|receipt|signature/.test(q)) {
       answer = "These are local JAR;VIS receipts with no signatures. reLATTE signing and receiver admission are separate future integrations. A receipt is not proof of fulfillment.";
-    } else if (/planz|plans|backlog|unfinished|ghana|waseca|porchlight|global crossing/.test(q)) {
+    } else if (/planz|plans|backlog|unfinished|ghana|waseca|porchlight|global crossing/.test(q) || (state.planIndex && /what needs attention|what should we do next/.test(q))) {
       const observed = state.planIndex;
       if(!observed) {
         answer = "planZ is an unconnected, read-only public source. Inspect its reviewed plan index explicitly in Project doors first. A plan index is not a live machine or authority.";

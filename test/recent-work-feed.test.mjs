@@ -29,3 +29,10 @@ test('newest crossing and neighboring work cannot be labeled as established part
   assert.ok(e);assert.ok(['PUBLIC_PROTOTYPE','RESEARCH_PROPOSAL'].includes(e.state));
  }
 });
+
+test('planZ owner-reviewed subset is discoverable without field or partner claims',()=>{
+ const p=data.entries.find(x=>x.id==='PLANZ-001');
+ assert.ok(p);assert.equal(p.state,'DOCUMENTED_IMPLEMENTATION');
+ assert.match(p.summary,/subset|seven-plan/);
+ assert.match(p.source,/\/planZ\/blob\/[a-f0-9]{40}\/docs\/ATTENTION-001\.md$/);
+});

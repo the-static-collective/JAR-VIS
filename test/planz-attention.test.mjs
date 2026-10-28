@@ -80,3 +80,14 @@ test("local HTTP inspection requires CSRF and has no arbitrary source URL",()=>s
   assert.equal(app.state().outbox.length,0);
  }finally{await server.close()}
 }));
+
+test('a forged source-reader cannot smuggle plan authority or unreviewed source addresses',()=>sandbox(async journalPath=>{
+ const good=await readPlanZAttention({fetchImpl:fetcher(),now});
+ const forged=structuredClone(good);forged.source='https://example.com/new-index';
+ const app=await Workbench.open({journalPath,clock:now,planReader:async()=>forged});
+ await assert.rejects(app.inspectPlanIndex(),/HOLD boundary/);
+ assert.equal(app.state().events.length,0);
+ forged.source=PLANZ_URL;forged.records[0].source='https://example.com/evil';
+ await assert.rejects(app.inspectPlanIndex(),/independent source-shape/);
+ assert.equal(app.state().planIndex,null);
+}));

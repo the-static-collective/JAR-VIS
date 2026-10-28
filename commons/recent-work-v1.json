@@ -1,6 +1,6 @@
 {
   "schema": "static-collective/recent-work-feed-v1",
-  "release": "RECENT-2026-10-28-003",
+  "release": "RECENT-2026-10-28-004",
   "reviewedOn": "2026-10-28",
   "authority": "PUBLIC_EDITORIAL_SOURCE_NOT_PARTNER_AUTHORITY",
   "disclosure": "This curated, dated catalog is not a live availability feed, service enrollment, or verified community roster. Source commits identify public project text; they do not establish partnerships, permission, field completion or canonical adoption. Every community and project retains its own authority.",
@@ -336,6 +336,33 @@
       ],
       "publicUrl": "https://postoffice.abundent.org/",
       "source": "https://github.com/the-static-collective/JAR-VIS/blob/e83ab618a9d0815fbcaeb19b4707030ad0957930/docs/POST-OFFICE-004-FIRST-OUTBOUND-RECEIPT.md"
+    },
+    {
+      "id": "PLANZ-001",
+      "title": "planZ — public plan blockers and next human gates",
+      "state": "DOCUMENTED_IMPLEMENTATION",
+      "summary": "planZ now publishes a tested, hand-reviewed, seven-plan organizational attention index; JAR;VIS's localhost workbench can explicitly inspect it and surface topical blockers. It is a subset, not the global census or a live executor.",
+      "firstCheck": "Which owner-source issue and outstanding local permission must be reviewed before one plan can proceed?",
+      "tags": [
+        "planz",
+        "plans",
+        "planning",
+        "backlog",
+        "census",
+        "blocker",
+        "steward",
+        "next",
+        "unfinished",
+        "crossing",
+        "ghana",
+        "waseca",
+        "kinship",
+        "rock",
+        "community",
+        "review"
+      ],
+      "publicUrl": "https://github.com/the-static-collective/planZ/blob/main/public/attention-v1.json",
+      "source": "https://github.com/the-static-collective/planZ/blob/2864a3e5041d2dab80acad89a4971ecde678097e/docs/ATTENTION-001.md"
     }
   ]
 }
