@@ -10,7 +10,7 @@ const plan={id:"GLOBAL-CROSSING-001",title:"Porchlight Commons food distribution
  region:"Ghana (proposed)",nextGate:"Ask the local steward to review one bounded food distribution question.",
  blockedBy:["LOCAL_OPERATOR_PERMISSION"],tags:["ghana","food","porchlight"],related:[],disposition:"AWAITING_LOCAL_STEWARD",fieldOutcome:"NOT_VERIFIED",executionAllowed:false,thirdPartyApproval:"NOT_ESTABLISHED"};
 const obs={schema:"jarvis.planz-attention-observation/v0",source:PLANZ_URL,authority:"INDEX_ONLY",
- edition:"ATTENTION-2026-10-28-001",contentSha256:"a".repeat(64),observedAt:now(),records:[plan],
+ edition:"ATTENTION-2026-10-28-001",reviewedOn:"2026-10-28",contentSha256:"a".repeat(64),observedAt:now(),records:[plan],
  access:"public-read-only",admission:"none",runtimeConnected:false};
 const summary="Ask the local steward to test one shelf-stable route with approved existing distribution staff.";
 async function sandbox(fn){const dir=await mkdtemp(join(tmpdir(),"jar-return-"));try{return await fn(join(dir,"events.jsonl"))}finally{await rm(dir,{recursive:true,force:true})}}
