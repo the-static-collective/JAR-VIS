@@ -1,0 +1,6 @@
+{
+  "schema": "static-collective/review-decisions-v1",
+  "authority": "GITHUB_WRITE_REVIEWERS",
+  "disclosure": "Each record is a GitHub-authenticated, source-only human review of a specific candidate. The review may HOLD, dismiss or acknowledge source paths. It is never evidence of a deployment, an organizational partnership, an independently verified benefit, or authority over a receiving community.",
+  "records": []
+}
