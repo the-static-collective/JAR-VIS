@@ -1,7 +1,7 @@
 {
   "schema": "static-collective/change-candidates-v1",
   "authority": "NONE",
-  "scannedAt": "2026-10-28T17:48:04.781Z",
+  "scannedAt": "2026-10-28T22:42:56.526Z",
   "monitoredRepos": [
     "webZ",
     "reLATTE",
@@ -16,5 +16,156 @@
     "LOADOUT"
   ],
   "disclosure": "Automatically generated source-diff CANDIDATES, not reviewed claims, canon, releases, deployments, partnerships or completed acts. No automatic admission is possible.",
-  "candidates": []
+  "candidates": [
+    {
+      "id": "DIFF-6CBCEFA6C75FB3275B38",
+      "repo": "reLATTE",
+      "ref": "main",
+      "from": "746b0f3042d481dd49574fb215883030f6267148",
+      "to": "39038d66b15f43559c48c7da8b8a40a76b883ff0",
+      "observedAt": "2026-10-28T22:42:56.526Z",
+      "compareUrl": "https://github.com/the-static-collective/reLATTE/compare/746b0f3042d481dd49574fb215883030f6267148...39038d66b15f43559c48c7da8b8a40a76b883ff0",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "PENDING_REVIEW",
+      "reason": "NONE",
+      "totalFiles": 8,
+      "categoryCounts": {
+        "TESTS": 2,
+        "DOCUMENTATION": 3,
+        "CONFIGURATION": 0,
+        "SOURCE_CODE": 3,
+        "OTHER": 0
+      },
+      "files": [
+        {
+          "path": "README.md",
+          "status": "modified",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "docs/BRIDGE-005.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "docs/PLANZ-RETURN-TRANSPORT-001.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "src/bridge-review.ts",
+          "status": "added",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "src/index.ts",
+          "status": "modified",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "src/planz-return.ts",
+          "status": "added",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "test/bridge-review.test.ts",
+          "status": "added",
+          "category": "TESTS"
+        },
+        {
+          "path": "test/planz-return.test.ts",
+          "status": "added",
+          "category": "TESTS"
+        }
+      ]
+    },
+    {
+      "id": "DIFF-7C4F4DD7DE3A39941B28",
+      "repo": "planZ",
+      "ref": "main",
+      "from": "dad6593c3718c65fa4bb7a3650af8fc80d060ce6",
+      "to": "987ed4e88789ebb9e3a55953471510cb5cd93acf",
+      "observedAt": "2026-10-28T22:42:56.526Z",
+      "compareUrl": "https://github.com/the-static-collective/planZ/compare/dad6593c3718c65fa4bb7a3650af8fc80d060ce6...987ed4e88789ebb9e3a55953471510cb5cd93acf",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "PENDING_REVIEW",
+      "reason": "NONE",
+      "totalFiles": 14,
+      "categoryCounts": {
+        "TESTS": 3,
+        "DOCUMENTATION": 4,
+        "CONFIGURATION": 2,
+        "SOURCE_CODE": 4,
+        "OTHER": 1
+      },
+      "files": [
+        {
+          "path": ".github/workflows/validate.yml",
+          "status": "added",
+          "category": "CONFIGURATION"
+        },
+        {
+          "path": "README.md",
+          "status": "modified",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "docs/ATTENTION-001.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "docs/BRIDGE-005.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "docs/RETURN-TRIAGE-001.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "package.json",
+          "status": "added",
+          "category": "CONFIGURATION"
+        },
+        {
+          "path": "public/attention-v1.json",
+          "status": "added",
+          "category": "OTHER"
+        },
+        {
+          "path": "scripts/bridge-work-contract.mjs",
+          "status": "added",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "scripts/triage-bridge.mjs",
+          "status": "added",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "scripts/triage-return.mjs",
+          "status": "added",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "scripts/validate-attention.mjs",
+          "status": "added",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "test/attention.test.mjs",
+          "status": "added",
+          "category": "TESTS"
+        }
+      ]
+    }
+  ]
 }
