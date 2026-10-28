@@ -1,6 +1,7 @@
 "use strict";
 const $ = (id) => document.getElementById(id);
 let state = null;
+let planState = null;
 let selectedId = null;
 let csrf = "";
 let noticeTimer;
@@ -32,6 +33,8 @@ async function refresh() {
   if (!response.ok) throw new Error("Inheritance notebook is unavailable");
   state = await response.json();
   csrf = state.csrfToken;
+  const plans = await fetch("/api/state",{cache:"no-store"});
+  if(plans.ok)planState=(await plans.json()).planIndex;
   if (!state.records.some((r) => r.id === selectedId)) selectedId = state.records[0]?.id ?? null;
   render();
 }
@@ -47,6 +50,22 @@ async function submit(form, route, transform = (v) => v, after = () => {}) {
     await refresh();
     notice("Saved in the local append-only notebook. Nothing was published.");
   } catch (e) { notice(e.message); }
+}
+function renderPlanPicker(){
+  const picker=$("planChoice"),before=picker.value;
+  picker.replaceChildren();
+  if(!planState?.records?.length){
+    $("planStart").disabled=true;
+    $("planNotice").textContent="HOLD: return to Project doors and explicitly inspect planZ.";
+    return;
+  }
+  for(const p of planState.records){
+    const opt=node("option",p.title+" · "+p.disposition);opt.value=p.id;picker.append(opt);
+  }
+  if([...picker.options].some(o=>o.value===before))picker.value=before;
+  $("planStart").disabled=false;
+  $("planNotice").textContent="Observed "+new Date(planState.observedAt).toLocaleString()+
+    " · "+planState.edition+" · Source index only, no permission.";
 }
 function renderCounters() {
   const labels = [
@@ -89,6 +108,12 @@ function renderJourney() {
   if (!r) return;
   $("chosenTitle").textContent = r.title;
   $("chosenStatus").textContent = r.need + " · " + r.region + " · " + r.steward;
+  $("planOrigin").hidden=!r.planOrigin;
+  if(r.planOrigin)$("planOrigin").textContent="SOURCE: "+r.planOrigin.planId+
+    " · "+r.planOrigin.issueUrl+" · SHA-256 "+r.planOrigin.sourceSha256+" · unverified";
+  $("planReturnSection").hidden=!r.planOrigin||!r.capability;
+  $("planReturnForm").hidden=!!r.planReturn;
+  $("exportPlanReturnButton").hidden=!r.planReturn;
   $("timeline").replaceChildren(
     step("WEAVE", "Recorded need (possibility, not commitment)"),
     step("COMMITMENT", r.commitment ? "Steward choice asserted locally; identity not authenticated" : "Awaiting voluntary assertion"),
@@ -132,11 +157,27 @@ function renderReviewerNeeds() {
   }
 }
 function render() {
+  renderPlanPicker();
   renderCounters();
   renderReviewerNeeds();
   renderRecords();
   renderJourney();
 }
+$("planForm").addEventListener("submit",async(e)=>{
+  e.preventDefault();await submit(e.currentTarget,"from-plan",x=>x,r=>{selectedId=r.weave.id;});
+});
+$("planReturnForm").addEventListener("submit",async(e)=>{
+  e.preventDefault();await submit(e.currentTarget,"prepare-plan-return",
+    x=>({weaveId:selectedId,publicSummary:x.publicSummary,operatorRedacted:x.operatorRedacted==="on"}));
+});
+$("exportPlanReturnButton").addEventListener("click",()=>{
+  const record=state?.records.find(r=>r.id===selectedId);if(!record?.planReturn)return;
+  const blob=new Blob([JSON.stringify(record.planReturn,null,2)+"\n"],{type:"application/json"});
+  const uri=URL.createObjectURL(blob),link=document.createElement("a");
+  link.href=uri;link.download="planz-return-hold-"+record.planOrigin.planId+".json";
+  document.body.append(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(uri),5000);
+});
 $("newForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   await submit(e.currentTarget, "propose", (data) => data, (result) => { selectedId = result.weave.id; });

@@ -1,6 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { LocalJournal } from "./journal.mjs";
 import { deriveReviewSeat } from "./reviewer-discovery.mjs";
+import { makePlanReturn } from "./planz-return.mjs";
+import { PLANZ_URL } from "./planz-attention.mjs";
 
 // Work That Inherits 001: a LOCAL operator notebook, not a public intake or identity service.
 // A review is a recorded assertion. Neither a hash nor a reviewer alias establishes physical truth.
@@ -35,7 +37,7 @@ export class InheritanceBoard {
       const p = event.payload;
       if (event.kind === "INHERIT_WEAVE") {
         if (records.has(p.id)) throw new Error("Duplicate weave in journal");
-        records.set(p.id, { ...p, commitment: null, report: null, review: null, capability: null });
+        records.set(p.id, { ...p, commitment: null, report: null, review: null, capability: null, planReturn: null });
       } else if (event.kind?.startsWith("INHERIT_")) {
         const record = records.get(p.weaveId);
         if (!record) throw new Error("Orphan inheritance event");
@@ -43,7 +45,7 @@ export class InheritanceBoard {
           INHERIT_COMMITMENT: "commitment",
           INHERIT_REPORT: "report",
           INHERIT_REVIEW: "review",
-          INHERIT_RETURN: "capability"
+          INHERIT_RETURN: "capability", INHERIT_PLAN_RETURN_PREPARED: "planReturn"
         }[event.kind];
         if (!slot || record[slot]) throw new Error("Duplicate or unsupported inheritance event");
         record[slot] = p;
@@ -78,6 +80,7 @@ export class InheritanceBoard {
         reported: records.filter((r) => r.report).length,
         reviewed: records.filter((r) => r.review?.decision === "accept-report").length,
         reusableCandidates: records.filter((r) => r.capability).length,
+        planReturnsPrepared: records.filter((r) => r.planReturn).length,
         independentlyVerified: 0
       }
     });
@@ -95,6 +98,44 @@ export class InheritanceBoard {
       };
       await this.#journal.append("INHERIT_WEAVE", payload, payload.at);
       return { weave: copy(payload), status: "WEAVE_PROPOSED" };
+    });
+  }
+  proposeFromPlan({plan,observation,steward}={}) {
+    return this.#exclusive(async()=>{
+      if(observation?.schema!=="jarvis.planz-attention-observation/v0"||
+         observation.source!==PLANZ_URL||observation.authority!=="INDEX_ONLY"||
+         !/^[a-f0-9]{64}$/.test(observation.contentSha256??"")||
+         !/^ATTENTION-\d{4}-\d{2}-\d{2}-\d{3}$/.test(observation.edition??"")||
+         !Array.isArray(observation.records)||
+         !observation.records.some(p=>p.id===plan?.id&&p.source===plan?.source&&
+           p.nextGate===plan?.nextGate&&p.fieldOutcome==="NOT_VERIFIED"&&
+           p.executionAllowed===false&&p.thirdPartyApproval==="NOT_ESTABLISHED"))
+        throw error("HOLD: no validated inspected public plan",409);
+      const prior=[...this.#records().values()].find(r=>r.planOrigin?.planId===plan.id&&
+        r.planOrigin.sourceSha256===observation.contentSha256);
+      if(prior)return {weave:copy(prior),reused:true,status:"WEAVE_PROPOSED"};
+      const p={schema:"jarvis.inheritance-weave/v0",id:"weave:"+randomUUID(),
+        title:field(plan.title,"Plan title",100),need:field(plan.nextGate,"Next gate",500),
+        region:field(plan.region,"Region",100),steward:field(steward,"Steward alias",100),
+        planOrigin:{planId:plan.id,issueUrl:plan.source,sourceSha256:observation.contentSha256,
+          edition:observation.edition,observedAt:observation.observedAt,
+          status:"UNVERIFIED_EDITORIAL_PLAN",blockers:[...plan.blockedBy]},at:this.#clock()};
+      await this.#journal.append("INHERIT_WEAVE",p,p.at);
+      return {weave:copy(p),reused:false,status:"WEAVE_PROPOSED"};
+    });
+  }
+  preparePlanReturn({weaveId,publicSummary,operatorRedacted}={}) {
+    return this.#exclusive(async()=>{
+      const r=this.#require(weaveId);
+      if(r.planReturn){
+        if(r.planReturn.publicMethodCandidate!==publicSummary?.trim().replace(/\s+/g," "))
+          throw error("Immutable return differs; start a corrective weave",409);
+        return {packet:copy(r.planReturn),reused:true};
+      }
+      let packet;try{packet=makePlanReturn(r,publicSummary,{redacted:operatorRedacted,at:this.#clock()})}
+      catch(e){throw error(e.message,409)}
+      await this.#journal.append("INHERIT_PLAN_RETURN_PREPARED",packet,packet.preparedAt);
+      return {packet:copy(packet),reused:false};
     });
   }
   commit({ weaveId, actor, voluntary } = {}) {

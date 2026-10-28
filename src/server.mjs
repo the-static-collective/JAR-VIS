@@ -79,6 +79,14 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         if (!inherit) return reply(res, 503, { error: "Inheritance board not configured" });
         const operations = {
           "/api/inheritance/propose": () => inherit.propose(body),
+          "/api/inheritance/from-plan": () => {
+            const observation=app.state().planIndex;
+            if(!observation)throw Object.assign(new Error("HOLD: inspect planZ first"),{status:409});
+            const plan=observation.records.find(p=>p.id===body.planId);
+            if(!plan)throw Object.assign(new Error("HOLD: plan not in inspected index"),{status:409});
+            return inherit.proposeFromPlan({plan,observation,steward:body.steward});
+          },
+          "/api/inheritance/prepare-plan-return": () => inherit.preparePlanReturn(body),
           "/api/inheritance/commit": () => inherit.commit(body),
           "/api/inheritance/report": () => inherit.report(body),
           "/api/inheritance/review": () => inherit.review(body),

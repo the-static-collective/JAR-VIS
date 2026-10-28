@@ -94,3 +94,7 @@ The [versioned recent-work feed](commons/recent-work-v1.json) and [maintenance p
 ## planZ Attention 001 — owner-indexed next human gates
 
 The local operator can now explicitly inspect a [versioned planZ owner-reviewed public index](https://github.com/the-static-collective/planZ/blob/main/public/attention-v1.json). JAR;VIS verifies the schema, hashes exact bytes, preserves a replayable local source observation, and suggests topical **unfulfilled human review gates**, with links to source-owned issues. It does **not** fetch client records, execute plans, contact partners, or treat a source issue as proof of completed work. See [planZ Attention integration](docs/PLANZ-ATTENTION-001.md) and `test/planz-attention.test.mjs`. The original README purpose door remains separate.
+
+## Work → planZ candidate return
+
+From the local `/inherit` desk, an operator can choose a previously inspected planZ pointer and begin an unapproved local weave. A reported-completed, locally reviewed candidate can be returned as a **redacted, downloadable, owner-held JSON packet**; it remains `HOLD_FOR_OWNER_REVIEW` and cannot change planZ, validate field completion, email anyone or execute work. See [PLANZ-RETURN-001](docs/PLANZ-RETURN-001.md).
