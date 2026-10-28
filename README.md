@@ -86,3 +86,7 @@ The source-pinned real OpenManus → ELF lineage proof already exists in experim
 Authenticated and revocable human grants; versioned capability manifests or signed adverts owned by source projects; cryptographically signed, canonical reLATTE envelopes with receiver-local admission; privacy controls; durable effect idempotency; adapters to Kinship and GHoT behind explicit scopes; Abundent return portal.
 
 **No compulsory central master. No assumed consent. No automatic authority escalation.**
+
+## Recent public work catalog
+
+The [versioned recent-work feed](commons/recent-work-v1.json) and [maintenance protocol](docs/RECENT-WORK-FEED-001.md) orient the *public Ask JAR;VIS question machine* to October 2026's independently owned experiments, including Jubilee Circuit, Porchlight, Garden, Night Desk, farm correspondence, voluntary stewardship, music, publication and owned email. The feed is an explicitly reviewed public editorial snapshot, not field verification or an authorization to perform work. JAR;VIS selects relevant entries in its own read-only adapter, retains source pins and status, and does not transmit visitor questions to GitHub.

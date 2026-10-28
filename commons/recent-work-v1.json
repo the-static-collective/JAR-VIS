@@ -1,6 +1,6 @@
 {
   "schema": "static-collective/recent-work-feed-v1",
-  "release": "RECENT-2026-10-28-002",
+  "release": "RECENT-2026-10-28-003",
   "reviewedOn": "2026-10-28",
   "authority": "PUBLIC_EDITORIAL_SOURCE_NOT_PARTNER_AUTHORITY",
   "disclosure": "This curated, dated catalog is not a live availability feed, service enrollment, or verified community roster. Source commits identify public project text; they do not establish partnerships, permission, field completion or canonical adoption. Every community and project retains its own authority.",
@@ -290,6 +290,52 @@
       ],
       "publicUrl": "https://becoming.abundent.org/",
       "source": "https://github.com/the-static-collective/webZ/blob/c45c5fbab68daa24796203beb6b7695696d84949/apps/README.md"
+    },
+    {
+      "id": "PRESS-001",
+      "title": "LemonPRESS — print, digital and local publication",
+      "state": "RESEARCH_PROPOSAL",
+      "summary": "LemonPRESS separates physical, digital, crawler and archive editions. A low-cost community newspaper, newsletters and local distribution are ideas to test; no publication partner or printed issue is assumed.",
+      "firstCheck": "Which local publisher or printer would review one consented, inexpensive pilot page and distribution route?",
+      "tags": [
+        "press",
+        "newspaper",
+        "newsletter",
+        "publishing",
+        "publication",
+        "print",
+        "printer",
+        "books",
+        "magazine",
+        "community",
+        "lemonpress",
+        "radio"
+      ],
+      "publicUrl": "https://apps.abundent.org/",
+      "source": "https://github.com/the-static-collective/lemonPRESS/blob/02feb4454240d482a5e0e03258f24f8b5cc0b9f5/README.md"
+    },
+    {
+      "id": "POST-OFFICE-001",
+      "title": "Post Office — owned email and consented correspondence",
+      "state": "DOCUMENTED_IMPLEMENTATION",
+      "summary": "An owner-authorized outbound Resend self-test reached provider acceptance, not independently confirmed inbox delivery. Community newsletters and opt-in outreach require verified consent, suppression and delivery checks.",
+      "firstCheck": "Can the owner verify inbox receipt and replies before adding a consented newsletter or invitation list?",
+      "tags": [
+        "email",
+        "newsletter",
+        "resend",
+        "mail",
+        "postoffice",
+        "post-office",
+        "correspondence",
+        "contact",
+        "inbox",
+        "communication",
+        "outreach",
+        "subscribe"
+      ],
+      "publicUrl": "https://postoffice.abundent.org/",
+      "source": "https://github.com/the-static-collective/JAR-VIS/blob/e83ab618a9d0815fbcaeb19b4707030ad0957930/docs/POST-OFFICE-004-FIRST-OUTBOUND-RECEIPT.md"
     }
   ]
 }
