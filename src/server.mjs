@@ -105,7 +105,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res,200,{schema:"jarvis.bridge-work-triage/v1",...reviewed,
           disposition:"HOLD_FOR_OPERATOR_REVIEW",sourceInspectedExternally:false,
           ownerApproved:false,sourceOwnerPermission:false,receiverAdmitted:false,
-          allowedEffect:"NONE",sentExternally:false,partnerRecognized:false,
+          allowedEffect:"NONE",sentExternally:false,partnerRecognized:false,fieldVerified:false,
           nextHumanStep:reviewed.actionLabel,
           note:"This import checks a public-only candidate. No ledger secrets, source network read, institution contact or action performed."});
       }
