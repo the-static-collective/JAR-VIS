@@ -425,7 +425,7 @@
     {
       "id": "SHELF-001",
       "title": "The Missing Handoff — public Waseca food supply need",
-      "state": "DOCUMENTED_NEED_PUBLIC_SYNTHETIC_INSTRUMENT",
+      "state": "RESEARCH_PROPOSAL",
       "summary": "October 2026 Waseca sources show rising food shelf sourcing pressure, welcomed donated produce and existing Waseca co-op/MSU study of food rescue logistics. webZ now contains a source-backed, no-client-data fictional handoff demonstration. No specific recipient-defined software bottleneck, partners, field work, or verified deliveries exist.",
       "firstCheck": "Ask one authorized food shelf steward which sourcing or receiving coordination step actually needs improvement, and check with co-op/MSU teams for prior work; HOLD without their answers.",
       "tags": [
