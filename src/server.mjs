@@ -99,7 +99,9 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res, 200, await operations[pathname]());
       }
       if (pathname === "/api/bridge/triage") {
-        const reviewed=validateBridgeWork(body,"JARVIS");
+        let reviewed;
+        try { reviewed=validateBridgeWork(body,"JARVIS"); }
+        catch { return reply(res,422,{error:"HOLD_INVALID_BRIDGE_PACKET"}); }
         return reply(res,200,{schema:"jarvis.bridge-work-triage/v1",...reviewed,
           disposition:"HOLD_FOR_OPERATOR_REVIEW",sourceInspectedExternally:false,
           ownerApproved:false,sourceOwnerPermission:false,receiverAdmitted:false,
