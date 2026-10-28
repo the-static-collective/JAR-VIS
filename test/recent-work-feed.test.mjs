@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const data=JSON.parse(readFileSync(new URL('../commons/recent-work-v1.json',import.meta.url),'utf8'));
 const states=new Set(['PUBLIC_PROTOTYPE','RESEARCH_PROPOSAL','DOCUMENTED_IMPLEMENTATION','DOCUMENTED_PROTOCOL','LOCAL_OPERATOR_PROTOTYPE']);
-const publicHosts=new Set(['apps.abundent.org','garden.abundent.org','night.abundent.org','postoffice.abundent.org','becoming.abundent.org','webz-field-porch-theotherlucasv-1250s-projects.vercel.app','github.com']);
+const publicHosts=new Set(['apps.abundent.org','garden.abundent.org','night.abundent.org','postoffice.abundent.org','becoming.abundent.org','connections.abundent.org','webz-field-porch-theotherlucasv-1250s-projects.vercel.app','github.com']);
 test('JARVIS public field registry is bounded, versioned and source pinned',()=>{
  assert.equal(data.schema,'static-collective/recent-work-feed-v1');
  assert.match(data.release,/^RECENT-[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{3}$/);
