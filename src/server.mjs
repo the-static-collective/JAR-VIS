@@ -3,6 +3,7 @@ import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { Workbench } from "./workbench.mjs";
 import { InheritanceBoard } from "./inheritance.mjs";
+import {validateBridgeWork} from "./bridge-work-card.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
@@ -10,7 +11,9 @@ const staticFiles = new Map([
   ["/inherit", [new URL("../public/inherit.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/inherit.js", [new URL("../public/inherit.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/inherit.css", [new URL("../public/inherit.css", import.meta.url), "text/css; charset=utf-8"]],
-  ["/site.css", [new URL("../public/site.css", import.meta.url), "text/css; charset=utf-8"]]
+  ["/site.css", [new URL("../public/site.css", import.meta.url), "text/css; charset=utf-8"]],
+  ["/bridge", [new URL("../public/bridge.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -94,6 +97,17 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         };
         if (!operations[pathname]) return reply(res, 404, { error: "Not found" });
         return reply(res, 200, await operations[pathname]());
+      }
+      if (pathname === "/api/bridge/triage") {
+        let reviewed;
+        try { reviewed=validateBridgeWork(body,"JARVIS"); }
+        catch { return reply(res,422,{error:"HOLD_INVALID_BRIDGE_PACKET"}); }
+        return reply(res,200,{schema:"jarvis.bridge-work-triage/v1",...reviewed,
+          disposition:"HOLD_FOR_OPERATOR_REVIEW",sourceInspectedExternally:false,
+          ownerApproved:false,sourceOwnerPermission:false,receiverAdmitted:false,
+          allowedEffect:"NONE",sentExternally:false,partnerRecognized:false,fieldVerified:false,
+          nextHumanStep:reviewed.actionLabel,
+          note:"This import checks a public-only candidate. No ledger secrets, source network read, institution contact or action performed."});
       }
       if (pathname === "/api/propose") return reply(res, 200, await app.proposeNeed(body.needId));
       if (pathname === "/api/grant") return reply(res, 200, await app.grant(body));

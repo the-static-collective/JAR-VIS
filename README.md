@@ -22,6 +22,10 @@ The [live reviewer and stewardship invitation portal](https://kbhqacsdvjsstzyplq
 
 [How it works, what is and is not live, and the operator screening procedure](docs/WORK-THAT-INHERITS-002.md)
 
+## BRIDGE-005 — bounded institutional next-action receiver
+
+A public-only Bridge work card may be manually imported at [http://127.0.0.1:7789/bridge](http://127.0.0.1:7789/bridge). The independent loopback receiver verifies a pinned source contract and returns **HOLD_FOR_OPERATOR_REVIEW**, never a partner relationship, external submission, model run or verified field result. See [BRIDGE-005](docs/BRIDGE-005.md). The private Abundent application ledger is **not** imported or synchronized.
+
 ## Try the local attendant
 
 Node.js 20+ and no third-party runtime packages required.
