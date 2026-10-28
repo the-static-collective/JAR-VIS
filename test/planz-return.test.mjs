@@ -57,7 +57,7 @@ test("HTTP from-plan requires inspected plan and CSRF; no arbitrary URL fetch",(
   const h={"content-type":"application/json","x-jarvis-csrf":csrf};
   let r=await fetch(url+"/api/inheritance/from-plan",{method:"POST",headers:h,body:JSON.stringify({planId:plan.id,steward:"Volunteer A"})});
   assert.equal(r.status,409);
-  r=await fetch(url+"/api/inspect-planz",{method:"POST",headers:h,body:"{}"});assert.equal(r.status,200);
+  r=await fetch(url+"/api/inspect-planz",{method:"POST",headers:h,body:"{}"});assert.equal(r.status,200,await r.text());
   r=await fetch(url+"/api/inheritance/from-plan",{method:"POST",headers:{"content-type":"application/json"},body:"{}"});assert.equal(r.status,403);
   r=await fetch(url+"/api/inheritance/from-plan",{method:"POST",headers:h,body:JSON.stringify({planId:plan.id,steward:"Volunteer A",url:"http://localhost/private"})});
   assert.equal(r.status,200);
