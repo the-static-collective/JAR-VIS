@@ -1,0 +1,20 @@
+{
+  "schema": "static-collective/change-candidates-v1",
+  "authority": "NONE",
+  "scannedAt": "2026-10-28T17:48:04.781Z",
+  "monitoredRepos": [
+    "webZ",
+    "reLATTE",
+    "BananaSpork",
+    "Static-live",
+    "lemonPRESS",
+    "GRAFT",
+    "GHoT",
+    "planZ",
+    "Free-Graph",
+    "CANNON",
+    "LOADOUT"
+  ],
+  "disclosure": "Automatically generated source-diff CANDIDATES, not reviewed claims, canon, releases, deployments, partnerships or completed acts. No automatic admission is possible.",
+  "candidates": []
+}
