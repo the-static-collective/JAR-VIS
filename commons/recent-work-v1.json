@@ -1,6 +1,6 @@
 {
   "schema": "static-collective/recent-work-feed-v1",
-  "release": "RECENT-2026-10-28-006",
+  "release": "RECENT-2026-10-28-007",
   "reviewedOn": "2026-10-28",
   "authority": "PUBLIC_EDITORIAL_SOURCE_NOT_PARTNER_AUTHORITY",
   "disclosure": "This curated, dated catalog is not a live availability feed, service enrollment, or verified community roster. Source commits identify public project text; they do not establish partnerships, permission, field completion or canonical adoption. Every community and project retains its own authority.",
@@ -421,6 +421,30 @@
       ],
       "publicUrl": "https://apps.abundent.org/bridge/atlas/",
       "source": "https://github.com/the-static-collective/webZ/blob/29b2b1a8ba618ff46d404142749a057203d22381/docs/BRIDGE-ATLAS-002.md"
+    },
+    {
+      "id": "SHELF-001",
+      "title": "The Missing Handoff — public Waseca food supply need",
+      "state": "DOCUMENTED_NEED_PUBLIC_SYNTHETIC_INSTRUMENT",
+      "summary": "October 2026 Waseca sources show rising food shelf sourcing pressure, welcomed donated produce and existing Waseca co-op/MSU study of food rescue logistics. webZ now contains a source-backed, no-client-data fictional handoff demonstration. No specific recipient-defined software bottleneck, partners, field work, or verified deliveries exist.",
+      "firstCheck": "Ask one authorized food shelf steward which sourcing or receiving coordination step actually needs improvement, and check with co-op/MSU teams for prior work; HOLD without their answers.",
+      "tags": [
+        "food",
+        "waseca",
+        "grocery",
+        "shelf",
+        "supply",
+        "rescue",
+        "research",
+        "pilot",
+        "bridge",
+        "ghot",
+        "planz",
+        "graft",
+        "students"
+      ],
+      "publicUrl": "https://github.com/the-static-collective/webZ/tree/main/bridge/locus",
+      "source": "https://github.com/the-static-collective/webZ/blob/a40e91adff2ec45efd3cd2b0a797da42265e99fd/docs/SHELF-LOCUS-001.md"
     }
   ]
 }
