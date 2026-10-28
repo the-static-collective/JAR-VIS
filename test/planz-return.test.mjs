@@ -8,7 +8,7 @@ import {PLANZ_URL} from "../src/planz-attention.mjs";
 const now=()=>"2026-10-28T20:00:00.000Z";
 const plan={id:"GLOBAL-CROSSING-001",title:"Porchlight Commons food distribution",source:"https://github.com/the-static-collective/BananaSpork/issues/29",
  region:"Ghana (proposed)",nextGate:"Ask the local steward to review one bounded food distribution question.",
- blockedBy:["LOCAL_OPERATOR_PERMISSION"],fieldOutcome:"NOT_VERIFIED",executionAllowed:false,thirdPartyApproval:"NOT_ESTABLISHED"};
+ blockedBy:["LOCAL_OPERATOR_PERMISSION"],tags:["ghana","food","porchlight"],related:[],disposition:"AWAITING_LOCAL_STEWARD",fieldOutcome:"NOT_VERIFIED",executionAllowed:false,thirdPartyApproval:"NOT_ESTABLISHED"};
 const obs={schema:"jarvis.planz-attention-observation/v0",source:PLANZ_URL,authority:"INDEX_ONLY",
  edition:"ATTENTION-2026-10-28-001",contentSha256:"a".repeat(64),observedAt:now(),records:[plan],
  access:"public-read-only",admission:"none",runtimeConnected:false};
@@ -37,7 +37,7 @@ test("return candidate requires gates; no private notes or aliases leave the jou
  assert.equal(packet.sourceOwnerApproved,false);assert.equal(packet.sentExternally,false);
  for(const forbidden of ["SECRET","Volunteer A","Reviewer B"])assert.ok(!JSON.stringify(packet).includes(forbidden));
  assert.equal((await board.preparePlanReturn({weaveId,publicSummary:summary,operatorRedacted:true})).reused,true);
- await assert.rejects(board.preparePlanReturn({weaveId,publicSummary:"Different redacted summary with a new suggestion",operatorRedacted:true}),/immutable/);
+ await assert.rejects(board.preparePlanReturn({weaveId,publicSummary:"Different redacted summary with a new suggestion",operatorRedacted:true}),/Immutable/);
  assert.deepEqual((await InheritanceBoard.open({journalPath:file,clock:now})).state().records[0].planReturn,packet);
 }));
 test("failed local review and missing origin refuse return",()=>sandbox(async file=>{
