@@ -13,6 +13,15 @@
   </section>
   <div class="warning" role="note"><strong>Local and unverified.</strong> Names are aliases, not authenticated identities. Review is an operator-entered claim, <strong>not</strong> independent proof. No public posting, requests for help, or field fulfillment occurs here. Do not enter names, case details, health data, addresses, or confidential evidence.</div>
   <section class="statistics" id="stats" aria-label="Local work counters"></section>
+  <section class="panel" aria-label="planZ plans">
+    <div class="section-heading"><div><p class="overline">00B · SOURCE-OWNED PLANS</p><h2>Start from planZ</h2></div></div>
+    <p>Use the last explicitly inspected owner-public plan, retaining its source digest and next human gate. This is an unapproved local possibility, not an assignment.</p>
+    <p id="planNotice" class="next-step">Inspect the planZ source from the workbench's Project doors first.</p>
+    <form id="planForm"><div class="row">
+      <label>Plan to consider <select name="planId" id="planChoice" required></select></label>
+      <label>Operator/steward alias <input name="steward" minlength="2" maxlength="100" placeholder="Volunteer A" required></label>
+    </div><button type="submit" id="planStart" disabled>Bring into local work →</button></form>
+  </section>
   <div class="layout">
     <section class="panel">
       <div class="section-heading"><div><p class="overline">01 · NOTICE A NEED</p><h2>Start a weave</h2></div></div>
@@ -37,7 +46,7 @@
   </section>
   <section class="panel journey" id="journey" hidden>
     <div class="section-heading"><div><p class="overline">03 · TAKE THE NEXT STEP</p><h2 id="chosenTitle"></h2><p id="chosenStatus"></p></div><button id="exportButton" type="button" class="secondary">Export local JSON</button></div>
-    <div id="timeline" class="timeline"></div>
+    <div id="planOrigin" class="next-step" hidden></div><div id="timeline" class="timeline"></div>
     <section id="commitSection" hidden>
       <h3>Voluntary commitment</h3><p>The operator records the steward's stated choice. This does not verify their identity or consent.</p>
       <form id="commitForm"><label>Steward alias <input name="actor" minlength="2" maxlength="100" required></label><label class="check"><input type="checkbox" name="voluntary" required> I am recording an explicit voluntary decision, not inferring one.</label><button type="submit">Record stated commitment</button></form>
@@ -53,6 +62,17 @@
     <section id="returnSection" hidden>
       <h3>Return a reusable candidate</h3><p>Only an accepted, completed report can yield a candidate. It is not automatically published or labeled independently verified.</p>
       <form id="returnForm"><label>Method somebody else could repeat <textarea name="method" minlength="2" maxlength="1000" required></textarea></label><label>Invitation: what can the next person do? <textarea name="nextInvitation" minlength="2" maxlength="500" required></textarea></label><button type="submit">Make a local WE CAN → YOU CAN card</button></form>
+    </section>
+    <section id="planReturnSection" hidden>
+      <h3>Return a candidate for planZ review</h3>
+      <p>Only a locally reviewed reusable candidate qualifies. This does not verify work or send a message.</p>
+      <form id="planReturnForm"><label>Public-safe learning summary (30–220 characters)
+        <textarea name="publicSummary" minlength="30" maxlength="220" required></textarea></label>
+        <label class="check"><input name="operatorRedacted" type="checkbox" required>
+        I removed names, contacts, case information, precise addresses, financial details, and confidential evidence.</label>
+        <button type="submit">Prepare HOLD packet</button></form>
+      <button id="exportPlanReturnButton" type="button" class="secondary" hidden>Download owner-review packet</button>
+      <p>No automatic GitHub submission, plan completion or partner contact.</p>
     </section>
     <p id="nextStep" class="next-step"></p>
   </section>
