@@ -43,8 +43,8 @@ test("loopback POST accepts only CSRF-protected, receiver-specific public work c
   assert.equal(triage.sentExternally,false);
   assert.equal(triage.fieldVerified,false);
   const invalid=await call({...good,recipientAccepted:true},{"x-jarvis-csrf":state.csrfToken});
-  assert.notEqual(invalid.status,200);
-  assert.equal((await invalid.json()).error,"Internal error");
+  assert.equal(invalid.status,422);
+  assert.equal((await invalid.json()).error,"HOLD_INVALID_BRIDGE_PACKET");
   assert.equal((await fetch(local.url+"/bridge")).status,200);
  }finally{await local.close()}
 });
