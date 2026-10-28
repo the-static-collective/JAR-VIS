@@ -1,0 +1,186 @@
+{
+  "schema": "static-collective/source-observations-v1",
+  "scannedAt": "2026-10-28T17:48:04.781Z",
+  "scope": "EXPLICIT_PUBLIC_REPOSITORIES_ONLY",
+  "authority": "NONE",
+  "disclosure": "A public branch pointer and commit time were observed. Main is not canon. A change is not a feature release, a successful deployment, a partner agreement, a completed task, or verified field evidence. HOLD cannot be treated as unchanged.",
+  "sources": [
+    {
+      "repo": "webZ",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "c45c5fbab68daa24796203beb6b7695696d84949",
+      "commitTime": "2026-10-28T17:19:33Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/webZ/commit/c45c5fbab68daa24796203beb6b7695696d84949",
+      "tags": [
+        "abundent",
+        "jubilee",
+        "porchlight",
+        "garden",
+        "switchboard",
+        "becoming"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    },
+    {
+      "repo": "reLATTE",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "746b0f3042d481dd49574fb215883030f6267148",
+      "commitTime": "2026-10-27T09:51:36Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/reLATTE/commit/746b0f3042d481dd49574fb215883030f6267148",
+      "tags": [
+        "commuter",
+        "postoffice",
+        "farm",
+        "email",
+        "receipt"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    },
+    {
+      "repo": "BananaSpork",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "f4c4067b5896eb5eb20a7498f89da38f04731d73",
+      "commitTime": "2026-10-27T10:17:46Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/BananaSpork/commit/f4c4067b5896eb5eb20a7498f89da38f04731d73",
+      "tags": [
+        "homelessness",
+        "porchlight",
+        "grocery",
+        "food"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    },
+    {
+      "repo": "Static-live",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "38e67b2930cea09c3e01a05447a6e92a67c2468f",
+      "commitTime": "2026-10-01T20:48:25Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/Static-live/commit/38e67b2930cea09c3e01a05447a6e92a67c2468f",
+      "tags": [
+        "music",
+        "performance",
+        "radio",
+        "worship"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    },
+    {
+      "repo": "lemonPRESS",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "02feb4454240d482a5e0e03258f24f8b5cc0b9f5",
+      "commitTime": "2026-09-30T20:39:52Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/lemonPRESS/commit/02feb4454240d482a5e0e03258f24f8b5cc0b9f5",
+      "tags": [
+        "publishing",
+        "newspaper",
+        "newsletter",
+        "books"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    },
+    {
+      "repo": "GRAFT",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "265fd538266a742d033ba2f5b408a78610d0a75c",
+      "commitTime": "2026-10-25T13:24:32Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/GRAFT/commit/265fd538266a742d033ba2f5b408a78610d0a75c",
+      "tags": [
+        "commons",
+        "weaving",
+        "research",
+        "crossing"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    },
+    {
+      "repo": "GHoT",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "e35dd470384d864b7b0b629a68dad570875a7df0",
+      "commitTime": "2026-10-03T17:19:26Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/GHoT/commit/e35dd470384d864b7b0b629a68dad570875a7df0",
+      "tags": [
+        "hardware",
+        "compute",
+        "energy",
+        "solar"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    },
+    {
+      "repo": "planZ",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "dad6593c3718c65fa4bb7a3650af8fc80d060ce6",
+      "commitTime": "2026-10-05T20:09:03Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/planZ/commit/dad6593c3718c65fa4bb7a3650af8fc80d060ce6",
+      "tags": [
+        "planning",
+        "garden",
+        "food",
+        "project"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    },
+    {
+      "repo": "Free-Graph",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "ec0ad8743c5faac3f3675760bbafcbcb1df846c1",
+      "commitTime": "2026-09-18T22:42:12Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/Free-Graph/commit/ec0ad8743c5faac3f3675760bbafcbcb1df846c1",
+      "tags": [
+        "relationships",
+        "weave",
+        "graph"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    },
+    {
+      "repo": "CANNON",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "62a557389013155c07e4d98578cbfb560f5f59c5",
+      "commitTime": "2026-10-09T03:06:10Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/CANNON/commit/62a557389013155c07e4d98578cbfb560f5f59c5",
+      "tags": [
+        "evidence",
+        "history",
+        "provenance"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    },
+    {
+      "repo": "LOADOUT",
+      "ref": "main",
+      "status": "OBSERVED_HEAD",
+      "sha": "1adcb3d82f736f3ca8329c3c1d0d9eba398d49ee",
+      "commitTime": "2026-09-02T13:39:19Z",
+      "checkedAt": "2026-10-28T17:48:04.781Z",
+      "commitUrl": "https://github.com/the-static-collective/LOADOUT/commit/1adcb3d82f736f3ca8329c3c1d0d9eba398d49ee",
+      "tags": [
+        "tools",
+        "capability",
+        "compute"
+      ],
+      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+    }
+  ],
+  "events": []
+}
