@@ -1,6 +1,6 @@
 {
   "schema": "static-collective/recent-work-feed-v1",
-  "release": "RECENT-2026-10-28-004",
+  "release": "RECENT-2026-10-28-005",
   "reviewedOn": "2026-10-28",
   "authority": "PUBLIC_EDITORIAL_SOURCE_NOT_PARTNER_AUTHORITY",
   "disclosure": "This curated, dated catalog is not a live availability feed, service enrollment, or verified community roster. Source commits identify public project text; they do not establish partnerships, permission, field completion or canonical adoption. Every community and project retains its own authority.",
@@ -363,6 +363,34 @@
       ],
       "publicUrl": "https://github.com/the-static-collective/planZ/blob/main/public/attention-v1.json",
       "source": "https://github.com/the-static-collective/planZ/blob/2864a3e5041d2dab80acad89a4971ecde678097e/docs/ATTENTION-001.md"
+    },
+    {
+      "id": "BRIDGE-001",
+      "title": "Between Rooms — the institutional proposal is the first bridge",
+      "state": "PUBLIC_PROTOTYPE",
+      "summary": "A public, source-backed interactive proposal maps nine prospective institutional doors onto one fictional food-access problem, with institution-specific drafts, local simulated HOLD/REFUSE and portable JSON. None of the institutions is a partner, invited participant or verified recipient.",
+      "firstCheck": "Which one authorized local steward, actual non-sensitive problem and one recipient door should be human-reviewed before any outreach?",
+      "tags": [
+        "bridge",
+        "institutions",
+        "mit",
+        "solve",
+        "rockefeller",
+        "civic",
+        "rochester",
+        "food",
+        "grocery",
+        "housing",
+        "homelessness",
+        "ghana",
+        "planz",
+        "relatte",
+        "jarvis",
+        "university",
+        "grant"
+      ],
+      "publicUrl": "https://apps.abundent.org/bridge/",
+      "source": "https://github.com/the-static-collective/webZ/blob/8b36ba2940d793e73efedc936c01d6b6e6f41d58/docs/BRIDGE-001.md"
     }
   ]
 }
