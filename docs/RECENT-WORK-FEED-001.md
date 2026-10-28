@@ -17,3 +17,7 @@ Jubilee Circuit music/festival/church culture; Porchlight Ghana–Minnesota prov
 5. Public JAR;VIS must fail to HOLD if the feed is absent, oversized or malformed; never replace it with invented matches.
 
 **No compulsory universal manager. Local human authority remains with each organ and receiving community.**
+
+## planZ owner-attention source
+
+The latest manually reviewed `PLANZ-001` catalog entry points to planZ's bounded public attention JSON. The **public Ask JAR;VIS** may select this documentation for relevant questions; the **local JAR;VIS operator workbench** separately supports explicit reading, immutable-observation hashing and topical next-gate review. The public catalog entry does not mean the public website can issue plan commands, inspect private records or share the local journal.

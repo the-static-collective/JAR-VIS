@@ -22,8 +22,8 @@ export const doors = Object.freeze([
   },
   {
     id: "planz", title: "planZ", family: "INTENT",
-    status: "public source", role: "Read its public mission statement, not internal plans or source-project authority.",
-    capability: "Read-only published purpose; no plan API", connected: false, sourceReadable: true
+    status: "public source", role: "Inspect a reviewed public plan subset, known blockers and next human gates. Local project authority remains external.",
+    capability: "Opt-in read-only public plan index; no plan execution", connected: false, sourceReadable: true
   },
   {
     id: "abundent", title: "Abundent", family: "RETURN",
