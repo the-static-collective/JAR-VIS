@@ -40,7 +40,7 @@ test('failed, diverged, truncated and invalid API response HOLD, never false cod
  }
 });
 test('unobserved or held sources never become candidate movements',async()=>{
- const prev=obs(A),next=obs(B);next.sources[0].status='HOLD';next.sources[0].sha=null;
+ const prev=obs(A),next=obs(A);next.sources[0].status='HOLD';next.sources[0].sha=null;
  const result=await generateCandidates({previous:prev,current:next,fetcher:()=>{throw Error('no fetch')}});
  assert.equal(result.candidates.length,0);
 });
