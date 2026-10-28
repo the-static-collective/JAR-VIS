@@ -1,6 +1,6 @@
 {
   "schema": "static-collective/recent-work-feed-v1",
-  "release": "RECENT-2026-10-28-001",
+  "release": "RECENT-2026-10-28-002",
   "reviewedOn": "2026-10-28",
   "authority": "PUBLIC_EDITORIAL_SOURCE_NOT_PARTNER_AUTHORITY",
   "disclosure": "This curated, dated catalog is not a live availability feed, service enrollment, or verified community roster. Source commits identify public project text; they do not establish partnerships, permission, field completion or canonical adoption. Every community and project retains its own authority.",
@@ -76,7 +76,7 @@
         "distribution",
         "market",
         "nourish",
-        "food shelf",
+        "food-shelf",
         "local"
       ],
       "publicUrl": "https://garden.abundent.org/",
