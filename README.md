@@ -90,3 +90,7 @@ Authenticated and revocable human grants; versioned capability manifests or sign
 ## Recent public work catalog
 
 The [versioned recent-work feed](commons/recent-work-v1.json) and [maintenance protocol](docs/RECENT-WORK-FEED-001.md) orient the *public Ask JAR;VIS question machine* to October 2026's independently owned experiments, including Jubilee Circuit, Porchlight, Garden, Night Desk, farm correspondence, voluntary stewardship, music, publication and owned email. The feed is an explicitly reviewed public editorial snapshot, not field verification or an authorization to perform work. JAR;VIS selects relevant entries in its own read-only adapter, retains source pins and status, and does not transmit visitor questions to GitHub.
+
+## planZ Attention 001 — owner-indexed next human gates
+
+The local operator can now explicitly inspect a [versioned planZ owner-reviewed public index](https://github.com/the-static-collective/planZ/blob/main/public/attention-v1.json). JAR;VIS verifies the schema, hashes exact bytes, preserves a replayable local source observation, and suggests topical **unfulfilled human review gates**, with links to source-owned issues. It does **not** fetch client records, execute plans, contact partners, or treat a source issue as proof of completed work. See [planZ Attention integration](docs/PLANZ-ATTENTION-001.md) and `test/planz-attention.test.mjs`. The original README purpose door remains separate.

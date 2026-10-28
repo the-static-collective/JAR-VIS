@@ -5,6 +5,7 @@ import {
 import { LocalJournal } from "./journal.mjs";
 import { doors } from "./doors.mjs";
 import { inspectPublicDoor, publicDoorIds } from "./public-doors.mjs";
+import { readPlanZAttention, findPlanAttention } from "./planz-attention.mjs";
 import { composeFixtureGardenParty } from "./house-party.mjs";
 import { inspectNativeTestimony } from "./native-testimony.mjs";
 import { projectHeartbeat, fixtureWitness } from "./heartbeat.mjs";
@@ -19,19 +20,21 @@ export class Workbench {
   #journal;
   #clock;
   #sourceReader;
+  #planReader;
   #tail = Promise.resolve();
-  constructor({ jar, journal, clock, sourceReader = inspectPublicDoor }) {
+  constructor({ jar, journal, clock, sourceReader = inspectPublicDoor, planReader = readPlanZAttention }) {
     this.#jar = jar;
     this.#journal = journal;
     this.#clock = clock;
     this.#sourceReader = sourceReader;
+    this.#planReader = planReader;
   }
-  static async open({ journalPath, clock = () => new Date().toISOString(), sourceReader = inspectPublicDoor }) {
+  static async open({ journalPath, clock = () => new Date().toISOString(), sourceReader = inspectPublicDoor, planReader = readPlanZAttention }) {
     return new Workbench({
       jar: gardenJar(),
       journal: await LocalJournal.open(journalPath),
       clock,
-      sourceReader
+      sourceReader, planReader
     });
   }
   #exclusive(callback) {
@@ -47,6 +50,7 @@ export class Workbench {
     const parties = new Map();
     const nativeObservations = new Map();
     const witnesses = new Map();
+    let planIndex = null;
     const events = this.#journal.list();
     for (const event of events) {
       const { kind, payload } = event;
@@ -61,6 +65,8 @@ export class Workbench {
         outcomes.set(payload.proposalId, payload);
       } else if (kind === "DOOR_INSPECTED") {
         sourceObservations.set(payload.doorId, payload);
+      } else if (kind === "PLANZ_INDEX_INSPECTED") {
+        planIndex = payload;
       } else if (kind === "PARTY_COMPLETED") {
         parties.set(payload.id, payload);
       } else if (kind === "NATIVE_REPORTED") {
@@ -69,10 +75,10 @@ export class Workbench {
         witnesses.set(payload.proposalId, payload);
       }
     }
-    return { proposals, grants, outcomes, sourceObservations, parties, nativeObservations, witnesses, events };
+    return { proposals, grants, outcomes, sourceObservations, parties, nativeObservations, witnesses, planIndex, events };
   }
   state() {
-    const { proposals, grants, outcomes, sourceObservations, parties, nativeObservations, witnesses, events } = this.#replay();
+    const { proposals, grants, outcomes, sourceObservations, parties, nativeObservations, witnesses, planIndex, events } = this.#replay();
     const list = [...proposals.values()].reverse().map((proposal) => ({
       ...copy(proposal),
       approvedBy: [...(grants.get(proposal.id)?.values() ?? [])]
@@ -96,6 +102,7 @@ export class Workbench {
       particulars: observe(this.#jar),
       doors: copy(doors),
       sourceObservations: [...sourceObservations.values()].map(copy),
+      planIndex: copy(planIndex),
       parties: [...parties.values()].reverse().map(copy),
       nativeObservations: [...nativeObservations.values()].reverse().map(copy),
       proposals: list,
@@ -150,6 +157,28 @@ export class Workbench {
       } catch (error) { throw bad(error.message); }
       await this.#journal.append("FIXTURE_WITNESSED", report, this.#clock());
       return { witness: copy(report), reused: false };
+    });
+  }
+  async inspectPlanIndex() {
+    return this.#exclusive(async () => {
+      let observation;
+      try { observation = await this.#planReader({ now: this.#clock }); }
+      catch(error) {
+        const problem = new Error("planZ index unavailable or invalid; previous snapshot remains unmodified");
+        problem.status = 502; problem.cause = error; throw problem;
+      }
+      if(observation?.schema!=="jarvis.planz-attention-observation/v0" ||
+         observation.access!=="public-read-only" || observation.admission!=="none" ||
+         observation.runtimeConnected!==false || observation.authority!=="INDEX_ONLY" ||
+         !/^[0-9a-f]{64}$/.test(observation.contentSha256??"") ||
+         !Array.isArray(observation.records)||observation.records.length>40 ||
+         observation.records.some(x=>x.executionAllowed!==false ||
+            x.fieldOutcome!=="NOT_VERIFIED" ||
+            x.thirdPartyApproval!=="NOT_ESTABLISHED")){
+        throw bad("planZ index violated read-only HOLD boundary");
+      }
+      await this.#journal.append("PLANZ_INDEX_INSPECTED", observation, this.#clock());
+      return { observation: copy(observation), admittedAction:false };
     });
   }
   async inspectDoor(doorId) {
@@ -253,7 +282,20 @@ export class Workbench {
       answer = "Kinship has a process-local mock adapter only. " + state.counters.mockRelays + " simulated crossing(s) are in the local journal. No real broadcast, website post, or external message occurs.";
     } else if (/relatte|receipt|signature/.test(q)) {
       answer = "These are local JAR;VIS receipts with no signatures. reLATTE signing and receiver admission are separate future integrations. A receipt is not proof of fulfillment.";
-    } else if (/ghot|planz|abundent|penny|door|connect/.test(q)) {
+    } else if (/planz|plans|backlog|unfinished|ghana|waseca|porchlight|global crossing/.test(q)) {
+      const observed = state.planIndex;
+      if(!observed) {
+        answer = "planZ is an unconnected, read-only public source. Inspect its reviewed plan index explicitly in Project doors first. A plan index is not a live machine or authority.";
+      } else {
+        const matches = findPlanAttention(observed,q);
+        answer = matches.length ?
+          "planZ owner-indexed next gates (NOT verified field work): " +
+            matches.map((p)=>p.title+" ["+p.disposition+"]: "+p.nextGate+
+              " Blocked by "+p.blockedBy.join(", ")+". Source: "+p.source).join(" | ")+
+            " (Observed "+observed.observedAt+"; no grant, dispatch or partner enrollment.)" :
+          "No topical planZ index match. The reviewed map is partial, not the full census; no plan is automatically closed or authorized.";
+      }
+    } else if (/ghot|abundent|penny|door|connect/.test(q)) {
       const seen = state.sourceObservations.map((v) => v.doorId + " (" + v.observedAt + ")");
       answer = "GHoT and planZ have opt-in read-only GitHub source inspection. " +
         (seen.length ? "Previously observed: " + seen.join(", ") + ". " : "No public source inspected yet. ") +

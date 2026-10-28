@@ -93,6 +93,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (pathname === "/api/attend") return reply(res, 200, app.attend(body.text));
       if (pathname === "/api/heartbeat-witness") return reply(res, 200, await app.witnessMock(body));
       if (pathname === "/api/inspect-door") return reply(res, 200, await app.inspectDoor(body.doorId));
+      if (pathname === "/api/inspect-planz") return reply(res, 200, await app.inspectPlanIndex());
       if (pathname === "/api/house-party") return reply(res, 200, await app.hostFixtureParty());
       if (pathname === "/api/import-native") return reply(res, 200, await app.importNativeReport(body));
       return reply(res, 404, { error: "Not found" });

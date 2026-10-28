@@ -121,6 +121,15 @@ function renderDoors() {
       }));
       card.append(action);
     }
+    if (door.id === "planz") {
+      const action = el("button", "mini-button source-button", "Inspect current plan index ↗");
+      action.type = "button";
+      action.addEventListener("click", () => command(async () => {
+        const result = await call("/api/inspect-planz", {});
+        toast("planZ: " + result.observation.records.length + " reviewed pointers read; zero plans executed.");
+      }));
+      card.append(action);
+    }
     const observed = state.sourceObservations.find((item) => item.doorId === door.id);
     if (observed) {
       card.append(el("p", "source-meta", "LAST READ · " + new Date(observed.observedAt).toLocaleString()));
@@ -153,6 +162,30 @@ function renderDoors() {
     return article;
   });
   region.replaceChildren(heading, notice, ...readings);
+}
+function renderPlanIndex() {
+  const pane = $("#planIndex");
+  const observation = state.planIndex;
+  if (!observation) {
+    pane.replaceChildren(el("p","description","The plan index is not inspected. Select planZ → Inspect current plan index to read its published, owner-reviewed subset."));
+    return;
+  }
+  const header=el("div","plan-head");
+  header.append(el("h3","","planZ attention · reviewed public subset"),
+    el("p","source-meta",observation.edition+" · source SHA-256 "+observation.contentSha256+
+      " · observed "+new Date(observation.observedAt).toLocaleString()));
+  const note=el("p","description","These are plan pointers and next human gates, NOT approved programs, field results, or a global census. New public issue edits are not imported until you explicitly inspect again.");
+  const plans=observation.records.map(p=>{
+    const panel=el("article","observation");
+    const title=el("h4","",p.title+" · "+p.disposition);
+    const source=el("a","source-link","Source issue ↗");
+    source.href=p.source;source.target="_blank";source.rel="noopener noreferrer";
+    panel.append(title,source,el("p","","NEXT HUMAN GATE: "+p.nextGate),
+      el("p","source-meta","BLOCKERS: "+p.blockedBy.join(" · ")),
+      el("p","tiny","FIELD RESULT: NOT VERIFIED · THIRD-PARTY APPROVAL: NOT ESTABLISHED"));
+    return panel;
+  });
+  pane.replaceChildren(header,note,...plans);
 }
 function renderParty() {
   const latest = state.parties?.[0];
@@ -256,6 +289,7 @@ function render() {
   renderProposal();
   renderHeartbeat();
   renderDoors();
+  renderPlanIndex();
   renderParty();
   renderNative();
   renderEvents();
