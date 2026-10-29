@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111727"><title>STRANGER CABARET · JAR;VIS</title>
+<link rel="stylesheet" href="/cabaret.css"><script src="/cabaret.js" defer></script></head>
+<body><div class="grain" aria-hidden="true"></div>
+<header><a class="back" href="/">← JAR;VIS WORKBENCH</a><span class="brand">STRANGER CABARET <b>003</b></span><span class="badge">LOCAL · FICTIONAL · NO DISPATCH</span></header>
+<main>
+<section class="hero" aria-label="Cabaret stage">
+  <div class="eyebrow">ASK THE GHOST COWBOY · A STRANGER ARCADE EXPERIMENT</div>
+  <div class="headline">
+  <div><h1>THE <i>GHOST</i><br>COWBOY<br><em>ANSWERING</em><br>MACHINE</h1>
+    <p>One actual JAR;VIS answer. Three unpredictable costumes. A song, a tiny manga, or a haunted flipbook. The joke is allowed to mutate. The evidence isn't.</p></div>
+  <div class="character" aria-hidden="true">
+   <div class="halo"></div><div class="hat-brim"></div><div class="hat-crown"><span>★</span></div>
+   <div class="head"><div class="eyes"><b>✳</b><b>✳</b></div><div class="mouth">= = =</div></div>
+   <div class="neck">⑂ ⑂ ⑂</div><div class="torso"><strong>JAR;VIS</strong><small>BOO-T 1999</small><div class="dial">♬</div></div>
+   <div class="shadow"></div>
+  </div></div>
+</section>
+<section class="console" aria-label="Ask the haunted attendant">
+  <form id="ask"><label for="question">TRANSMISSION / WHAT'S ON YOUR MIND?</label>
+  <textarea id="question" name="question" maxlength="500" rows="3" required placeholder="How could our community turn one question into a useful experiment?"></textarea>
+  <div class="switches"><div class="modes" role="group" aria-label="Creative output mode">
+   <label><input type="radio" name="mode" value="surprise" checked><span>🎲 SURPRISE ME</span></label>
+   <label><input type="radio" name="mode" value="song"><span>♫ RADIO SONG</span></label>
+   <label><input type="radio" name="mode" value="manga"><span>▦ SIX-PANEL MANGA</span></label>
+   <label><input type="radio" name="mode" value="flipbook"><span>▷ HAUNTED FLIPBOOK</span></label>
+  </div><button type="submit" class="action" id="askButton">SUMMON AN ANSWER ↗</button></div>
+  </form>
+  <div class="status" id="status" aria-live="polite">THE MACHINE IS LISTENING. SOUND REQUIRES A BUTTON PRESS.</div>
+</section>
+<section class="result" id="result" hidden aria-live="polite">
+  <div class="result-top"><div><small id="modeTag">RECEIVED</small><h2 id="answerTitle"></h2></div><div class="button-row"><button id="reroll" type="button">↺ REROLL THE COSTUME</button><button id="print" type="button">▧ PRINT PASSPORT</button></div></div>
+  <div id="stage"></div>
+  <div class="answer"><div class="stamp">THE GROUNDED ANSWER</div><p id="grounded"></p><small>Original deterministic JAR;VIS attendant response. Not general-purpose research or an LLM answer. Creative performance is separate.</small></div>
+  <div class="passport">
+    <div><h3>THE EVIDENCE PASSPORT</h3><p>No pretend human success. Question and answer text are not stored in the exported receipt; only digests and bounded metadata.</p></div>
+    <div class="passport-actions"><button id="download" type="button">↓ EXPORT JSON</button><button id="readPassport" type="button">VIEW RECEIPT</button></div>
+    <details id="passportDetails"><summary>Show inspectable proof fields</summary><pre id="passportText"></pre></details>
+  </div>
+</section>
+<section class="review-desk" id="reviewDesk" aria-label="Stranger review desk">
+  <div class="eyebrow">THE STRANGER GETS THE LAST WORD</div><h2>Challenge the clown.<br><em>Not the person's freedom.</em></h2>
+  <p>A local review card is not an independent witness signature. It never changes a field outcome or records your identity. Your note is hashed rather than copied into the card.</p>
+  <div class="review-buttons">
+    <button type="button" data-review="ASK_WHY">? ASK WHY</button>
+    <button type="button" data-review="BREAK_IT">⚡ BREAK IT</button>
+    <button type="button" data-review="REFUSE">✕ REFUSE</button>
+    <button type="button" data-review="FORK">⑂ FORK A COSTUME</button>
+    <button type="button" data-review="KEEP">★ KEEP THIS CREATURE</button>
+    <button type="button" data-review="SCRAPE">⌫ SCRAPE THE CREATURE</button>
+  </div>
+  <label for="reviewNote">OPTIONAL PRIVATE REVIEW NOTE (HASH ONLY)</label>
+  <textarea id="reviewNote" maxlength="500" rows="2" placeholder="What is confusing, missing, risky, or delightful?"></textarea>
+  <div class="review-return" id="reviewReturn" aria-live="polite">A reviewer may object, fork, refuse, or request evidence. The owner remains free to disagree.</div>
+  <button type="button" id="downloadReview" hidden>↓ EXPORT REVIEW CARD</button>
+</section>
+<section class="challenge">
+  <div><span class="eyebrow">THE HUMAN CHALLENGE DOOR</span><h2>Bring a witness.<br><em>Leave with a question.</em></h2>
+  <p>Already have a CANNON SEASON-001 ledger? Inspect its hash-chain structure against the exact pinned source. The software won't claim your stranger, consent, or field trial happened just because a JSON file says so.</p></div>
+  <div class="challenge-actions"><label for="ledger">OPTIONAL LOCAL LEDGER JSON</label><input type="file" id="ledger" accept=".json,application/json"><button id="verify" type="button" disabled>⌑ CHECK AGAINST CANNON</button><p id="verification" role="status">Nothing uploaded. Source-locked local CANNON checkout required for structural verification.</p></div>
+</section>
+</main>
+<footer><span>JAR;VIS × CANNON × THE HAUNTED TOASTER'S KEEP / SCRAPE INSPIRATION</span><span>THE PERFORMANCE CAN BE SILLY. THE CLAIMS MUST BE PRECISE.</span></footer>
+</body></html>
