@@ -18,3 +18,7 @@ JAR;VIS uses fiction, film grammar, machine folios and music **as lenses for que
 - A receiving app must inspect the packet independently. Its local checksum alone does not prove where it came from.
 
 **Status: executable local creative *ideation* with synthetic/no-human outcome, not an operating community or submitted fellowship.**
+
+## Actual JAR;VIS workbench path
+
+In the local `npm start` workbench, open `/thought-food` (now linked in the original home sidebar). Source catalog and the read-only creative-crossing endpoint run in the **actual JAR;VIS localhost HTTP server**, behind its existing Host/Origin checks and POST anti-CSRF gate. Select 2–5 source cards and export a portable JSON packet without typing personal details. `/api/thought-food/catalog` is read-only; `POST /api/thought-food/compile` accepts **only** the fixed keys `ids` and `purpose`. No private content ingestion, film render, training, telemetry, contact or deployment. Run `node --test test/thought-food-server.test.mjs` for actual HTTP, CSRF, invalid selection and UI tests.
