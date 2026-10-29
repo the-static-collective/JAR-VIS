@@ -1,0 +1,57 @@
+name: JAR;VIS Stranger Cabaret 003 — source-locked creative evidence
+on:
+  push:
+    branches: ['experiment/stranger-cabaret-003']
+    paths:
+      - 'src/cabaret/**'
+      - 'src/server.mjs'
+      - 'public/cabaret*'
+      - 'test/cabaret.test.mjs'
+      - 'docs/STRANGER-CABARET-003.md'
+      - '.github/workflows/stranger-cabaret-003.yml'
+  pull_request:
+    paths:
+      - 'src/cabaret/**'
+      - 'src/server.mjs'
+      - 'public/cabaret*'
+      - 'test/cabaret.test.mjs'
+      - 'docs/STRANGER-CABARET-003.md'
+      - '.github/workflows/stranger-cabaret-003.yml'
+permissions:
+  contents: read
+jobs:
+  creative-and-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: jarvis
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/CANNON
+          ref: 63925118a42ef307fa274443fa9f81957c5a6682
+          fetch-depth: 0
+          path: cannon
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Exact-pin CANNON and preserve ancestral creative source contracts
+        run: |
+          test "$(git -C cannon rev-parse HEAD)" = "63925118a42ef307fa274443fa9f81957c5a6682"
+          git -C cannon merge-base --is-ancestor f99d4b0f74b117e0af034137d550e88aa3d01f26 HEAD
+      - name: Syntax, browser assets, creative contracts and real pinned witness integration
+        env:
+          SEASON_CANNON: ${{ github.workspace }}/cannon
+        run: |
+          node --check src/cabaret/engine.mjs
+          node --check src/server.mjs
+          node --check public/cabaret.js
+          node --test test/cabaret.test.mjs test/season-attendant.test.mjs
+        working-directory: jarvis
+      - name: Preserve original JAR;VIS attendant boundary tests
+        run: |
+          node --test test/constellation.test.mjs test/arcade-attendant.test.mjs
+        working-directory: jarvis
