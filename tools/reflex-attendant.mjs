@@ -10,7 +10,7 @@ const lock=JSON.parse(readFileSync(new URL('../spec/inspand-reflex-source-v1.jso
 function hold(cond,tag){if(!cond)throw Error('HOLD_JARVIS_REFLEX_'+tag)}
 const sha=(algo,bytes)=>createHash(algo).update(bytes).digest('hex');
 function git(root,args,{binary=false}={}){
- return execFileSync('git',['--no-replace-objects','-C',root,...args],{encoding:binary?undefined:'utf8',timeout:25000,maxBuffer:12*1024*1024,stdio:['ignore','pipe','pipe']});
+ try{return execFileSync('git',['--no-replace-objects','-C',root,...args],{encoding:binary?undefined:'utf8',timeout:25000,maxBuffer:12*1024*1024,stdio:['ignore','pipe','pipe']});}catch{throw Error('HOLD_JARVIS_REFLEX_GIT_SOURCE_UNAVAILABLE')}
 }
 export function parse(args){
  const [mode,...tail]=args;
