@@ -1,0 +1,18 @@
+{
+  "schema": "jarvis.suno-song-seed/v1",
+  "origin": "fictional-fixture",
+  "seed": {
+    "id": "sample-church.porch-light-001",
+    "title": "Porch Light",
+    "lyrics": "We leave a little light on by the door.\nThere is room enough for one more.",
+    "style": "Acoustic 6/8 folk-gospel, gentle rhythm guitar and congregational response"
+  },
+  "review": {
+    "sourceAdmitted": true,
+    "contributorPermissionRef": "FICTIONAL:consent-001",
+    "rightsReviewRef": "FICTIONAL:rights-001",
+    "privateGenerationApprovalRef": "FICTIONAL:private-only-001",
+    "creditSpendApprovalRef": "FICTIONAL:credits-001",
+    "withdrawn": false
+  }
+}
