@@ -1,0 +1,12 @@
+{
+  "schema": "jarvis.reflex-source-lock/v1",
+  "repository": "the-static-collective/CANNON",
+  "commit": "a1e43996bd2cc507bbec77e8c64dd271ee3cad4d",
+  "sourceBlobs": {
+    "registry/reflex-library-v1.json": "59ee84f5fa1704747201511ffcc59a82326a049c",
+    "scripts/reflex-library.mjs": "8ee2ecb2af52a4cfd2bdb734364a1e91bbac2608"
+  },
+  "authority": "INSPECT_ONLY",
+  "foreignOwnerConsent": false,
+  "executableCapabilityClaims": 2
+}
