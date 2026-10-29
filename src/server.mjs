@@ -5,6 +5,7 @@ import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { composeCabaret, makePassport } from "./cabaret/engine.mjs";
+import { replaySlots } from "./cabaret/slots.mjs";
 import { runSeason } from "../tools/season.mjs";
 import { Workbench } from "./workbench.mjs";
 import { InheritanceBoard } from "./inheritance.mjs";
@@ -21,7 +22,10 @@ const staticFiles = new Map([
   ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/cabaret", [new URL("../public/cabaret.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/cabaret.js", [new URL("../public/cabaret.js", import.meta.url), "text/javascript; charset=utf-8"]],
-  ["/cabaret.css", [new URL("../public/cabaret.css", import.meta.url), "text/css; charset=utf-8"]]
+  ["/cabaret.css", [new URL("../public/cabaret.css", import.meta.url), "text/css; charset=utf-8"]],
+  ["/slots", [new URL("../public/slots.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/slots.js", [new URL("../public/slots.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/slots.css", [new URL("../public/slots.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -86,6 +90,19 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res, 403, { error: "Missing or invalid local anti-CSRF token" });
       }
       const body = await readJson(req);
+      if (pathname === "/api/slots/deal") {
+        if (Object.keys(body).sort().join(",") !== "intents,question")
+          return reply(res,400,{error:"HOLD_EXACT_SLOTS_REQUEST_REQUIRED"});
+        try {
+          // All historical decisions are replayed from the original question and
+          // original JAR;VIS answer; the browser cannot supply a fake answer.
+          const attendant=app.attend(body.question);
+          const deck=replaySlots({question:body.question,answer:attendant.answer,intents:body.intents});
+          return reply(res,200,{deck,answerSource:attendant.mode,
+            scope:"LOCAL_CREATIVE_SOFTWARE_ONLY",independentHumanVerification:false,
+            nativeToasterExecuted:false,fieldVerified:false});
+        }catch(e){return reply(res,422,{error:String(e.message).slice(0,180)})}
+      }
       if (pathname === "/api/cabaret/ask") {
         if (Object.keys(body).sort().join(",") !== "mode,question,variant")
           return reply(res,400,{error:"HOLD_EXACT_CABARET_REQUEST_REQUIRED"});
