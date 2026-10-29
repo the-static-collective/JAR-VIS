@@ -1,0 +1,54 @@
+name: INSPAND-004 JAR;VIS source-locked composer observation
+on:
+  push:
+    branches:
+      - experiment/inspand-004-composition-attendant
+  pull_request:
+    paths:
+      - tools/composition-attendant.mjs
+      - test/composition-attendant.test.mjs
+      - spec/inspand-composer-source-v1.json
+      - .github/workflows/inspand-composer-attendant.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  read-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Fetch exact independently locked CANNON source
+        run: |
+          PIN="$(node -p "JSON.parse(require('fs').readFileSync('spec/inspand-composer-source-v1.json')).commit")"
+          git clone --quiet https://github.com/the-static-collective/CANNON.git "$RUNNER_TEMP/cannon-composer"
+          git -C "$RUNNER_TEMP/cannon-composer" checkout --quiet --detach "$PIN"
+      - name: Source inspection, actual CANNON list, and no-autonomy tests
+        env:
+          INSPAND_COMPOSER_CANNON: ${{ runner.temp }}/cannon-composer
+        run: |
+          node --test test/composition-attendant.test.mjs
+          node tools/composition-attendant.mjs inspect --cannon "$INSPAND_COMPOSER_CANNON"
+          node tools/composition-attendant.mjs list --cannon "$INSPAND_COMPOSER_CANNON" > "$RUNNER_TEMP/held-composer-invitation.json"
+          node -e 'const fs=require("fs"),x=JSON.parse(fs.readFileSync(process.argv[1]));if(x.authority!=="NONE"||x.automaticExecution||x.candidate.edges.length!==1)process.exit(2)' "$RUNNER_TEMP/held-composer-invitation.json"
+      - name: Falsified source and foreign build both refuse
+        env:
+          INSPAND_COMPOSER_CANNON: ${{ runner.temp }}/cannon-composer
+        run: |
+          if node tools/composition-attendant.mjs build --cannon "$INSPAND_COMPOSER_CANNON"; then exit 1; fi
+          cp "$INSPAND_COMPOSER_CANNON/registry/reflex-compositions-v1.json" "$RUNNER_TEMP/good-composition.json"
+          printf 'FORGED_OWNER_APPROVAL' >> "$INSPAND_COMPOSER_CANNON/registry/reflex-compositions-v1.json"
+          if node tools/composition-attendant.mjs list --cannon "$INSPAND_COMPOSER_CANNON"; then exit 1; fi
+          cp "$RUNNER_TEMP/good-composition.json" "$INSPAND_COMPOSER_CANNON/registry/reflex-compositions-v1.json"
+          node tools/composition-attendant.mjs list --cannon "$INSPAND_COMPOSER_CANNON"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-inspand-004-read-only-composition-invitation
+          path: ${{ runner.temp }}/held-composer-invitation.json
+          retention-days: 30
+          if-no-files-found: error
