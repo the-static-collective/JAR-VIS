@@ -1,6 +1,11 @@
 import { createServer } from "node:http";
 import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
+import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { composeCabaret, makePassport } from "./cabaret/engine.mjs";
+import { runSeason } from "../tools/season.mjs";
 import { Workbench } from "./workbench.mjs";
 import { InheritanceBoard } from "./inheritance.mjs";
 import {validateBridgeWork} from "./bridge-work-card.mjs";
@@ -13,7 +18,10 @@ const staticFiles = new Map([
   ["/inherit.css", [new URL("../public/inherit.css", import.meta.url), "text/css; charset=utf-8"]],
   ["/site.css", [new URL("../public/site.css", import.meta.url), "text/css; charset=utf-8"]],
   ["/bridge", [new URL("../public/bridge.html", import.meta.url), "text/html; charset=utf-8"]],
-  ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]]
+  ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/cabaret", [new URL("../public/cabaret.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/cabaret.js", [new URL("../public/cabaret.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/cabaret.css", [new URL("../public/cabaret.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -47,7 +55,7 @@ async function readJson(req) {
   return value;
 }
 
-export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard } = {}) {
+export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard, cannonPath = process.env.SEASON_CANNON } = {}) {
   if (!workbench && !journalPath) throw new Error("journalPath required");
   const app = workbench ?? await Workbench.open({ journalPath });
   const inherit = inheritanceBoard ?? (journalPath ? await InheritanceBoard.open({ journalPath: journalPath + ".inheritance.jsonl" }) : null);
@@ -78,6 +86,39 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res, 403, { error: "Missing or invalid local anti-CSRF token" });
       }
       const body = await readJson(req);
+      if (pathname === "/api/cabaret/ask") {
+        if (Object.keys(body).sort().join(",") !== "mode,question,variant")
+          return reply(res,400,{error:"HOLD_EXACT_CABARET_REQUEST_REQUIRED"});
+        let creative;
+        try {
+          const attended=app.attend(body.question);
+          creative=composeCabaret({question:body.question,mode:body.mode,
+            variant:body.variant,answer:attended.answer});
+        } catch(e) {return reply(res,422,{error:String(e.message).slice(0,160)})}
+        return reply(res,200,{creative,passport:makePassport(creative)});
+      }
+      if (pathname === "/api/cabaret/passport") {
+        if (Object.keys(body).sort().join(",") !== "ledger,mode,question,variant")
+          return reply(res,400,{error:"HOLD_EXACT_WITNESS_REQUEST_REQUIRED"});
+        if (!cannonPath) return reply(res,409,{error:"HOLD_SOURCE_LOCKED_CANNON_CHECKOUT_REQUIRED"});
+        let creative;
+        try {
+          const attended=app.attend(body.question);
+          creative=composeCabaret({question:body.question,mode:body.mode,
+            variant:body.variant,answer:attended.answer});
+        } catch(e) {return reply(res,422,{error:String(e.message).slice(0,160)})}
+        const temp=mkdtempSync(join(tmpdir(),"jarvis-cabaret-passport-"));
+        try {
+          const path=join(temp,"ledger.json");
+          writeFileSync(path,JSON.stringify(body.ledger),{flag:"wx",mode:0o600});
+          const witness=runSeason(["verify","--cannon",cannonPath,"--ledger",path]);
+          return reply(res,200,{creative,passport:makePassport(creative,witness),
+            verification:witness.result,
+            caveat:"Source-checked structural ledger, NOT authenticated independent testimony."});
+        } catch(e) {
+          return reply(res,422,{error:"HOLD_WITNESS_SOURCE_OR_CHAIN_REJECTED"});
+        } finally {rmSync(temp,{recursive:true,force:true})}
+      }
       if (pathname.startsWith("/api/inheritance/")) {
         if (!inherit) return reply(res, 503, { error: "Inheritance board not configured" });
         const operations = {
