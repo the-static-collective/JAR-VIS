@@ -5,7 +5,7 @@ const ids=['food','fellowship','campus','festival','care','farm','civic','founde
 const fixture={schema:'abundent.harmony-catalog/v1',status:'PUBLIC_SAFE_PROTOTYPE_NOT_PARTNERSHIP',asOf:'2026-10-29',
  invariants:['CULTURE_NOT_CONQUEST','EXIT_WITHOUT_PENALTY'],
  profiles:ids.map((id)=>({id,title:'Context of '+id,question:'How could '+id+' help?',offer:'Practice one voluntary, local decision without enrollment.',first:'../suitcase/',firstName:'Suitcase local tool',
-  neighbors:[['Room','../'],['Wallet','../../commons/wallet/'],['Receiver','../../commons/receiver/']],
+  neighbors:[['Bridge room','../'],['Wallet','../../commons/wallet/'],['Receiver','../../commons/receiver/']],
   gates:['Named local permission is independently required.','Human confirmation is not inferred.']}))};
 const mock=(doc=fixture,other={})=>{
  const calls=[];
