@@ -39,6 +39,22 @@
     <details id="passportDetails"><summary>Show inspectable proof fields</summary><pre id="passportText"></pre></details>
   </div>
 </section>
+<section class="review-desk" id="reviewDesk" aria-label="Stranger review desk">
+  <div class="eyebrow">THE STRANGER GETS THE LAST WORD</div><h2>Challenge the clown.<br><em>Not the person's freedom.</em></h2>
+  <p>A local review card is not an independent witness signature. It never changes a field outcome or records your identity. Your note is hashed rather than copied into the card.</p>
+  <div class="review-buttons">
+    <button type="button" data-review="ASK_WHY">? ASK WHY</button>
+    <button type="button" data-review="BREAK_IT">⚡ BREAK IT</button>
+    <button type="button" data-review="REFUSE">✕ REFUSE</button>
+    <button type="button" data-review="FORK">⑂ FORK A COSTUME</button>
+    <button type="button" data-review="KEEP">★ KEEP THIS CREATURE</button>
+    <button type="button" data-review="SCRAPE">⌫ SCRAPE THE CREATURE</button>
+  </div>
+  <label for="reviewNote">OPTIONAL PRIVATE REVIEW NOTE (HASH ONLY)</label>
+  <textarea id="reviewNote" maxlength="500" rows="2" placeholder="What is confusing, missing, risky, or delightful?"></textarea>
+  <div class="review-return" id="reviewReturn" aria-live="polite">A reviewer may object, fork, refuse, or request evidence. The owner remains free to disagree.</div>
+  <button type="button" id="downloadReview" hidden>↓ EXPORT REVIEW CARD</button>
+</section>
 <section class="challenge">
   <div><span class="eyebrow">THE HUMAN CHALLENGE DOOR</span><h2>Bring a witness.<br><em>Leave with a question.</em></h2>
   <p>Already have a CANNON SEASON-001 ledger? Inspect its hash-chain structure against the exact pinned source. The software won't claim your stranger, consent, or field trial happened just because a JSON file says so.</p></div>
