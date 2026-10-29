@@ -1,0 +1,31 @@
+name: THOUGHT-FOOD-001 local creative pantry
+on:
+  pull_request:
+    paths:
+      - 'src/thought-food.mjs'
+      - 'tools/thought-food.mjs'
+      - 'test/thought-food.test.mjs'
+      - '.github/workflows/thought-food-001.yml'
+  workflow_dispatch:
+jobs:
+  local-proof:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test test/thought-food.test.mjs
+      - name: Export and cold-verify source-bound ideas
+        run: |
+          node tools/thought-food.mjs demo thought-food-001.json
+          node tools/thought-food.mjs verify thought-food-001.json > thought-food-001-review.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: thought-food-001-local-review-HOLD
+          path: |
+            thought-food-001.json
+            thought-food-001-review.json
+          if-no-files-found: error
