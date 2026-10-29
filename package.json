@@ -4,11 +4,14 @@
   "private": true,
   "type": "module",
   "description": "JAR;VIS Genesis 002: voluntary local attendant workbench and mock Kinship crossing",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "test": "node --test test/*.test.mjs",
     "demo": "node src/demo.mjs",
     "demo:hold": "node src/demo.mjs --hold",
-    "start": "node src/serve.mjs"
+    "start": "node src/serve.mjs",
+    "harmony": "node tools/inspect-harmony.mjs"
   }
 }
