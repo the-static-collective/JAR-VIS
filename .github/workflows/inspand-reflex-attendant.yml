@@ -1,0 +1,54 @@
+name: INSPAND-003 JAR;VIS independent read-only reflex attendant
+on:
+  push:
+    branches:
+      - experiment/inspand-003-reflex-attendant
+  pull_request:
+    paths:
+      - tools/reflex-attendant.mjs
+      - spec/inspand-reflex-source-v1.json
+      - test/reflex-attendant.test.mjs
+      - .github/workflows/inspand-reflex-attendant.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Acquire and check out exact independently pinned CANNON experiment
+        run: |
+          PIN="$(node -p "JSON.parse(require('fs').readFileSync('spec/inspand-reflex-source-v1.json')).commit")"
+          git clone --quiet https://github.com/the-static-collective/CANNON.git "$RUNNER_TEMP/cannon"
+          git -C "$RUNNER_TEMP/cannon" checkout --quiet --detach "$PIN"
+      - name: Independently inspect exact source and call original CANNON discovery
+        env:
+          INSPAND_CANNON: ${{ runner.temp }}/cannon
+        run: |
+          node --test test/reflex-attendant.test.mjs
+          node tools/reflex-attendant.mjs inspect --cannon "$INSPAND_CANNON"
+          node tools/reflex-attendant.mjs discover --cannon "$INSPAND_CANNON" --need "plan film visual replay" > "$RUNNER_TEMP/attendant-reflex-invitation.json"
+          node -e 'const f=require("fs"),x=JSON.parse(f.readFileSync(process.argv[1]));if(x.candidates.length!==2||x.authority!=="NONE"||x.automaticallyExecuted)process.exit(2)' "$RUNNER_TEMP/attendant-reflex-invitation.json"
+      - name: Changed foreign source bytes and blocked build must be refused
+        env:
+          INSPAND_CANNON: ${{ runner.temp }}/cannon
+        run: |
+          if node tools/reflex-attendant.mjs build --cannon "$INSPAND_CANNON" --need "film"; then echo "EXECUTION ACCEPTED"; exit 1; fi
+          cp "$INSPAND_CANNON/registry/reflex-library-v1.json" "$RUNNER_TEMP/original-catalog.json"
+          printf 'FORGED' >> "$INSPAND_CANNON/registry/reflex-library-v1.json"
+          if node tools/reflex-attendant.mjs inspect --cannon "$INSPAND_CANNON"; then echo "FOREIGN SOURCE TAMPER ACCEPTED"; exit 1; fi
+          cp "$RUNNER_TEMP/original-catalog.json" "$INSPAND_CANNON/registry/reflex-library-v1.json"
+          node tools/reflex-attendant.mjs inspect --cannon "$INSPAND_CANNON"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-inspand-003-review-only-discovery-invitation
+          path: ${{ runner.temp }}/attendant-reflex-invitation.json
+          retention-days: 30
+          if-no-files-found: error
