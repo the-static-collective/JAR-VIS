@@ -1,0 +1,11 @@
+# STORY-ROOMS-002 — Stories are thoughtful fuel, not automatic canon
+
+Added to existing native JAR;VIS `/thought-food` alongside film/music/book prototype pantry. Eight author-attributed narrative lenses: The Static Collective Movie (cross-media movie seed), The Pet Sitter (substitute-teacher protagonist), Deuce Burbank's tiny livestream (not assumed separate produced film), Renji's memory-intact game workshop, Renji's *fictional* 48-copy book, CANON-001 Collection Event (author-approved fictional canon), and OCTOPUS MADE THIS parent and relational mutation (candidate fiction).
+
+The actual canonical statements live in GitBook The Pet Sitter, The Room Inside the Room and CANON 001; the Octopus ideas live in the public Daily Slice creative witnesses. Each packet includes source URLs and explicitly distinct maturity labels; copying a link is not a rights grant.
+
+`node tools/story-rooms.mjs demo` creates default 3-source packet with three pairings, 4 independent PlanZ-inspired pressures each (viewpoint, absence, receiver, carrier), and three HELD small-plan candidates. `verify` performs exact local recomposition, refusing a rewritten canon, an exaggerated real outcome, or a source-change. `POST /api/story-rooms/compose` is provided by the real JAR;VIS localhost server, with existing anti-CSRF and fixed key controls. The existing workbench `/thought-food` UI now supports story source selections and portable local JSON. Both the story and media lanes are separate so a narrative seed cannot silently claim it produced a movie.
+
+**Second Table source handoff:** a separately governed webZ receiver may interpret this self-contained, original-source-labeled JSON as an *untrusted idea proposal*. External source authenticity, group membership, consent, events, publication and the Voqal application remain independently held. Fictional animal choices may inspire questions about participation and refusal, but never serve as proof that people consented or received aid.
+
+**Original fiction constraints:** Pet Sitter emotional center belongs to the ordinary teacher; Deuce is largely missing in that film. Renji is not amnesiac. His diagram readers can disagree and a crop cannot rewrite the original. Rats choose their crossing. The Octopus fable is not already admitted to movie canon and its animal civilization is not a science report.
