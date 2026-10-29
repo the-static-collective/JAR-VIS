@@ -24,7 +24,7 @@ test('altered canon, fake completed productions and source tampering are rejecte
  for(const bad of [
   {...p,digest:'sha256:'+'0'.repeat(64)},
   {...p,payload:{...p.payload,newStoryCanonDeclared:true}},
-  {...p,payload:{...p.payload,sourceReferences:[{...p.payload.sourceReferences[0],state:'FIXED_FICTIONAL_CANON'},...p.payload.sourceReferences.slice(1)]}},
+  {...p,payload:{...p.payload,sourceReferences:[{...p.payload.sourceReferences[0],state:'FORGED_REAL_CIVILIZATION'},...p.payload.sourceReferences.slice(1)]}},
   {...p,payload:{...p.payload,planCandidates:[]}},
   {...p,published:true}
  ])assert.throws(()=>verifyStoryRooms(bad),/STORY_ROOMS_HOLD/);
