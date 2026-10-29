@@ -1,7 +1,7 @@
 {
   "schema": "jarvis.arcade-source-lock/v1",
   "repository": "the-static-collective/CANNON",
-  "commit": "82fa70c8cb5f3463cd98b20e266a27538e3d3fc9",
+  "commit": "f99d4b0f74b117e0af034137d550e88aa3d01f26",
   "ancestry": [
     "c5031495424abcd6141d546a1f85a5e781539072",
     "32979819f5bf7e35dcb19d30fc8ffdeb8c81ccb1",
