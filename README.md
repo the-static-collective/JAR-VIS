@@ -1,5 +1,10 @@
 # JAR;VIS
 
+## Suno MCP Song Garden 001 (draft)
+
+A **read-only local JAR;VIS MCP tool** can hand an approved, private song seed to a host that also connects to Suno's official MCP beta. An operator can use both in one Claude Code session, after separate Suno OAuth and credit authorization. No direct Suno invocation, real church approval, song generation, or deployment is claimed. See [Suno Song Garden 001](docs/SUNO-SONG-GARDEN-001.md) and `test/suno-song-garden*.test.mjs`.
+
+
 **Jubilee Automation / Attention Relay / Res; Virtual / Voluntary Integration / Intelligence Stewardship / System.**
 
 **Short name:** JAR;VIS  
