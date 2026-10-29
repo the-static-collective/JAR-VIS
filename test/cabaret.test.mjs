@@ -4,6 +4,7 @@ import {mkdtempSync,rmSync} from 'node:fs';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import {composeCabaret,makePassport} from '../src/cabaret/engine.mjs';
+import {inspectPassport,makeReviewerCard} from '../src/cabaret/challenge.mjs';
 import {startWorkbenchServer} from '../src/server.mjs';
 
 const example='Could our Garden project become a festival?';
@@ -118,4 +119,28 @@ test('native CANNON source-chain checks a genuine fictional ledger, rejects tamp
    assert.equal(bad.status,422);
    assert.match((await bad.json()).error,/HOLD_WITNESS/);
   }finally{await service.close();rmSync(dir,{recursive:true,force:true})}
+});
+
+test('actual reviewer challenge card is self-declared, digest-only, and does not claim independent field proof',()=>{
+ const parent=makePassport(make({mode:'manga'}));
+ const child=makePassport(make({mode:'manga',variant:1}));
+ assert.equal(inspectPassport(parent).status,'LOCAL_PACKET_BYTES_MATCH');
+ const changed={...parent,publishableHumanSuccess:true};
+ assert.throws(()=>inspectPassport(changed),/HOLD_PASSPORT_SCOPE_INVALID/);
+ assert.throws(()=>inspectPassport({...parent,scope:'HUMAN_SUCCESS'}),/HOLD_PASSPORT_DIGEST_MISMATCH/);
+ for (const action of ['ASK_WHY','BREAK_IT','REFUSE','FORK','KEEP','SCRAPE']){
+  const card=makeReviewerCard({passport:parent,action,note:'Needs independent replay.',
+   childPassport:action==='FORK'?child:null});
+  assert.equal(card.reviewerIdentity,'NOT_AUTHENTICATED');
+  assert.equal(card.sourceOwnerDisposition,'UNCHANGED');
+  assert.equal(card.published,false);
+  assert.equal(card.submitted,false);
+  assert.equal(card.dispatched,false);
+  assert.doesNotMatch(JSON.stringify(card),/Needs independent replay/);
+  assert.deepEqual(card,makeReviewerCard({passport:parent,action,note:'Needs independent replay.',
+   childPassport:action==='FORK'?child:null}));
+ }
+ assert.throws(()=>makeReviewerCard({passport:parent,action:'SIGN_AS_WITNESS'}),/HOLD_UNKNOWN_REVIEW_ACTION/);
+ assert.throws(()=>makeReviewerCard({passport:parent,action:'FORK',childPassport:parent}),/HOLD_FORK_MUST_KEEP_QUESTION_AND_ANSWER/);
+ assert.throws(()=>makeReviewerCard({passport:parent,action:'REFUSE',note:'a'.repeat(501)}),/HOLD_REVIEW_NOTE_LIMIT/);
 });
