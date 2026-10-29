@@ -50,3 +50,47 @@ $('save').addEventListener('click',()=>{
  tell('Public-only source-linked idea packet saved to this device. It was not published or sent.');
 });
 boot();
+
+// Separate original story rooms: opt-in source-only ideas, no inferred media rights.
+async function storyInit(){
+ try{
+  const cat=await fetch('/api/story-rooms/catalog').then(x=>x.json());
+  if(cat.schema!=='jarvis.story-rooms-catalog/v1')throw Error('Story sources unavailable');
+  for(const s of cat.sources){
+   const card=document.createElement('label');card.className='card';
+   const check=document.createElement('input');check.type='checkbox';check.name='story';check.value=s.id;
+   check.checked=['collection-event','renji-game','octopus-rooms'].includes(s.id);
+   const title=document.createElement('b');title.textContent=s.title+' · '+s.medium;
+   const status=document.createElement('small');status.textContent=s.state;
+   const description=document.createElement('span');description.textContent=s.mechanic;
+   card.append(check,title,status,description);$('stories').append(card);
+  }
+ }catch(error){$('story-status').textContent=String(error);$('story-compose').disabled=true;}
+}
+let storyPacket=null;
+$('story-compose').addEventListener('click',async()=>{
+ storyPacket=null;$('story-save').disabled=true;
+ try{
+  const ids=[...document.querySelectorAll('input[name="story"]:checked')].map(x=>x.value);
+  const res=await fetch('/api/story-rooms/compose',{method:'POST',headers:{'content-type':'application/json','x-jarvis-csrf':csrf},body:JSON.stringify({ids,purpose:$('story-purpose').value})});
+  const j=await res.json();if(!res.ok)throw Error(j.error||'HOLD');
+  storyPacket=j.packet;
+  $('story-results').replaceChildren();
+  for(const b of storyPacket.payload.branches){
+   const el=document.createElement('article');el.className='idea';
+   const head=document.createElement('b');head.textContent=b.parentIds.join(' × ');
+   const p=document.createElement('p');p.textContent=b.question;
+   el.append(head,p);$('story-results').append(el);
+  }
+  $('story-proof').textContent=JSON.stringify(storyPacket,null,2);
+  $('story-save').disabled=false;
+  $('story-status').textContent='Fictional story question and planning candidates only. No scene promoted to canon.';
+ }catch(error){$('story-status').textContent=String(error);$('story-results').replaceChildren();$('story-proof').textContent='HOLD';}
+});
+$('story-save').addEventListener('click',()=>{
+ if(!storyPacket)return;
+ const url=URL.createObjectURL(new Blob([JSON.stringify(storyPacket,null,2)+'\\n'],{type:'application/json'}));
+ const a=document.createElement('a');a.href=url;a.download='jarvis-story-rooms-002-HOLD.json';a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+storyInit();

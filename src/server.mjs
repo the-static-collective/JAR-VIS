@@ -8,6 +8,7 @@ import { composeCabaret, makePassport } from "./cabaret/engine.mjs";
 import { replaySlots } from "./cabaret/slots.mjs";
 import { createOffer } from "./cabaret/toaster-offer.mjs";
 import {THOUGHT_SOURCES,compileThoughtFood,verifyThoughtFood} from "./thought-food.mjs";
+import {STORY_SOURCES,composeStoryRooms,verifyStoryRooms} from "./story-rooms.mjs";
 import { runSeason } from "../tools/season.mjs";
 import { Workbench } from "./workbench.mjs";
 import { InheritanceBoard } from "./inheritance.mjs";
@@ -83,6 +84,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/story-rooms/catalog") return reply(res,200,{schema:"jarvis.story-rooms-catalog/v1",sources:STORY_SOURCES,status:"FICTIONAL_SOURCE_DESCRIPTIONS_NOT_CANON_ADMISSION"});
         if (pathname === "/api/thought-food/catalog") return reply(res,200,{schema:"jarvis.thought-food-catalog/v1",sources:THOUGHT_SOURCES,mode:"PUBLIC_IDEAS_ONLY_NO_MEDIA_CUSTODY"});
         if (pathname === "/api/inheritance") return inherit ?
           reply(res, 200, { ...inherit.state(), csrfToken: csrf }) : reply(res, 503, { error: "Inheritance board not configured" });
@@ -96,6 +98,12 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res, 403, { error: "Missing or invalid local anti-CSRF token" });
       }
       const body = await readJson(req);
+      if (pathname === "/api/story-rooms/compose") {
+        if (Object.keys(body).sort().join(",")!=="ids,purpose") return reply(res,400,{error:"STORY_ROOMS_HOLD_EXACT_REQUEST_REQUIRED"});
+        try{const packet=composeStoryRooms({ids:body.ids,purpose:body.purpose});verifyStoryRooms(packet);
+          return reply(res,200,{packet,rightsCleared:false,published:false,realHumanOutcome:false});}
+        catch(e){return reply(res,422,{error:String(e.message).slice(0,150)});}
+      }
       if (pathname === "/api/thought-food/compile") {
         if (Object.keys(body).sort().join(",") !== "ids,purpose")
           return reply(res,400,{error:"THOUGHT_FOOD_HOLD_EXACT_SOURCE_SELECTION_REQUIRED"});
