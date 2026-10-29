@@ -89,3 +89,33 @@ test('all fifteen species renderer payload contracts are reached in a bounded sa
  assert.equal(seen.get('recipe').steps.length,5);
  assert.ok(seen.get('postcard').message);
 });
+
+test('CONVERGE chooses only unvisited media after first family',()=>{
+ const first=run([]),converged=run([{kind:'SCRAPE'}]);
+ const prior=new Set(first.family.creatures.map(c=>c.renderer));
+ for(const creature of converged.family.creatures)assert.equal(prior.has(creature.renderer),false);
+ assert.equal(converged.family.frontierBefore[first.family.creatures[0].renderer],1);
+ assert.equal(converged.family.frontierBefore[converged.family.creatures[0].renderer],0);
+});
+test('STOMP rejects every renderer from the previous local six-up',()=>{
+ const first=run([{kind:'SCRAPE'}]),second=run([{kind:'SCRAPE'},{kind:'SCRAPE'}]);
+ const prior=new Set(first.family.creatures.map(c=>c.renderer));
+ assert.equal(second.family.operation,'STOMP');
+ for(const creature of second.family.creatures)assert.equal(prior.has(creature.renderer),false);
+});
+test('exact kept parent medium survives MUTATE and two kept parent media survive CROSS',()=>{
+ const first=run([]).family.creatures[0];
+ const moved=run([{kind:'KEEP',candidateId:first.id},{kind:'NEXT'}]);
+ assert.ok(moved.family.creatures.some(c=>c.renderer===first.renderer));
+ const other=moved.family.creatures.find(c=>c.renderer!==first.renderer);
+ const crossed=run([{kind:'KEEP',candidateId:first.id},{kind:'NEXT'},
+  {kind:'KEEP',candidateId:other.id},{kind:'NEXT'}]);
+ assert.ok(crossed.family.creatures.some(c=>c.renderer===first.renderer));
+ assert.ok(crossed.family.creatures.some(c=>c.renderer===other.renderer));
+});
+test('SCRAPE receipt preserves the extinct family and subsequent emerging family separately',()=>{
+ const one=run([]),after=run([{kind:'SCRAPE'}]);
+ assert.equal(after.receipts[0].offeredFamilyDigest,one.family.familyDigest);
+ assert.equal(after.receipts[0].resultFamilyDigest,after.family.familyDigest);
+ assert.notEqual(after.receipts[0].offeredFamilyDigest,after.receipts[0].resultFamilyDigest);
+});
