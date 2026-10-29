@@ -1,0 +1,18 @@
+{
+  "schema": "jarvis.season-source-lock/v1",
+  "repository": "the-static-collective/CANNON",
+  "commit": "63925118a42ef307fa274443fa9f81957c5a6682",
+  "ancestry": [
+    "f99d4b0f74b117e0af034137d550e88aa3d01f26",
+    "c5031495424abcd6141d546a1f85a5e781539072",
+    "32979819f5bf7e35dcb19d30fc8ffdeb8c81ccb1",
+    "bb57e71151bca1eb245abfc82cf74047e9105169",
+    "cb7f14b71e7e26456097abd7b0e78a49f50c64eb",
+    "99a9c270397717b690615178d0e821df545fb684"
+  ],
+  "sourceDoc": "docs/SEASON-001.md",
+  "sourceScript": "scripts/season-witness.mjs",
+  "sourceSchema": "cannon.season-witness/v1",
+  "status": "review-only-fictional-software",
+  "authority": "NO_EXTERNAL_EFFECTS"
+}
