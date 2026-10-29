@@ -178,18 +178,33 @@ function operation(round,lastKind,keepers,streak) {
  if(streak>=3)return 'FRESH_BIRTH';
  return 'DIVERSE';
 }
-function dealFamily({question,answer,round,operationName,keepers}){
+function dealFamily({question,answer,round,operationName,keepers,history=[]}){
  const root=digest([POLICY,question,answer,round,operationName,keepers.map(k=>k.id)]);
  const motif=word(question);
- // Slot renderer families are never duplicated within one six-up.
- // Starting groups rotate across 15 actually supported HTML render paths.
- const available=[...RENDERERS];
- const picked=[];
- for(let i=0;i<6;i++){
-  const index=pick(root,'renderer-'+i,available.length);
-  picked.push(available.splice(index,1)[0]);
+ const coverage=Object.fromEntries(RENDERERS.map(renderer=>[
+  renderer, history.flatMap(f=>f.creatures).filter(c=>c.renderer===renderer).length
+ ]));
+ const lastFamily=history.at(-1);
+ const desired=[];
+ if(operationName==='MUTATE'||operationName==='CROSS'){
+  // Exact kept specimens, not learned aesthetic weights, contribute ancestry.
+  for(const k of (operationName==='CROSS'?keepers.slice(-2):keepers.slice(-1)))
+   if(k.renderer&&!desired.includes(k.renderer))desired.push(k.renderer);
  }
- const specimens=picked.map((renderer,i)=>{
+ const candidates=RENDERERS.filter(r=>!desired.includes(r));
+ if(operationName==='CONVERGE'){
+  // Actual least-visited deterministic frontier, not merely a name.
+  candidates.sort((a,b)=>coverage[a]-coverage[b]||
+   pick(root,'tie-'+a,100000)-pick(root,'tie-'+b,100000));
+ }else if(operationName==='STOMP'){
+  const recentlySeen=new Set(lastFamily?.creatures.map(c=>c.renderer)??[]);
+  candidates.sort((a,b)=>Number(recentlySeen.has(a))-Number(recentlySeen.has(b))||
+   pick(root,'stomp-'+a,100000)-pick(root,'stomp-'+b,100000));
+ }else{
+  candidates.sort((a,b)=>pick(root,'species-'+a,100000)-pick(root,'species-'+b,100000));
+ }
+ desired.push(...candidates.slice(0,6-desired.length));
+ const specimens=desired.map((renderer,i)=>{
   const pool=SPECIES.filter(s=>s.renderer===renderer);
   const spec=pool[pick(root,'species-'+i,pool.length)];
   const phenotypeSeed=digest([root,ROLES[i],spec.id,keepers.map(k=>k.id)]);
@@ -212,6 +227,7 @@ function dealFamily({question,answer,round,operationName,keepers}){
  const family={
   schema:'jarvis.maddclown-family/v1',round,operation:operationName,
   policy:POLICY,root,ancestry:keepers.slice(-2).map(k=>k.id),
+  frontierBefore:coverage,
   creatures:specimens,
   evidenceClass:'LOCAL_CREATIVE_SOFTWARE_ONLY'
  };
@@ -220,31 +236,32 @@ function dealFamily({question,answer,round,operationName,keepers}){
 export function replaySlots({question,answer,intents=[]}={}){
  const q=ensureQuestion(question),a=ensureAnswer(answer);
  validateIntents(intents);
- let round=0,streak=0,last='BIRTH',status='OFFERING',keepers=[];
+ let round=0,streak=0,last='BIRTH',status='OFFERING',keepers=[],history=[];
  let family=dealFamily({question:q,answer:a,round,operationName:'BIRTH',keepers});
  const receipts=[];
  let previous=digest([POLICY,q,a]);
  for(const intent of intents){
   if(status==='KEPT'&&intent.kind!=='NEXT')throw Error('HOLD_AFTER_KEEP_NEXT_REQUIRED');
   if(status==='OFFERING'&&intent.kind==='NEXT')throw Error('HOLD_NEXT_NEEDS_KEEP');
+  const beforeFamily=family;
   if(intent.kind==='KEEP'){
    const target=family.creatures.find(c=>c.id===intent.candidateId);
    if(!target)throw Error('HOLD_KEEP_EXACT_CURRENT_CREATURE_REQUIRED');
-   keepers=[...keepers,{id:target.id,seed:target.seed,creatureDigest:target.creatureDigest,familyDigest:family.familyDigest}];
+   keepers=[...keepers,{id:target.id,seed:target.seed,renderer:target.renderer,creatureDigest:target.creatureDigest,familyDigest:family.familyDigest}];
    status='KEPT';
   }else{
    if(round>=15)throw Error('HOLD_DEAL_LIMIT');
    if(intent.kind==='SCRAPE'){streak++;last='SCRAPE'}
    else if(intent.kind==='NEXT'){streak=0;last='NEXT'}
    else throw Error('HOLD_UNKNOWN_VERDICT');
-   round++;
+   history=[...history,family];round++;
    family=dealFamily({question:q,answer:a,round,
-    operationName:operation(round,last,keepers,streak),keepers});
+    operationName:operation(round,last,keepers,streak),keepers,history});
    status='OFFERING';
   }
   const record={
    schema:'jarvis.maddclown-receipt/v1',sequence:receipts.length+1,
-   kind:intent.kind,familyDigest:family.familyDigest,
+   kind:intent.kind,offeredFamilyDigest:beforeFamily.familyDigest,resultFamilyDigest:family.familyDigest,
    candidateId:intent.kind==='KEEP'?intent.candidateId:null,
    selectedOperation:family.operation,ancestorIds:family.ancestry,
    priorReceipt:previous,
@@ -258,6 +275,7 @@ export function replaySlots({question,answer,intents=[]}={}){
   question:q,answer:a,
   questionDigest:sha(q),answerDigest:sha(a),
   family,round,status,keepers,receipts,
+  historyFamilyDigests:history.map(f=>f.familyDigest),
   nextAllowed:status==='KEPT'?['NEXT']:['KEEP','SCRAPE'],
   focusIsVerdict:false,preferenceWeightsRecorded:false,
   humanOutcomesVerified:false,externalDispatch:false,
