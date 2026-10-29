@@ -250,7 +250,7 @@ function render(){
  $('operation').textContent=f.operation;$('round').textContent='ROUND '+deck.round+' · '+f.familyDigest.slice(7,15);
  const kept=deck.status==='KEPT';
  $('keep').hidden=kept;$('scrape').hidden=kept;$('next').hidden=!kept;
- $('scrape').disabled=kept;$('keep').disabled=kept||!focused;$('next').disabled=!kept;
+ $('scrape').disabled=kept;$('keep').disabled=kept||!focused;$('next').disabled=!kept;$('offerToaster').disabled=!kept;
  for(const c of f.creatures){
   const tile=el('button',null,'creature');tile.type='button';
   tile.dataset.candidate=c.id;tile.dataset.focused='false';tile.setAttribute('aria-pressed','false');
@@ -291,3 +291,19 @@ $('export').addEventListener('click',async()=>{
  const a=el('a');a.href=url;a.download='MADD-CLOWN-'+deck.family.familyDigest.slice(7,15)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
 window.addEventListener('pagehide',cleanPlayback);
+
+$('offerToaster').addEventListener('click',async()=>{
+ if(!deck||deck.status!=='KEPT'){status.textContent='HOLD: KEEP AN EXACT CREATURE FIRST';return}
+ try{
+  const response=await fetch('/api/slots/toaster-offer',{
+   method:'POST',headers:{'content-type':'application/json','x-jarvis-csrf':await token()},
+   body:JSON.stringify({question:question.value,intents})});
+  const payload=await response.json();
+  if(!response.ok)throw Error(payload.error||'OFFER_REFUSED');
+  const data=JSON.stringify(payload.offer,null,2)+'\n';
+  const url=URL.createObjectURL(new Blob([data],{type:'application/json'}));
+  const a=el('a');a.href=url;a.download='KEEP-to-Toaster-'+payload.offer.selectedCreature.id+'.json';a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  status.textContent='LOCAL KEEP OFFER EXPORTED. NATIVE TOASTER NEEDS THE SONG AND AN INDEPENDENT NATIVE KEEP.';
+ }catch(e){status.textContent='HOLD: '+e.message}
+});

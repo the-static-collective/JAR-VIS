@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { composeCabaret, makePassport } from "./cabaret/engine.mjs";
 import { replaySlots } from "./cabaret/slots.mjs";
+import { createOffer } from "./cabaret/toaster-offer.mjs";
 import { runSeason } from "../tools/season.mjs";
 import { Workbench } from "./workbench.mjs";
 import { InheritanceBoard } from "./inheritance.mjs";
@@ -90,6 +91,17 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res, 403, { error: "Missing or invalid local anti-CSRF token" });
       }
       const body = await readJson(req);
+      if (pathname === "/api/slots/toaster-offer") {
+        if (Object.keys(body).sort().join(",") !== "intents,question")
+          return reply(res,400,{error:"HOLD_EXACT_TOASTER_OFFER_REQUEST_REQUIRED"});
+        try{
+          const attended=app.attend(body.question);
+          const offer=createOffer({question:body.question,answer:attended.answer,intents:body.intents});
+          return reply(res,200,{offer,
+            status:"LOCAL_KEEP_EXPORTED_NOT_NATIVE_TOASTER_KEEP",
+            sourceRightsVerified:false,mediaAttached:false,renderAuthorized:false});
+        }catch(e){return reply(res,422,{error:String(e.message).slice(0,180)})}
+      }
       if (pathname === "/api/slots/deal") {
         if (Object.keys(body).sort().join(",") !== "intents,question")
           return reply(res,400,{error:"HOLD_EXACT_SLOTS_REQUEST_REQUIRED"});
