@@ -1,0 +1,59 @@
+name: JAR;VIS SEASON-001 exact-pinned witness attendant
+on:
+  push:
+    branches: ['experiment/season-001-witness-attendant']
+    paths:
+      - 'tools/season.mjs'
+      - 'spec/season-source-v1.json'
+      - 'test/season-attendant.test.mjs'
+      - 'docs/SEASON-001-ATTENDANT.md'
+      - '.github/workflows/season-attendant-001.yml'
+  pull_request:
+    paths:
+      - 'tools/season.mjs'
+      - 'spec/season-source-v1.json'
+      - 'test/season-attendant.test.mjs'
+      - 'docs/SEASON-001-ATTENDANT.md'
+      - '.github/workflows/season-attendant-001.yml'
+permissions:
+  contents: read
+jobs:
+  exact-pinned-season:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: jarvis
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/CANNON
+          ref: 63925118a42ef307fa274443fa9f81957c5a6682
+          fetch-depth: 0
+          path: cannon
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check exact commit and original native-machine ancestry
+        run: |
+          test "$(git -C cannon rev-parse HEAD)" = "63925118a42ef307fa274443fa9f81957c5a6682"
+          git -C cannon merge-base --is-ancestor f99d4b0f74b117e0af034137d550e88aa3d01f26 HEAD
+      - name: Verify structural refusal tests and authenticated source lock
+        env:
+          SEASON_CANNON: ${{ github.workspace }}/cannon
+        run: |
+          node --check tools/season.mjs
+          node --test test/season-attendant.test.mjs
+          node tools/season.mjs inspect --cannon ../cannon
+        working-directory: jarvis
+      - name: Delegate fictional demo and offline verification to original source
+        run: |
+          node tools/season.mjs demo --cannon ../cannon --out "${{ runner.temp }}/season" --authorize LOCAL_FICTIONAL_ONLY
+          node tools/season.mjs verify --cannon ../cannon --ledger "${{ runner.temp }}/season/fictional-garden.json"
+          node tools/season.mjs verify --cannon ../cannon --ledger "${{ runner.temp }}/season/fictional-refusal.json"
+        working-directory: jarvis
+      - name: Existing attendant refusal syntax remains green
+        run: node --test test/constellation.test.mjs test/arcade-attendant.test.mjs
+        working-directory: jarvis
