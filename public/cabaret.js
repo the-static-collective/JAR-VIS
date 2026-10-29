@@ -1,6 +1,6 @@
 const $=id=>document.getElementById(id);
 const form=$('ask'),question=$('question'),status=$('status'),stage=$('stage');
-let csrf=null,last=null,variant=0,flipTimer=null,audioContext=null,oscillators=[];
+let csrf=null,last=null,lastReview=null,variant=0,flipTimer=null,audioContext=null,oscillators=[];
 const text=(tag,value,cls)=>{const e=document.createElement(tag);if(cls)e.className=cls;e.textContent=value;return e};
 const button=(label,action)=>{const b=text('button',label);b.type='button';b.addEventListener('click',action);return b};
 function stop() {
@@ -76,7 +76,10 @@ function renderFlipbook(media){
  draw();flip.append(frame);root.append(flip,controls,text('p',media.limit,'annotation'));return root;
 }
 function render(payload){
- stop();last=payload;const {creative,passport}=payload;
+ stop();last=payload;lastReview=null;
+ $('downloadReview').hidden=true;
+ $('reviewReturn').textContent='Review the creative response; no human action is authorized.';
+ const {creative,passport}=payload;
  $('result').hidden=false;
  $('modeTag').textContent='TRANSMISSION '+creative.stamp+' / '+creative.mode.toUpperCase()+' / VARIANT '+creative.variant;
  $('answerTitle').textContent=creative.title;
@@ -91,8 +94,8 @@ async function ask(){
  const payload=currentRequest();
  if(!payload.question.trim()){status.textContent='ASK A QUESTION FIRST';return}
  $('askButton').disabled=true;status.textContent='THE COWBOY IS CONSULTING HIS LITTLE RULE BOOK…';
- try{render(await api('/api/cabaret/ask',payload))}
- catch(e){status.textContent='HOLD: '+e.message}
+ try{render(await api('/api/cabaret/ask',payload));return true}
+ catch(e){status.textContent='HOLD: '+e.message;return false}
  finally{$('askButton').disabled=false}
 }
 form.addEventListener('submit',e=>{e.preventDefault();variant=0;ask()});
@@ -121,3 +124,70 @@ $('verify').addEventListener('click',async()=>{
  finally{$('verify').disabled=false}
 });
 window.addEventListener('pagehide',stop);
+
+async function shaBrowser(input){
+ const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(input));
+ return 'sha256:'+Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function localIntegrity(passport){
+ if(!passport||passport.schema!=='jarvis.stranger-evidence-passport/v1'||
+  passport.publishableHumanSuccess!==false||passport.externalDispatch!==false||
+  passport.nativeOwnersExecutedByThisRequest!==0||
+  passport.externallyVerifiedHumanOutcomes!==0)return false;
+ const {passportDigest,...payload}=passport;
+ return passportDigest===await shaBrowser(JSON.stringify(payload));
+}
+async function localReview(action,parent,child=null){
+ if(!parent||!await localIntegrity(parent))throw Error('HOLD_PASSPORT_BYTES_MISMATCH');
+ const note=$('reviewNote').value.trim().replace(/\s+/g,' ');
+ if(note.length>500)throw Error('HOLD_NOTE_LIMIT');
+ if(action==='FORK'){
+  if(!child||!await localIntegrity(child)||child.creativeSeed===parent.creativeSeed||
+    child.questionDigest!==parent.questionDigest||child.answerDigest!==parent.answerDigest)
+    throw Error('HOLD_FORK_MUST_KEEP_EXACT_QUESTION_AND_ANSWER');
+ }else if(child!==null)throw Error('HOLD_CHILD_ONLY_FOR_FORK');
+ const packet={schema:'jarvis.stranger-review-card/v1',action,
+  subjectPassportDigest:parent.passportDigest,noteDigest:await shaBrowser(note),
+  noteIncludedInCard:false,childPassportDigest:child?.passportDigest??null,
+  localPacketIntegrity:'LOCAL_PACKET_BYTES_MATCH',reviewerIdentity:'NOT_AUTHENTICATED',
+  humanEvidence:'NOT_ESTABLISHED',sourceOwnerDisposition:'UNCHANGED',
+  published:false,submitted:false,dispatched:false};
+ return {...packet,reviewCardDigest:await shaBrowser(JSON.stringify(packet))};
+}
+document.querySelectorAll('[data-review]').forEach(b=>b.addEventListener('click',async()=>{
+ if(!last){$('reviewReturn').textContent='HOLD: ASK A QUESTION FIRST';return}
+ const action=b.dataset.review;
+ let parent=last.passport,child=null;
+ try{
+  if(action==='FORK'){
+   variant=(variant+1)%100;
+   const okay=await ask();
+   if(!okay)throw Error('HOLD_FORK_CREATIVE_RESPONSE_FAILED');
+   child=last.passport;
+  }
+  const review=await localReview(action,parent,child);
+  lastReview=review;
+  $('downloadReview').hidden=false;
+  const messages={
+   ASK_WHY:'WHY: the answer comes from JAR;VIS local rules. The performance is deterministic. The passport proves neither human identity nor community impact.',
+   BREAK_IT:'BREAK IT: now testing a counterfeit local passport digest…',
+   REFUSE:'REFUSED locally. This self-reported card is not a CANNON field-gate refusal, and is not sent anywhere.',
+   FORK:'FORKED: one exact creative ancestor, a new seed, and the same attendant answer. Not a native CANNON branch.',
+   KEEP:'KEPT this exact little creature as a local review decision. It does not train a preference model or publish.',
+   SCRAPE:'SCRAPED this creative specimen locally; the underlying factual answer and human permissions remain unchanged.'
+  };
+  if(action==='BREAK_IT'){
+   const tampered={...parent,publishableHumanSuccess:true};
+   if(await localIntegrity(tampered))throw Error('COUNTERFEIT_UNEXPECTEDLY_PASSED');
+   messages.BREAK_IT='BREAK IT: altered success flag FAILED digest verification, as expected. An editor can still recompute an unsigned hash, so this is not authenticated custody.';
+  }
+  $('reviewReturn').textContent=messages[action]+' Review card ready for local export; note contents are not copied into it.';
+ }catch(e){$('reviewReturn').textContent='HOLD: '+e.message}
+}));
+$('downloadReview').addEventListener('click',()=>{
+ if(!lastReview)return;
+ const data=JSON.stringify(lastReview,null,2)+'\n';
+ const url=URL.createObjectURL(new Blob([data],{type:'application/json'}));
+ const a=document.createElement('a');a.href=url;a.download='stranger-review-'+lastReview.action+'.json';a.click();
+ window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
