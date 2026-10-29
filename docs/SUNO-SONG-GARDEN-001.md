@@ -70,3 +70,22 @@ The Node tests exercise deterministic content bindings, required rights and cred
 For an actual *native JAR;VIS → Suno MCP invocation*, the next isolated crossing is to register a host-supported OAuth-capable MCP transport after beta admission, inspect the **live tool manifest**, add explicit cost/usage confirmation, avoid storing tokens in public logs, and test exactly one private fixture first. Only then could automated invocation be described as working. Do not treat having the endpoint URL as completed connection.
 
 **Laws:** SEED ≠ SONG · SUNO ACCESS ≠ CREDIT AUTHORIZATION · PRIVATE GENERATION ≠ PUBLICATION · REPORTED URL ≠ VERIFIED SONG · SOURCE ADMISSION ≠ CHURCH ADOPTION · STAGE METADATA ≠ REAL AUDIO.
+
+
+## Dual-MCP composition: JAR;VIS and Suno in the SAME AI host
+
+This branch now also provides a real **local JAR;VIS MCP stdio server** (`tools/suno-song-garden-mcp.mjs`). It exposes one read-only tool, `jarvis_prepare_private_suno_seed`; that tool reads a single **operator-maintained** local file, checks review references/withdrawal, and gives the assistant a private Suno prompt. It never generates music. The separate official Suno remote MCP performs the actual generation only when authenticated and approved by the human.
+
+For Claude Code while your working directory is this repository:
+
+~~~sh
+claude mcp add jarvis-song-garden -- node tools/suno-song-garden-mcp.mjs
+claude mcp add --transport http suno https://api.suno.com/mcp
+# Start Claude Code and use /mcp to authenticate with Suno.
+~~~
+
+The equivalent two-server configuration is saved as `examples/suno-song-garden-001/claude-code.mcp.json` for inspection; it is **not silently installed** into your Claude settings. With beta access, the operator can ask: **"Use jarvis_prepare_private_suno_seed for sample-church.porch-light-001; show me the private candidate and credit implications, then request my confirmation before using Suno."** Both tools are in one host session; the host is the orchestration layer.
+
+The MCP server defaults to the included **fictional** seed. To use a different locally approved seed, point `JARVIS_SUNO_GARDEN_SEED_PATH` to a private JSON file **only after** establishing actual contributor consent, independent church review, and credit authorization. This path is deliberately taken from the trusted local environment, **never from an AI tool argument**. Withdrawal is checked again on every call. Do not use a shared computer or agent with access to confidential congregational seeds without appropriate identity and security controls.
+
+**Proof boundary:** local JAR;VIS MCP works in test fixtures, but a two-server OAuth-authenticated generation in Claude Code, real Suno song receipt, church review, and live stage performance have not yet been demonstrated.
