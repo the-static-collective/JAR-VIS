@@ -198,9 +198,14 @@ function renderSignal(c){
  const lamp=el('div',null,'signal-lamp');r.append(lamp,el('h3',c.art.message),el('p',c.art.meaning));
  const code=[...c.art.message].map(x=>MORSE[x]||'').join(' ').slice(0,75);
  r.append(el('small',code,'perf-note'),btn('✴ BLINK THE MESSAGE',()=>{
-  cleanPlayback();const pulses=[];
+  cleanPlayback();
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    status.textContent='MOTION REDUCED: MORSE TEXT DISPLAYED WITHOUT BLINKING.';
+    return;
+  }
+  const pulses=[];
   for(const ch of code){if(ch==='.')pulses.push(1,0);else if(ch==='-')pulses.push(1,1,1,0);else pulses.push(0,0)}
-  let i=0;interval=setInterval(()=>{lamp.classList.toggle('lit',!!pulses[i]);i++;if(i>=pulses.length){lamp.classList.remove('lit');cleanPlayback()}},140);
+  let i=0;interval=setInterval(()=>{lamp.classList.toggle('lit',!!pulses[i]);i++;if(i>=pulses.length){lamp.classList.remove('lit');cleanPlayback()}},650);
  }),btn('■ STOP',()=>{cleanPlayback();lamp.classList.remove('lit')}));
  return r;
 }
@@ -277,7 +282,7 @@ $('export').addEventListener('click',async()=>{
   nativeToasterExecuted:false,nativeCannonExecuted:false,
   humanOutcomesVerified:false,externalDispatch:false,publicationAuthorized:false,
   questionOrAnswerContentIncluded:false,
-  note:'Unsiged, digest-only local creative evidence. Not authenticated human custody.'
+  note:'Unsigned, digest-only local creative evidence. Not authenticated human custody.'
  };
  const bytes=new TextEncoder().encode(JSON.stringify(payload));
  const hash=await crypto.subtle.digest('SHA-256',bytes);
