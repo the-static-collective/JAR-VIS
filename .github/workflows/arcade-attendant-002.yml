@@ -1,0 +1,56 @@
+name: JAR;VIS Stranger Arcade 002 — pinned CANNON 22-owner source inspection
+on:
+  push:
+    branches: ['experiment/constellation-002-22-owner-attendant']
+    paths:
+      - 'tools/constellation.mjs'
+      - 'tools/arcade.mjs'
+      - 'spec/arcade-source-v1.json'
+      - 'test/arcade-attendant.test.mjs'
+      - 'docs/STRANGER-ARCADE-002.md'
+      - '.github/workflows/arcade-attendant-002.yml'
+  pull_request:
+    paths:
+      - 'tools/constellation.mjs'
+      - 'tools/arcade.mjs'
+      - 'spec/arcade-source-v1.json'
+      - 'test/arcade-attendant.test.mjs'
+      - 'docs/STRANGER-ARCADE-002.md'
+      - '.github/workflows/arcade-attendant-002.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-pin-door:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: jarvis
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/CANNON
+          ref: f99d4b0f74b117e0af034137d550e88aa3d01f26
+          fetch-depth: 0
+          path: cannon
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Validate exact source head and historical ancestry
+        run: |
+          test "$(git -C cannon rev-parse HEAD)" = "f99d4b0f74b117e0af034137d550e88aa3d01f26"
+          git -C cannon merge-base --is-ancestor c5031495424abcd6141d546a1f85a5e781539072 HEAD
+      - name: Run new JAR;VIS attendant boundary and actual source inspection tests
+        env:
+          ARCADE_CANNON: ${{ github.workspace }}/cannon
+        run: |
+          node --check tools/arcade.mjs
+          node --test test/arcade-attendant.test.mjs
+          node tools/arcade.mjs inspect --cannon ../cannon
+        working-directory: jarvis
+      - name: Legacy JAR;VIS constellation parser and refusal tests remain green
+        run: |
+          node --test test/constellation.test.mjs
+        working-directory: jarvis
