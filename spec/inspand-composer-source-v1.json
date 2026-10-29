@@ -1,0 +1,12 @@
+{
+  "schema": "jarvis.composition-source-lock/v1",
+  "repository": "the-static-collective/CANNON",
+  "commit": "8361ad17395d7924cd9f0b6d0e3349fca6ef3300",
+  "exactBlobs": {
+    "scripts/reflex-composer.mjs": "fd7139c752e2b587e69d2bb4b9a8c8874c0ac6de",
+    "registry/reflex-compositions-v1.json": "e0f1d21cecf14fd9e0797be65b1d4bfddada8b94"
+  },
+  "authority": "INSPECT_ONLY",
+  "allowedCliOperation": "list",
+  "ownerConsent": false
+}
