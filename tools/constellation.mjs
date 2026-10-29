@@ -21,20 +21,20 @@ export function parseArguments(args){
  if(command==='verify'&&options['--authorize'])throw Error('VERIFY_HAS_NO_NEW_GRANT');
  return {command,options};
 }
-export function inspectCannon(input){
- if(!/^[a-f0-9]{40}$/.test(lock.commit??''))throw Error('HOLD: exact reviewed CANNON source lock not provisioned');
+export function inspectCannon(input, selectedLock=lock){
+ if(!/^[a-f0-9]{40}$/.test(selectedLock.commit??''))throw Error('HOLD: exact reviewed CANNON source lock not provisioned');
  const root=realpathSync(resolve(input));
  const git=(...argv)=>execFileSync('git',['--no-replace-objects','-C',root,...argv],{encoding:'utf8',timeout:15000,maxBuffer:8*1024*1024}).trim();
  const checkObject=(type,oid)=>{
   const bytes=execFileSync('git',['--no-replace-objects','-C',root,'cat-file',type,oid],{maxBuffer:8*1024*1024,timeout:15000});
   if(createHash('sha1').update(type+' '+bytes.length+'\0').update(bytes).digest('hex')!==oid)throw Error('HOLD: CANNON_GIT_OBJECT_BYTES_MISMATCH');
  };
- if(git('rev-parse','HEAD')!==lock.commit)throw Error('HOLD: CANNON_EXACT_PIN_MISMATCH');
- if(git('remote','get-url','origin').replace(/\.git$/,'')!=='https://github.com/'+lock.repository)throw Error('HOLD: CANNON_ORIGIN_MISMATCH');
- checkObject('commit',lock.commit);checkObject('tree',git('rev-parse',lock.commit+'^{tree}'));
- for(const row of git('ls-tree','-rdz',lock.commit).split('\0').filter(Boolean))checkObject('tree',row.split('\t')[0].split(' ')[2]);
- for(const ancestor of lock.ancestry)git('merge-base','--is-ancestor',ancestor,lock.commit);
- const tracked=new Set(git('ls-tree','-rz',lock.commit).split('\0').filter(Boolean).map(row=>row.split('\t')[1]));
+ if(git('rev-parse','HEAD')!==selectedLock.commit)throw Error('HOLD: CANNON_EXACT_PIN_MISMATCH');
+ if(git('remote','get-url','origin').replace(/\.git$/,'')!=='https://github.com/'+selectedLock.repository)throw Error('HOLD: CANNON_ORIGIN_MISMATCH');
+ checkObject('commit',selectedLock.commit);checkObject('tree',git('rev-parse',selectedLock.commit+'^{tree}'));
+ for(const row of git('ls-tree','-rdz',selectedLock.commit).split('\0').filter(Boolean))checkObject('tree',row.split('\t')[0].split(' ')[2]);
+ for(const ancestor of selectedLock.ancestry)git('merge-base','--is-ancestor',ancestor,selectedLock.commit);
+ const tracked=new Set(git('ls-tree','-rz',selectedLock.commit).split('\0').filter(Boolean).map(row=>row.split('\t')[1]));
  function walk(dir,prefix=''){
   for(const e of readdirSync(dir,{withFileTypes:true})){
    if(!prefix&&['.git','node_modules'].includes(e.name))continue;
@@ -44,14 +44,14 @@ export function inspectCannon(input){
   }
  }
  walk(root);let count=0;
- for(const row of git('ls-tree','-rz',lock.commit).split('\0').filter(Boolean)){
+ for(const row of git('ls-tree','-rz',selectedLock.commit).split('\0').filter(Boolean)){
   const [meta,path]=row.split('\t'),[mode,type,oid]=meta.split(' '),live=join(root,path);
   if(type!=='blob'||!['100644','100755'].includes(mode)||!lstatSync(live).isFile()||realpathSync(live)!==live)throw Error('HOLD: CANNON_NONREGULAR_SOURCE');
   const bytes=readFileSync(live);const actual=createHash('sha1').update('blob '+bytes.length+'\0').update(bytes).digest('hex');
   if(actual!==oid)throw Error('HOLD: CANNON_TRACKED_SOURCE_BYTES_MISMATCH');count++;
  }
  const atlas=JSON.parse(readFileSync(join(root,'constellation/atlas.json')));
- return {schema:'jarvis.constellation-source-observation/v1',repository:lock.repository,commit:lock.commit,ancestryPreserved:true,trackedFilesChecked:count,publicRepositories:atlas.coverage.publicRepositories,privateRepositoriesWithheld:atlas.coverage.privateRepositoriesWithheld,authority:'INSPECT_ONLY',fieldVerified:false,externalDispatch:false};
+ return {schema:'jarvis.constellation-source-observation/v1',repository:selectedLock.repository,commit:selectedLock.commit,ancestryPreserved:true,trackedFilesChecked:count,publicRepositories:atlas.coverage.publicRepositories,privateRepositoriesWithheld:atlas.coverage.privateRepositoriesWithheld,authority:'INSPECT_ONLY',fieldVerified:false,externalDispatch:false};
 }
 export function run(args){
  const {command,options}=parseArguments(args);const cannon=resolve(options['--cannon']);
