@@ -1,6 +1,6 @@
 {
   "schema": "static-collective/recent-work-feed-v1",
-  "release": "RECENT-2026-10-28-007",
+  "release": "RECENT-2026-10-28-008",
   "reviewedOn": "2026-10-28",
   "authority": "PUBLIC_EDITORIAL_SOURCE_NOT_PARTNER_AUTHORITY",
   "disclosure": "This curated, dated catalog is not a live availability feed, service enrollment, or verified community roster. Source commits identify public project text; they do not establish partnerships, permission, field completion or canonical adoption. Every community and project retains its own authority.",
@@ -445,6 +445,33 @@
       ],
       "publicUrl": "https://github.com/the-static-collective/webZ/tree/main/bridge/locus",
       "source": "https://github.com/the-static-collective/webZ/blob/a40e91adff2ec45efd3cd2b0a797da42265e99fd/docs/SHELF-LOCUS-001.md"
+    },
+    {
+      "id": "SUITCASE-001",
+      "title": "The Suitcase Internet — portable signed offline room handoff",
+      "state": "PUBLIC_PROTOTYPE",
+      "summary": "An actual browser-based offline-shell prototype lets separately controlled devices create nonexportable signing keys, exchange source-readable signed public-safe offers, and respond with independently signed HOLD/REFUSE/REVIEW receipts via intentional JSON file transfer. Six church/campus/food/festival/library/individual host concepts are PRE-APPROVAL templates only. No actual hosts enrolled, encrypted messages, live relay, native reLATTE interoperability, identity verification or field results.",
+      "firstCheck": "Have two independent devices carry a public-safe fake proposal and signed refusal without network; only then ask ONE actually willing church or community steward for permission to review a hypothetical node, with safeguarding, power and privacy gates.",
+      "tags": [
+        "suitcase",
+        "offline",
+        "portable",
+        "local-first",
+        "church",
+        "campus",
+        "festival",
+        "food",
+        "node",
+        "reLATTE",
+        "GHOT",
+        "GRAFT",
+        "planZ",
+        "post-office",
+        "signed",
+        "consent"
+      ],
+      "publicUrl": "https://apps.abundent.org/bridge/suitcase/",
+      "source": "https://github.com/the-static-collective/webZ/blob/542c115237d2d0416a488fd8055630f94258469d/docs/SUITCASE-001.md"
     }
   ]
 }
