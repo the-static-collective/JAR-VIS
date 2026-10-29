@@ -1,7 +1,7 @@
 {
   "schema": "static-collective/change-candidates-v1",
   "authority": "NONE",
-  "scannedAt": "2026-10-28T22:42:56.526Z",
+  "scannedAt": "2026-10-29T06:01:58.906Z",
   "monitoredRepos": [
     "webZ",
     "reLATTE",
@@ -17,6 +17,54 @@
   ],
   "disclosure": "Automatically generated source-diff CANDIDATES, not reviewed claims, canon, releases, deployments, partnerships or completed acts. No automatic admission is possible.",
   "candidates": [
+    {
+      "id": "DIFF-6187F5CBCB57BE1DF208",
+      "repo": "GHoT",
+      "ref": "main",
+      "from": "e35dd470384d864b7b0b629a68dad570875a7df0",
+      "to": "9748a0772c4a13135421c4fa84a9991e0a51e05f",
+      "observedAt": "2026-10-29T06:01:58.906Z",
+      "compareUrl": "https://github.com/the-static-collective/GHoT/compare/e35dd470384d864b7b0b629a68dad570875a7df0...9748a0772c4a13135421c4fa84a9991e0a51e05f",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "HOLD_COMPARE",
+      "reason": "COMPARE_OVERSIZE",
+      "files": [],
+      "totalFiles": null,
+      "categoryCounts": {}
+    },
+    {
+      "id": "DIFF-04EA7BABA2B269A8D425",
+      "repo": "planZ",
+      "ref": "main",
+      "from": "987ed4e88789ebb9e3a55953471510cb5cd93acf",
+      "to": "5b6df7fb2a3a0c57d0fff8381108589ec2765a94",
+      "observedAt": "2026-10-29T06:01:58.906Z",
+      "compareUrl": "https://github.com/the-static-collective/planZ/compare/987ed4e88789ebb9e3a55953471510cb5cd93acf...5b6df7fb2a3a0c57d0fff8381108589ec2765a94",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "PENDING_REVIEW",
+      "reason": "NONE",
+      "totalFiles": 1,
+      "categoryCounts": {
+        "TESTS": 0,
+        "DOCUMENTATION": 0,
+        "CONFIGURATION": 0,
+        "SOURCE_CODE": 0,
+        "OTHER": 1
+      },
+      "files": [
+        {
+          "path": "public/attention-v1.json",
+          "status": "modified",
+          "category": "OTHER"
+        }
+      ]
+    },
     {
       "id": "DIFF-6CBCEFA6C75FB3275B38",
       "repo": "reLATTE",
