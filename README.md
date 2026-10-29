@@ -102,3 +102,7 @@ The local operator can now explicitly inspect a [versioned planZ owner-reviewed 
 ## Work → planZ candidate return
 
 From the local `/inherit` desk, an operator can choose a previously inspected planZ pointer and begin an unapproved local weave. A reported-completed, locally reviewed candidate can be returned as a **redacted, downloadable, owner-held JSON packet**; it remains `HOLD_FOR_OWNER_REVIEW` and cannot change planZ, validate field completion, email anyone or execute work. See [PLANZ-RETURN-001](docs/PLANZ-RETURN-001.md).
+
+## CONSTELLATION-001 — local evidence attendant
+
+The [exact-pin operator runner](docs/CONSTELLATION-001.md) can inspect CANNON's preserved experimental ancestry, explicitly authorize a fictional local build, and cold-verify the resulting offline MIT / Voqal / open-institution evidence desk. No outreach, private intake, physical action or foreign-owner admission is dispatched.
