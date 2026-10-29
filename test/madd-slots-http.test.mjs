@@ -4,6 +4,8 @@ import {mkdtempSync,rmSync} from 'node:fs';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import {startWorkbenchServer} from '../src/server.mjs';
+import {Script} from 'node:vm';
+import {readFileSync} from 'node:fs';
 
 test('JAR;VIS serves playable six-up and refuses forged genome, actions and outside origins',async()=>{
  const temp=mkdtempSync(join(tmpdir(),'madd-local-'));
@@ -35,4 +37,16 @@ test('JAR;VIS serves playable six-up and refuses forged genome, actions and outs
   assert.equal(fabricated.status,422);
   assert.match((await fabricated.json()).error,/HOLD_KEEP_EXACT_CURRENT_CREATURE_REQUIRED/);
  }finally{await app.close();rmSync(temp,{recursive:true,force:true})}
+});
+
+test('all 15 media renderers are actually registered in syntax-valid browser code',()=>{
+ const source=readFileSync(new URL('../public/slots.js',import.meta.url),'utf8');
+ assert.doesNotThrow(()=>new Script(source,{filename:'slots.js'}));
+ const fifteen=['radio','drums','manga','flipbook','ascii','poster','blueprint',
+  'constellation','zine','gamebook','poem','kinetic','signal','recipe','postcard'];
+ for(const kind of fifteen)assert.match(source,new RegExp('\\b'+kind+':render','m'));
+ const page=readFileSync(new URL('../public/slots.html',import.meta.url),'utf8');
+ for(const item of ['id="keep"','id="scrape"','id="next"','id="stage"','id="receipt"'])
+  assert.ok(page.includes(item));
+ assert.match(page,/FOCUS ≠ KEEP/);
 });
