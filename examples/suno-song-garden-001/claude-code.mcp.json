@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "jarvis-song-garden": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "tools/suno-song-garden-mcp.mjs"
+      ]
+    },
+    "suno": {
+      "type": "http",
+      "url": "https://api.suno.com/mcp"
+    }
+  }
+}
