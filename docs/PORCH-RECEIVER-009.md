@@ -39,3 +39,13 @@ All writes return observed state; no unapproved dissemination or service dispatc
 ## Boundary gates
 
 Do not configure automatic notifications, email ingestion, public matching or LLM processing without separate explicit review of content retention, safety, provider consent, abuse management and operator authorization. Existing us@abundent.org forwarding is an **independent** email route, not automatically imported into this database.
+
+## Owner activation (2026-10-30)
+
+The owner volunteered to serve as first human operator. The backend now supports the verified first-email-OTP enrollment and, after binding the unique primary operator identity, revokes the enrollment capability. Initial enrolled operator count remains zero until the owner actually signs in. Never publish an operator capability in GitHub, a public web page or a synthetic sample.
+
+Sign-in steps: open `https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/jarvis-operator-008`, enter your **own** email address and the one-time privately issued `jv7_...` operator key only on first enrollment; request a code, verify it from your inbox, then view **Human porch** in the authenticated portal. Later visits need only email verification. The key is short-lived and will be revoked upon successful first member binding. If Supabase Auth delivers a magic link instead of a numeric code, this OTP flow requires a template update; do not bypass the sign-in requirement. There is no automatic owner enrollment from a chat declaration or a mere active Edge deployment.
+
+## Website feedback
+
+The human-front-door staging site now has a small **Something broken?** button and a dedicated `/feedback/` link. These are not new backend privileges: after explicit informed consent, feedback becomes a private, ordinary `kind=question` receipt with an observable website-feedback prefix and general page path. A deterministic JAR;VIS suggestion sends it to **Website feedback** for human review. The receipt holder may check or withdraw, and an enrolled operator may HOLD, reply, or CLOSE. The reporter is not automatically identified, contacted, matched or published. Never collect screenshots, analytics, network diagnostics or visitor browsing histories without fresh consent. Existing message email forwarding is a separate route.
