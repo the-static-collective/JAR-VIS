@@ -1,0 +1,51 @@
+name: JARVIS-018 Nourish Banana real-source attendant (synthetic HOLD)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/nourish-banana-attention.mjs'
+      - 'tools/attend-nourish-banana-018.mjs'
+      - 'test/nourish-banana-attention.test.mjs'
+      - 'docs/NOURISH-BANANA-ATTENDANT-018.md'
+      - 'public/nourish.html'
+      - '.github/workflows/nourish-banana-attention-018.yml'
+jobs:
+  source-native-attendance:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run source-owned JAR;VIS local regression suite
+        run: npm test
+      - name: Get 3 original repositories at exact immutable commits
+        run: |
+          git clone --quiet https://github.com/the-static-collective/webZ.git /tmp/jarvis18-webz
+          git -C /tmp/jarvis18-webz checkout --quiet --detach 38dbeb6b0acca96854bb8fcc84abbce326b9716a
+          git clone --quiet https://github.com/the-static-collective/Nourish-Kids.git /tmp/jarvis18-nourish
+          git -C /tmp/jarvis18-nourish checkout --quiet --detach 669d9750d62c670cfd3894fcffe367af83e85374
+          git clone --quiet https://github.com/the-static-collective/BananaSpork.git /tmp/jarvis18-banana
+          git -C /tmp/jarvis18-banana checkout --quiet --detach f4c4067b5896eb5eb20a7498f89da38f04731d73
+      - name: Install exact receiving-owner modules without lifecycle scripts
+        working-directory: /tmp/jarvis18-banana
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Execute original BananaSpork owner Help Slip tests
+        working-directory: /tmp/jarvis18-banana
+        run: node --import tsx src/domain/help-slip/helpSlip.test.ts
+      - name: JAR;VIS independently checks 3 source identities and clean trees
+        run: |
+          node tools/attend-nourish-banana-018.mjs inspect /tmp/jarvis18-webz /tmp/jarvis18-nourish /tmp/jarvis18-banana > /tmp/jarvis18-inspect.json
+      - name: JAR;VIS ATTEND runs original WebZ crossing over original Nourish and BananaSpork
+        run: |
+          node tools/attend-nourish-banana-018.mjs attend /tmp/jarvis18-webz /tmp/jarvis18-nourish /tmp/jarvis18-banana > /tmp/jarvis18-attention.json
+          node --input-type=module -e 'import fs from "node:fs";let c=JSON.parse(fs.readFileSync("/tmp/jarvis18-attention.json","utf8"));if(c.state!=="HOLD_FOR_OPERATOR_REVIEW"||c.witnessedByCode.hostileMutationsRefused!==8||c.witnessedByCode.confirmedUnits!==0||c.externalEffects!==false||c.nextHumanGates.length!==5)process.exit(1)'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JARVIS-018-SYNTHETIC-ATTENTION-HOLD
+          path: |
+            /tmp/jarvis18-inspect.json
+            /tmp/jarvis18-attention.json
+          retention-days: 7
