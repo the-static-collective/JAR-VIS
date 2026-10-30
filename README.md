@@ -10,6 +10,12 @@
 
 JAR;VIS is an attendant across independently owned projects, not a master AI, global database, or replacement for the systems it serves. It observes fictional particulars, explains potential connections, proposes bounded actions, requests simulated authorization, and records what happened — including HOLD.
 
+## Nourish × BananaSpork → JAR;VIS: the first dinner attendant (018)
+
+JAR;VIS now has a **local, read-only `/nourish` doorway** and source-native operator command that follows the proposed "Tonight's dinner → Tomorrow's independent table" food-first experiment. It does not create a real food-service request, enroll children, contact stewards, or control the Nourish or BananaSpork owners. The operator verifies exact pins and clean checkout origins for **three** independently owned public repositories, runs original Nourish recipe/fulfillment code **through original BananaSpork HOLD/POUR admission**, and converts the fictional owner-native receipt into a **redacted HOLD_FOR_OPERATOR_REVIEW** card with five unmet human gates. Eight rejected adversarial payloads and denied sharing without authority are required proof. The packet contains no private pantry details or child identity.
+
+Run locally after provisioning pinned checkouts and BananaSpork's dependencies: `node tools/attend-nourish-banana-018.mjs inspect|attend WEBZ_PATH NOURISH_PATH BANANASPORK_PATH`. Instructions, exact commits, and limitations: [Nourish-Banana Attendant 018](docs/NOURISH-BANANA-ATTENDANT-018.md). The `/nourish` page is an explanatory, static localhost page—not live status. **Code passing does not mean food was delivered, a child was fed, or a community group formed.** The full fellowship proposal is applicant-review only; no Voqal submission.
+
 ## Tomorrow's Work — Work That Inherits 001
 
 The local operator notebook at **[http://127.0.0.1:7789/inherit](http://127.0.0.1:7789/inherit)** can now record a possible community task → a steward's stated voluntary commitment → an unverified report → a separate operator-recorded review → a reusable candidate method and invitation. It persists in an independent append-only journal, survives restarts, and never auto-publishes, notifies, executes, or promotes testimony to verified fact. This is **not** a public platform or authenticated real-world participation service.
