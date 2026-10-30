@@ -17,6 +17,7 @@ export async function porchOperation(db,b){
  const old=await row(db,b.id);
  const state=b.action==="porch-hold"?"HELD":b.action==="porch-reply"?"REPLY_AVAILABLE":"CLOSED";
  if(old.state==="CLOSED")throw new Err("ALREADY_CLOSED",409);
+ if(b.action==="porch-hold"&&old.state==="REPLY_AVAILABLE")throw new Err("REPLY_ALREADY_AVAILABLE",409);
  if(b.action==="porch-reply"&&old.state!=="HELD"&&old.state!=="PENDING")throw new Err("REPLY_ALREADY_EXISTS_OR_CLOSED",409);
  const note=b.action==="porch-reply"?safeReply(b.reply):"";
  const changed={state,updated_at:new Date().toISOString()};
