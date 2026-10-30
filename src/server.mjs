@@ -32,7 +32,7 @@ const staticFiles = new Map([
   ["/thought-food", [new URL("../public/thought-food.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/thought-food.js", [new URL("../public/thought-food.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/thought-food.css", [new URL("../public/thought-food.css", import.meta.url), "text/css; charset=utf-8"]],
-  ["/nourish", [new URL("../public/nourish.html", import.meta.url), "text/html; charset=utf-8"],
+  ["/nourish", [new URL("../public/nourish.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/narrative", [new URL("../public/narrative-justice.html", import.meta.url), "text/html; charset=utf-8"]]
 ]);
 const headers = {
