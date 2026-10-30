@@ -18,6 +18,13 @@ export function triage(entry){
  const words=" "+entry.particular.toLowerCase().normalize("NFKC").replace(/[^\p{L}\p{N}]+/gu," ")+" ";
  const scores=Object.entries(vocab).filter(([k])=>k!=="other").map(([k,keywords])=>[k,keywords.filter(w=>words.includes(" "+w+" ")).length]).sort((a,b)=>b[1]-a[1]);
  const chosen=scores[0]?.[1]>0?scores[0][0]:"other";
+ if(entry.area?.startsWith("Website ")&&/^Website feedback \((?:broken|confusing|idea)\): /.test(entry.particular)){
+  return Object.freeze({schema:"jarvis/porch-attention-v1",classification:"website-feedback",
+    topic:"website",topicLabel:"Website feedback",suggestedResource:"",
+    suggestion:"Inspect the named page, reproduce the issue if possible, and reply through the private receipt. Do not assume browser or account identity.",
+    disposition:"HOLD_FOR_HUMAN_REVIEW",matchClaim:false,sent:false,verified:false,
+    authority:"NO_COMMITMENT_NO_MATCH_NO_PUBLICATION"});
+ }
  const base=dirs[chosen];
  return Object.freeze({
   schema:"jarvis/porch-attention-v1",classification:entry.kind,topic:chosen,topicLabel:base.label,
