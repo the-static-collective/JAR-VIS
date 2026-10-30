@@ -1,0 +1,16 @@
+name: JARVIS held culture attention
+on:
+  push:
+    branches: ['experiment/culture-return-005']
+  pull_request:
+    paths: ['src/culture-return.mjs','test/culture-return.test.mjs','.github/workflows/culture-return-005.yml']
+permissions:
+  contents: read
+jobs:
+  attention:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - run: npm test
