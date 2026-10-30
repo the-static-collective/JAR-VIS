@@ -3,7 +3,7 @@ export const normalizedEmail=v=>typeof v==='string'?v.trim().toLowerCase():'';
 export const validEmail=v=>typeof v==='string'&&v.length<=254&&/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(v)&&!/[\r\n]/.test(v);
 export const validCode=v=>typeof v==='string'&&/^[0-9]{6,8}$/.test(v);
 export const validBootstrap=v=>typeof v==='string'&&/^jv7_[a-f0-9]{64}$/.test(v);
-export const sameOrigin=req=>req.headers.get('origin')===new URL(req.url).origin;
+// Supabase can expose an internal function URL to Deno even when browser is on the public project origin.\n// Browser writes must originate from this EXACT first-party Supabase project domain.\nexport const sameOrigin=req=>req.headers.get('origin')==='https://kbhqacsdvjsstzyplqij.supabase.co';
 export const cookieJar=req=>Object.fromEntries((req.headers.get('cookie')||'').split(';').map(s=>s.trim()).filter(Boolean).map(s=>{const i=s.indexOf('=');return i<0?['','']:[s.slice(0,i),s.slice(i+1)];}));
 const path='/functions/v1/jarvis-operator-008';
 export const makeSessionCookies=(a,r,seconds=3600)=>[
