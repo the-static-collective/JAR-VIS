@@ -15,9 +15,9 @@
     {
       "id": "cannon",
       "repo": "the-static-collective/CANNON",
-      "commit": "85bff9b73dadcd23b99d8dfe50b65b939276334d",
+      "commit": "f757bd954caade89cfd68f7ca1488a54fc723a2e",
       "files": {
-        "scripts/minute-mail-native.mjs": "88609f13929071965c1e3a54d63e7c00d8178b76"
+        "scripts/minute-mail-native.mjs": "d757e937a2cfa26cd1acdd54198fea8ade6baa93"
       }
     },
     {
