@@ -1,0 +1,13 @@
+{
+  "schema": "jarvis.novel-art-brief/v1",
+  "project": "MINUTE-MAIL-001",
+  "objective": "Build a delightful useful post office where a lost minute of scrolling is returned as a small act of care for a neighbor. Give people something they can do without watching the screen, and never track their kindness.",
+  "creativeSeed": "A bureaucratic time-travel post office mails people back their missing minutes. Returned minutes become imaginary stamps marked LISTEN, HELP, NOTICE.",
+  "challenge": "Deliver a wholly new finished original film plus printable interactive local action kit, test native source-bound revision and two feedback loops.",
+  "output": "LOCAL_OFFLINE_POST_OFFICE",
+  "modelDirectedExecution": false,
+  "published": false,
+  "rightsGranted": false,
+  "realWorldActions": 0,
+  "approval": "SYNTHETIC_TEST_ONLY"
+}
