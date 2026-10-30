@@ -32,6 +32,12 @@ The [live reviewer and stewardship invitation portal](https://kbhqacsdvjsstzyplq
 
 A public-only Bridge work card may be manually imported at [http://127.0.0.1:7789/bridge](http://127.0.0.1:7789/bridge). The independent loopback receiver verifies a pinned source contract and returns **HOLD_FOR_OPERATOR_REVIEW**, never a partner relationship, external submission, model run or verified field result. See [BRIDGE-005](docs/BRIDGE-005.md). The private Abundent application ledger is **not** imported or synchronized.
 
+## Narrative Justice Attendant 019 — the stranger is not a character
+
+The operator-only [source-native narrative crossing](docs/NARRATIVE-JUSTICE-019.md) invokes original, exact-pinned **STORYSHIP #9** and **Story DNA #1** functions using public synthetic specimens. It separately checks the public-safe **WebZ #213** doorway and **lemonPRESS** editorial law. JAR;VIS independently refuses narrator authority, real-world consent claims, character-rights transfer, human field success and publication. It returns a **redacted HOLD_FOR_OPERATOR_REVIEW card with six unmet human questions**, not a fictional person turned into an enrolled participant.
+
+The localhost [Narrative Justice doorway](http://127.0.0.1:7789/narrative) is read-only; only an explicitly run local CLI can execute native source experiments. No interview, Voqal submission, real event, public deployment or grant decision occurs.
+
 ## Try the local attendant
 
 Node.js 20+ and no third-party runtime packages required.

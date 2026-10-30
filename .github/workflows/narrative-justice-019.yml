@@ -1,0 +1,65 @@
+name: JARVIS-019 Narrative Justice original-source bridge (synthetic HOLD)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/narrative-justice-attention.mjs'
+      - 'tools/attend-narrative-justice-019.mjs'
+      - 'test/narrative-justice-attention.test.mjs'
+      - 'docs/NARRATIVE-JUSTICE-019.md'
+      - 'public/narrative-justice.html'
+      - '.github/workflows/narrative-justice-019.yml'
+jobs:
+  native-narrative-attendance:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test original JAR;VIS and adversarial narrative hold
+        run: npm test
+      - name: Check out FOUR independent original owners at immutable SHAs
+        run: |
+          git clone -q https://github.com/the-static-collective/STORYSHIP.git /tmp/jar19-storyship
+          git -C /tmp/jar19-storyship checkout -q --detach dec614a4205051b4aa666f81ce423ff1ee7c26c7
+          git clone -q https://github.com/the-static-collective/story-dna.git /tmp/jar19-dna
+          git -C /tmp/jar19-dna checkout -q --detach beab7fd5ab6f63de2a7a9332998c22bedf6b73ea
+          git clone -q https://github.com/the-static-collective/webZ.git /tmp/jar19-webz
+          git -C /tmp/jar19-webz checkout -q --detach 5bd9dfc318bad7cb8800156944bb0d5a0ecad84f
+          git clone -q https://github.com/the-static-collective/lemonPRESS.git /tmp/jar19-press
+          git -C /tmp/jar19-press checkout -q --detach 02feb4454240d482a5e0e03258f24f8b5cc0b9f5
+      - name: Execute ORIGINAL Storyship native narrative navigation tests
+        working-directory: /tmp/jar19-storyship
+        run: npm test
+      - name: Execute ORIGINAL Story DNA owner tests
+        working-directory: /tmp/jar19-dna
+        run: npm test
+      - name: Inspect exact source identity BEFORE executing
+        run: |
+          node tools/attend-narrative-justice-019.mjs inspect /tmp/jar19-storyship /tmp/jar19-dna /tmp/jar19-webz /tmp/jar19-press > /tmp/jar19-sources.json
+      - name: Original Storyship + Story DNA native run, independent JAR;VIS HOLD
+        run: |
+          node tools/attend-narrative-justice-019.mjs attend /tmp/jar19-storyship /tmp/jar19-dna /tmp/jar19-webz /tmp/jar19-press > /tmp/jar19-card.json
+          node --input-type=module -e '
+            import fs from "node:fs";
+            const c=JSON.parse(fs.readFileSync("/tmp/jar19-card.json","utf8"));
+            if(c.state!=="HOLD_FOR_OPERATOR_REVIEW"||c.sourceWitness.actualHumansVerified!==0||
+               c.sourceWitness.consentEstablished!==false||c.sourceWitness.publicationAuthorized!==false||
+               c.externalEffects!==false||c.nextHumanGates.length!==6||c.sourceWitness.numberOfRivalReadings!==2||
+               c.sourceWitness.historicalEventsAdded!==0)process.exit(1);
+            const raw=JSON.stringify(c);
+            for(const secret of ["SYNTHETIC_PRIVATE_QUESTION_NOT_FOR_CARD","Neri Vale","Renji","secretPantry"]){
+              if(raw.includes(secret))process.exit(1);
+            }
+          '
+      - name: Export safe original-source software proof only
+        uses: actions/upload-artifact@v4
+        with:
+          name: JARVIS-019-NARRATIVE-HOLD-SYNTHETIC
+          path: |
+            /tmp/jar19-sources.json
+            /tmp/jar19-card.json
+          retention-days: 7
