@@ -1,0 +1,41 @@
+{
+  "schema": "jarvis.minute-mail-original-owners/v1",
+  "project": "MINUTE-MAIL-001",
+  "rightsGranted": false,
+  "externalActions": 0,
+  "owners": [
+    {
+      "id": "planz",
+      "repo": "the-static-collective/planZ",
+      "commit": "d7eb38b90f7794ad2570644522f3da687f42cb0d",
+      "files": {
+        "reactor/minute-mail.mjs": "82f7629ef613f0146e037450a06ff6ff3ca8b194"
+      }
+    },
+    {
+      "id": "cannon",
+      "repo": "the-static-collective/CANNON",
+      "commit": "85bff9b73dadcd23b99d8dfe50b65b939276334d",
+      "files": {
+        "scripts/minute-mail-native.mjs": "88609f13929071965c1e3a54d63e7c00d8178b76"
+      }
+    },
+    {
+      "id": "lemonpress",
+      "repo": "the-static-collective/lemonPRESS",
+      "commit": "c4fcb447a74bd54b62b026ef607eaa92a209af70",
+      "files": {
+        "src/minute-mail-house.mjs": "4d1fe721669b84c4ec281825af89114923c4285d",
+        "scripts/minute-mail-house.mjs": "abb120eab8d70bde14be3330d1c8d5416f9a323f"
+      }
+    },
+    {
+      "id": "toaster",
+      "repo": "the-static-collective/the-haunted-toaster",
+      "commit": "a3ce7b1349a940325cb72362e818ce907a95f35c",
+      "files": {
+        "src/full-measure/src/render/render.cjs": "7b0d761614fac791f5536b2b46fabda0bb017789"
+      }
+    }
+  ]
+}
