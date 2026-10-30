@@ -1,10 +1,10 @@
 // PORCH-RECEIVER-009 · non-sensitive voluntary private intake.
 // Intentionally NO automated matching, public posting, email, or LLM access.
 import {createClient} from "npm:@supabase/supabase-js@2.78.0";
-const URL=Deno.env.get("SUPABASE_URL")||"";
+const SERVER_URL=Deno.env.get("SUPABASE_URL")||"";
 const KEY=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")||"";
-if(!URL||!KEY)throw Error("RECEIVER_NOT_CONFIGURED");
-const db=createClient(URL,KEY,{auth:{persistSession:false,autoRefreshToken:false}});
+if(!SERVER_URL||!KEY)throw Error("RECEIVER_NOT_CONFIGURED");
+const db=createClient(SERVER_URL,KEY,{auth:{persistSession:false,autoRefreshToken:false}});
 const ORIGINS=new Set(["https://hello.abundent.org","https://abundent.org","https://abundent-front-door-002.vercel.app"]);
 const MAX=2500,UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,KEYFORM=/^[A-Za-z0-9_-]{43}$/;
 const PII=/[\w.+-]+@[\w.-]+\.[a-z]{2,}|(?:\+?1[\s.()-]?)?\(?\d{3}\)?[-. ]?\d{3}[-. ]?\d{4}|https?:\/\/|\b\d{1,5}\s+(?:[a-z-]+\s+){0,4}(?:street|st|avenue|ave|road|rd|drive|dr|lane|ln|boulevard|blvd)\b|\b(?:password|api key|social security|ssn|case number|account number)\b/i;
