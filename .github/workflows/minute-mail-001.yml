@@ -1,0 +1,72 @@
+name: JARVIS-MINUTE-001 genuinely NEW objective source-native full creative feedback production
+on:
+  push:
+    branches: [experiment/jarvis-minute-mail-001]
+  pull_request:
+    paths: ['src/minute-mail-loop.mjs','test/minute-mail-loop.test.mjs','registry/minute-mail-source-lock-v1.json','registry/minute-mail-new-brief-v1.json','.github/workflows/minute-mail-001.yml','docs/JARVIS-MINUTE-001.md']
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  original-five-owner-creative-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0,persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24'}
+      - name: Refuse spurious authority and original new objective fake
+        run: |
+          node --check src/minute-mail-loop.mjs
+          node --test test/minute-mail-loop.test.mjs
+          node src/minute-mail-loop.mjs inspect
+      - name: Pull exact source-owning novel creative engines (five repos)
+        run: |
+          git clone -q https://github.com/the-static-collective/planZ.git "$RUNNER_TEMP/planz"
+          git -C "$RUNNER_TEMP/planz" checkout -q --detach d7eb38b90f7794ad2570644522f3da687f42cb0d
+          git clone -q https://github.com/the-static-collective/CANNON.git "$RUNNER_TEMP/cannon"
+          git -C "$RUNNER_TEMP/cannon" checkout -q --detach 85bff9b73dadcd23b99d8dfe50b65b939276334d
+          git clone -q https://github.com/the-static-collective/the-haunted-toaster.git "$RUNNER_TEMP/toaster"
+          git -C "$RUNNER_TEMP/toaster" checkout -q --detach a3ce7b1349a940325cb72362e818ce907a95f35c
+          git clone -q https://github.com/the-static-collective/lemonPRESS.git "$RUNNER_TEMP/lemonpress"
+          git -C "$RUNNER_TEMP/lemonpress" checkout -q --detach c4fcb447a74bd54b62b026ef607eaa92a209af70
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - name: Demonstrate the old Genesis-only planner correctly HOLDS this new concept
+        run: |
+          node --input-type=module -e 'import{compileProductionRound}from "file://'"${RUNNER_TEMP}"'/planz/reactor/production-return.mjs";const brief={schema:"jarvis.creative-production-brief/v1",projectId:"MINUTE-MAIL-001",approval:"SYNTHETIC_TEST_ONLY",publish:false,rightsGranted:false,requestedArtifact:"LOCAL_SCREENING_PACKAGE"};let failed=false;try{compileProductionRound({brief})}catch(e){failed=String(e).includes("BRIEF")}if(!failed)process.exit(7);console.log("REAL_OLD_GENESIS_ADAPTER_HOLD_PROVEN")'
+      - name: Execute source-owning planZ and lemonPRESS fresh project unit tests
+        run: |
+          (cd "$RUNNER_TEMP/planz" && node --test reactor/minute-mail.test.mjs)
+          (cd "$RUNNER_TEMP/lemonpress" && node --test test/minute-mail-house.test.mjs)
+      - name: JARVIS runs four evidence-linked rounds with two actual ORIGINAL Toaster renders then original lemonPRESS kit and source review and revised kit
+        run: |
+          node src/minute-mail-loop.mjs build \
+            --planz "$RUNNER_TEMP/planz" --cannon "$RUNNER_TEMP/cannon" \
+            --toaster "$RUNNER_TEMP/toaster" --lemonpress "$RUNNER_TEMP/lemonpress" \
+            --out "$RUNNER_TEMP/lost-minute-post-office" --authorize SYNTHETIC_TEST_ONLY
+      - name: Cold replay every original producer, receipt, editorial revision and finished local interactive artifact
+        run: |
+          node src/minute-mail-loop.mjs verify \
+            --planz "$RUNNER_TEMP/planz" --cannon "$RUNNER_TEMP/cannon" \
+            --toaster "$RUNNER_TEMP/toaster" --lemonpress "$RUNNER_TEMP/lemonpress" \
+            --out "$RUNNER_TEMP/lost-minute-post-office"
+          node -e 'const f=require("fs"),d=process.argv[1],m=JSON.parse(f.readFileSync(d+"production-manifest.json")),r=JSON.parse(f.readFileSync(d+"kit-final/receipt.json"));if(m.status!=="FINISHED_LOCAL_CREATIVE_ARTIFACT_REVIEW_HELD"||m.rounds!==4||m.nativeVideoRenders!==2||m.originalEditorialPasses!==2||m.published||r.version!=="final"||r.tracksPeople||r.published||!f.existsSync(d+"media/revised-film.mp4")||!f.readFileSync(d+"kit-final/index.html","utf8").includes("Date.now()+60000"))process.exit(3)' "$RUNNER_TEMP/lost-minute-post-office/"
+      - name: Native film tampering must fail the complete original-source replay
+        run: |
+          cp "$RUNNER_TEMP/lost-minute-post-office/media/revised-film.mp4" "$RUNNER_TEMP/clean-final-minute.mp4"
+          printf 'FORGED' >> "$RUNNER_TEMP/lost-minute-post-office/media/revised-film.mp4"
+          if node src/minute-mail-loop.mjs verify \
+            --planz "$RUNNER_TEMP/planz" --cannon "$RUNNER_TEMP/cannon" \
+            --toaster "$RUNNER_TEMP/toaster" --lemonpress "$RUNNER_TEMP/lemonpress" \
+            --out "$RUNNER_TEMP/lost-minute-post-office";then exit 1;fi
+          cp "$RUNNER_TEMP/clean-final-minute.mp4" "$RUNNER_TEMP/lost-minute-post-office/media/revised-film.mp4"
+          node src/minute-mail-loop.mjs verify \
+            --planz "$RUNNER_TEMP/planz" --cannon "$RUNNER_TEMP/cannon" \
+            --toaster "$RUNNER_TEMP/toaster" --lemonpress "$RUNNER_TEMP/lemonpress" \
+            --out "$RUNNER_TEMP/lost-minute-post-office"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JARVIS-MINUTE-001-FINISHED-NEW-POST-OFFICE-two-original-films-printable-interactive-stamps
+          path: ${{ runner.temp }}/lost-minute-post-office/
+          retention-days: 14
