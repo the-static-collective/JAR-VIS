@@ -79,3 +79,15 @@ test("the operator only runs a pinned script, never invokes a receiving owner's 
  assert.match(script,/execFileSync/);
  assert.doesNotMatch(script,/\bfetch\s*\(|\bexec\s*\(|\bshell:\s*true|SupabaseClient|smtp|sendMail/);
 });
+
+test("JAR;VIS exposes a localhost-only review door without a food intake or external dispatch",()=>{
+ const html=readFileSync(new URL("../public/nourish.html",import.meta.url),"utf8");
+ const server=readFileSync(new URL("../src/server.mjs",import.meta.url),"utf8");
+ const homepage=readFileSync(new URL("../public/index.html",import.meta.url),"utf8");
+ assert.match(server,/\["\/nourish", \[new URL\("\.\.\/public\/nourish\.html"/);
+ assert.match(homepage,/href="\/nourish"/);
+ assert.match(html,/No real family participation/);
+ assert.match(html,/no text input and cannot run code/i);
+ assert.doesNotMatch(html,/<form\b|<input\b|<textarea\b|<script\b/i);
+ assert.match(html,/HOLD/);
+});
