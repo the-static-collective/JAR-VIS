@@ -41,6 +41,11 @@ export async function verifyCode(b){
      user_id:person.id,email,actor:'primary_operator'
    });
    if(insertError)return {status:403,body:{ok:false,reason:'OPERATOR_ALREADY_BOUND'}};
+   // One-time bootstrap: never keep this enrollment capability active after enrollment.
+   const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(b.operatorKey));
+   const tokenSha=[...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('');
+   await db.from('jarvis_backend_capabilities').update({revoked_at:new Date().toISOString()})
+     .eq('scope','operator').eq('token_sha256',tokenSha);
    member=await operator(email);
  }
  if(!member||member.user_id!==person.id||member.actor!=='primary_operator')
