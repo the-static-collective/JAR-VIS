@@ -20,14 +20,19 @@ async function input(req){
 }
 Deno.serve(async req=>{
  const p=new URL(req.url).pathname;
+ // Supabase's function router can supply either the full public path or a
+ // function-relative path. Normalize only documented safe leaf routes.
+ const atRoot=p===ROOT||p===ROOT+'/'||p==='/'||p===''||p==='/jarvis-operator-008'||p==='/jarvis-operator-008/';
+ const atHealth=p===ROOT+'/health'||p==='/health'||p==='/jarvis-operator-008/health';
+ const atJs=p===ROOT+'/ui.js'||p==='/ui.js'||p==='/jarvis-operator-008/ui.js';
  if(req.method==='GET'){
-  if(p===ROOT+'/health')return json({ok:true,service:'jarvis-email-first-008',externalEffects:0});
-  if(p===ROOT+'/ui.js')return new Response(client,{headers:{...BASE,'content-type':'application/javascript; charset=utf-8'}});
-  if(p===ROOT||p===ROOT+'/')return new Response(page,{headers:{...BASE,'content-type':'text/html; charset=utf-8',
+  if(atHealth)return json({ok:true,service:'jarvis-email-first-008',externalEffects:0});
+  if(atJs)return new Response(client,{headers:{...BASE,'content-type':'application/javascript; charset=utf-8'}});
+  if(atRoot)return new Response(page,{headers:{...BASE,'content-type':'text/html; charset=utf-8',
     'x-robots-tag':'noindex,nofollow','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'self'; form-action 'none'; frame-ancestors 'none'"}});
   return json({ok:false,reason:'NOT_FOUND'},404);
  }
- if(req.method!=='POST'||p!==ROOT)return json({ok:false,reason:'METHOD'},405);
+ if(req.method!=='POST'||!atRoot)return json({ok:false,reason:'METHOD'},405);
  if(!sameOrigin(req))return json({ok:false,reason:'ORIGIN'},403);
  const b=await input(req);
  if(!b||typeof b.action!=='string')return json({ok:false,reason:'BAD_INPUT'},400);
