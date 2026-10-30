@@ -25,7 +25,7 @@ jobs:
           git clone -q https://github.com/the-static-collective/planZ.git "$RUNNER_TEMP/planz"
           git -C "$RUNNER_TEMP/planz" checkout -q --detach d7eb38b90f7794ad2570644522f3da687f42cb0d
           git clone -q https://github.com/the-static-collective/CANNON.git "$RUNNER_TEMP/cannon"
-          git -C "$RUNNER_TEMP/cannon" checkout -q --detach 85bff9b73dadcd23b99d8dfe50b65b939276334d
+          git -C "$RUNNER_TEMP/cannon" checkout -q --detach f757bd954caade89cfd68f7ca1488a54fc723a2e
           git clone -q https://github.com/the-static-collective/the-haunted-toaster.git "$RUNNER_TEMP/toaster"
           git -C "$RUNNER_TEMP/toaster" checkout -q --detach a3ce7b1349a940325cb72362e818ce907a95f35c
           git clone -q https://github.com/the-static-collective/lemonPRESS.git "$RUNNER_TEMP/lemonpress"
