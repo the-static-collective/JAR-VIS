@@ -46,7 +46,7 @@ test("an editorial revision requires real PlayDeck and Toaster bytes and an ORIG
  const review=editorialReview(input,draft,source,rendered);
  assert.equal(review.decision,"REVISE_WITH_VERIFIED_ORIGIN_AND_OUTPUT");
  assert.equal(review.publishingAllowed,false);
- assert.throws(()=>editorialReview(input,draft,source,Buffer.from("FORGED"))),
+ assert.throws(()=>editorialReview(input,draft,source,Buffer.from("FORGED")),
   /HOLD/);
 });
 function requireCrypto(){return {createHash:(...a)=>nodeHash(...a)}}
