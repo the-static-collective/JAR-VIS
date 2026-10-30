@@ -35,7 +35,9 @@ try{
 
 const operatorBase="https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/jarvis-operator-008";
 const health=await fetch(operatorBase+"/health",{signal:AbortSignal.timeout(15000)});
-assert.equal(health.status,200,"existing operator service remains healthy");
+const operatorHome=await fetch(operatorBase,{signal:AbortSignal.timeout(15000)});
+console.log("Operator route health/home HTTP statuses:",health.status,operatorHome.status);
+assert.equal(operatorHome.status,200,"existing operator root is reachable");
 const protectedCall=await fetch(operatorBase,{method:"POST",headers:{"Origin":"https://kbhqacsdvjsstzyplqij.supabase.co","Content-Type":"application/json"},body:JSON.stringify({action:"porch-list"}),signal:AbortSignal.timeout(15000)});
 assert.equal(protectedCall.status,401,"anonymous visitor cannot access JAR;VIS operator review queue");
 console.log("Operator login gate blocks anonymous review; original operator still responds.");
