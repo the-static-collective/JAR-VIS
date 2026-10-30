@@ -26,6 +26,16 @@ The [live reviewer and stewardship invitation portal](https://kbhqacsdvjsstzyplq
 
 A public-only Bridge work card may be manually imported at [http://127.0.0.1:7789/bridge](http://127.0.0.1:7789/bridge). The independent loopback receiver verifies a pinned source contract and returns **HOLD_FOR_OPERATOR_REVIEW**, never a partner relationship, external submission, model run or verified field result. See [BRIDGE-005](docs/BRIDGE-005.md). The private Abundent application ledger is **not** imported or synchronized.
 
+## Human Porch Receiver 009 — a real, revocable first knock
+
+The [independent public staging porch](https://hello.abundent.org/porch/) can now optionally receive a **non-sensitive** human need, offer, or question into a private queue after explicit consent. Unlike a browser-only note, this crossing returns a real stored **PENDING** receipt and an unrecoverable one-time private key. The visitor can check for a separately reviewed reply or withdraw/delete their note. The reply is visible only to the receipt holder, not auto-emailed.
+
+JAR;VIS's [existing email-OTP operator desk](https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/jarvis-operator-008) offers a login-gated oldest-first queue, a deterministic **suggestion** for human attention, HOLD, a bounded reply and CLOSE. Its original synthetic task runner remains independent. The staging operator membership **still requires human bootstrap**; an active Edge Function does not imply any operator is enrolled or on duty.
+
+The new Supabase public receiver uses isolated private tables, RLS/no direct anonymous grants, hash-only view/withdraw capabilities, global and per-visitor rate limits and scheduled 30-day deletion. It has **no automatic AI call, matching, publishing, email ingestion or verified service delivery.** Existing us@ forwarding and webZ crossing rehearsal are unrelated and unchanged.
+
+[Contract, threat boundaries, retention and operating guide](docs/PORCH-RECEIVER-009.md) · [pure attention projection](src/porch-triage.mjs) · [executable smoke/withdraw proof](test/porch-receiver-live-smoke.mjs).
+
 ## Try the local attendant
 
 Node.js 20+ and no third-party runtime packages required.
