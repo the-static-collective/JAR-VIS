@@ -131,3 +131,37 @@ $("helpful").addEventListener("click",()=>verdict("helpful"));
 $("not-helpful").addEventListener("click",()=>verdict("not_helpful"));
 $("remember-card").disabled=true;
 init();
+
+$("load-boundary").addEventListener("click",async()=>{
+ const target=$("boundary-output");
+ target.replaceChildren();
+ const message=document.createElement("p");
+ message.textContent="Inhabiting the four viewpoints of each possible crossing...";
+ target.append(message);
+ try{
+   const response=await fetch("/api/boundary/001",{cache:"no-store"});
+   if(!response.ok)throw Error("Boundary instrument unavailable");
+   const body=await response.json();
+   target.replaceChildren();
+   for(const crossing of body.crossings){
+     const article=document.createElement("article");article.className="witness";
+     const h=document.createElement("h3");h.textContent=String(crossing.ordinal).padStart(2,"0")+" / "+crossing.object;
+     const intro=document.createElement("p");intro.textContent=crossing.transferMode.replaceAll("-"," ").toUpperCase()+" — NO VERIFIED DONOR";
+     const list=document.createElement("ol");
+     for(const perspective of crossing.viewpoints){
+       const li=document.createElement("li");
+       const bold=document.createElement("strong");
+       bold.textContent=perspective.position.replaceAll("-"," ")+" — ";
+       li.append(bold,document.createTextNode(perspective.question));
+       list.append(li);
+     }
+     const check=document.createElement("p");check.textContent="First useful move: "+crossing.nextHumanQuestion;
+     const guard=document.createElement("p");guard.className="small";guard.textContent="Verification required: "+crossing.requiredEvidence.join(" · ");
+     article.append(h,intro,list,check,guard);target.append(article);
+   }
+   const footer=document.createElement("p");
+   footer.className="small";
+   footer.textContent="No match found. No grant given. No hardware touched. Plan "+body.planId;
+   target.append(footer);
+ }catch(e){message.textContent=e.message}
+});
