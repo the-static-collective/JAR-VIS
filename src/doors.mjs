@@ -1,6 +1,11 @@
 // Capability directory only. These entries DO NOT read the named project's private state.
 export const doors = Object.freeze([
   {
+    id: "recursive-workshop", title: "The Recursive Workshop", family: "RECOMPOSITION",
+    status: "local source-pinned", role: "Deterministic Static OS assemblies with Haunted Toaster-inspired feedback and artifact witness.",
+    capability: "Local Python proposal-only engine; explicit opt-in memory; no actual external execution", connected: false
+  },
+  {
     id: "garden", title: "The Garden", family: "PARTICULARS",
     status: "fixture", role: "Need / offer records; current specimen contains invented Waseca data.",
     capability: "Read fictional local particulars", connected: false

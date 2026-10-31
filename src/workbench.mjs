@@ -279,7 +279,9 @@ export class Workbench {
     const q = question.trim().toLowerCase();
     const state = this.state();
     let answer;
-    if (/consent|authoriz|approv|permission|gate|semicolon/.test(q)) {
+    if (/toaster|self.build|recompos|recursive|self.learn|machine that builds|memory capsule|witness memory/.test(q)) {
+      answer = "The Recursive Workshop is installed at /workshop on this local machine. It invokes a frozen Static OS Python recomposer to build new typed proposal graphs and Toaster-inspired witness candidate families. Only your explicit feedback or generated-card observation enters its separate local journal. No live model, automatic code rewriting, GHoT execution, third-party matching or external effect occurs.";
+    } else if (/consent|authoriz|approv|permission|gate|semicolon/.test(q)) {
       answer = "The semicolon is a gate, not punctuation for automatic action. Genesis 002 accepts only two separately triggered MOCK steward approvals scoped to one proposal. It cannot authenticate real human consent; absent grants mean HOLD.";
     } else if (/kinship|radio|broadcast/.test(q)) {
       answer = "Kinship has a process-local mock adapter only. " + state.counters.mockRelays + " simulated crossing(s) are in the local journal. No real broadcast, website post, or external message occurs.";

@@ -1,3 +1,7 @@
+## Recursive Workshop — officially wired (LOCAL, PROPOSAL_ONLY)
+
+The [Recursive Workshop](docs/RECURSIVE-WORKSHOP-001.md) now connects **JAR;VIS → a pinned Static OS deterministic recomposer → Haunted Toaster-inspired witness memory** on the *local operator workbench*. Run `npm start` and open `http://127.0.0.1:7789/workshop`. Each question creates a fresh typed graph and a family of possible next moves; optionally record a generated-card observation or helpful/not-helpful verdict, and future questions will be recomposed from that consented history. It does not run a live AI, access third-party data, invent community partners, dispatch GHoT, store raw question text, or automatically execute/learn. A missing Python interpreter or modified pinned source results in HOLD, without breaking other desks. This is **not** a public multi-user website feature.
+
 # JAR;VIS
 
 **Jubilee Automation / Attention Relay / Res; Virtual / Voluntary Integration / Intelligence Stewardship / System.**
