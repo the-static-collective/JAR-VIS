@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import { Workbench } from "./workbench.mjs";
 import { InheritanceBoard } from "./inheritance.mjs";
 import {validateBridgeWork} from "./bridge-work-card.mjs";
+import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
@@ -13,7 +14,10 @@ const staticFiles = new Map([
   ["/inherit.css", [new URL("../public/inherit.css", import.meta.url), "text/css; charset=utf-8"]],
   ["/site.css", [new URL("../public/site.css", import.meta.url), "text/css; charset=utf-8"]],
   ["/bridge", [new URL("../public/bridge.html", import.meta.url), "text/html; charset=utf-8"]],
-  ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]]
+  ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/workshop", [new URL("../public/workshop.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/workshop.js", [new URL("../public/workshop.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -47,10 +51,16 @@ async function readJson(req) {
   return value;
 }
 
-export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard } = {}) {
+export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard, recursiveDesk } = {}) {
   if (!workbench && !journalPath) throw new Error("journalPath required");
   const app = workbench ?? await Workbench.open({ journalPath });
   const inherit = inheritanceBoard ?? (journalPath ? await InheritanceBoard.open({ journalPath: journalPath + ".inheritance.jsonl" }) : null);
+  let recursiveUnavailable = null;
+  let recursive = recursiveDesk ?? null;
+  if (!recursive && journalPath) {
+    try { recursive = await RecursiveWorkshop.open({ journalPath: journalPath + ".recursive.jsonl" }); }
+    catch (error) { recursiveUnavailable = "HOLD: local Python or pinned Static OS snapshot unavailable"; }
+  }
   const csrf = randomBytes(24).toString("hex");
   let boundPort;
   const server = createServer(async (req, res) => {
@@ -66,6 +76,9 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/recursive/state") return recursive ?
+          reply(res,200,{...recursive.summary(),csrfToken:csrf}) :
+          reply(res,503,{error: recursiveUnavailable ?? "HOLD: recursive desk not configured"});
         if (pathname === "/api/inheritance") return inherit ?
           reply(res, 200, { ...inherit.state(), csrfToken: csrf }) : reply(res, 503, { error: "Inheritance board not configured" });
         const staticEntry = staticFiles.get(pathname);
@@ -97,6 +110,17 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         };
         if (!operations[pathname]) return reply(res, 404, { error: "Not found" });
         return reply(res, 200, await operations[pathname]());
+      }
+      if (pathname.startsWith("/api/recursive/")) {
+        if(!recursive)return reply(res,503,{error:recursiveUnavailable ?? "HOLD: recursive desk unavailable"});
+        if(pathname==="/api/recursive/ask")return reply(res,200,await recursive.ask(body.text));
+        if(pathname==="/api/recursive/feedback")return reply(res,200,await recursive.feedback(body));
+        if(pathname==="/api/recursive/remember-card")return reply(res,200,await recursive.rememberCard(body));
+        if(pathname==="/api/recursive/preview-card")return reply(res,200,{
+          schema:"jarvis.recursive-card-preview/v1",card:draftCard(body.plan,body.topic),
+          stored:false,externalEffect:false
+        });
+        return reply(res,404,{error:"Unknown recursive workshop operation"});
       }
       if (pathname === "/api/bridge/triage") {
         let reviewed;
