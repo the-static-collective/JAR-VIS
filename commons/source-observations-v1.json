@@ -1,6 +1,6 @@
 {
   "schema": "static-collective/source-observations-v1",
-  "scannedAt": "2026-10-31T05:57:57.947Z",
+  "scannedAt": "2026-10-31T12:48:48.894Z",
   "scope": "EXPLICIT_PUBLIC_REPOSITORIES_ONLY",
   "authority": "NONE",
   "disclosure": "A public branch pointer and commit time were observed. Main is not canon. A change is not a feature release, a successful deployment, a partner agreement, a completed task, or verified field evidence. HOLD cannot be treated as unchanged.",
@@ -8,11 +8,11 @@
     {
       "repo": "webZ",
       "ref": "main",
-      "status": "OBSERVED_HEAD",
-      "sha": "197f71f1e57abeb14726621d1861f0c0e3cacd95",
-      "commitTime": "2026-10-31T05:35:21Z",
-      "checkedAt": "2026-10-31T05:57:57.947Z",
-      "commitUrl": "https://github.com/the-static-collective/webZ/commit/197f71f1e57abeb14726621d1861f0c0e3cacd95",
+      "status": "HOLD",
+      "sha": null,
+      "commitTime": null,
+      "checkedAt": "2026-10-31T12:48:48.894Z",
+      "commitUrl": null,
       "tags": [
         "abundent",
         "jubilee",
@@ -21,7 +21,9 @@
         "switchboard",
         "becoming"
       ],
-      "claim": "PUBLIC_REF_ONLY_NOT_CANON_OR_FIELD_EVIDENCE"
+      "lastKnownSha": "197f71f1e57abeb14726621d1861f0c0e3cacd95",
+      "reason": "FETCH_UNAVAILABLE_OR_INVALID",
+      "claim": "NO_CURRENT_SOURCE_OBSERVED"
     },
     {
       "repo": "reLATTE",
@@ -29,7 +31,7 @@
       "status": "OBSERVED_HEAD",
       "sha": "39038d66b15f43559c48c7da8b8a40a76b883ff0",
       "commitTime": "2026-10-28T22:34:28Z",
-      "checkedAt": "2026-10-31T05:57:57.947Z",
+      "checkedAt": "2026-10-31T12:48:48.894Z",
       "commitUrl": "https://github.com/the-static-collective/reLATTE/commit/39038d66b15f43559c48c7da8b8a40a76b883ff0",
       "tags": [
         "commuter",
@@ -46,7 +48,7 @@
       "status": "OBSERVED_HEAD",
       "sha": "f4c4067b5896eb5eb20a7498f89da38f04731d73",
       "commitTime": "2026-10-27T10:17:46Z",
-      "checkedAt": "2026-10-31T05:57:57.947Z",
+      "checkedAt": "2026-10-31T12:48:48.894Z",
       "commitUrl": "https://github.com/the-static-collective/BananaSpork/commit/f4c4067b5896eb5eb20a7498f89da38f04731d73",
       "tags": [
         "homelessness",
@@ -62,7 +64,7 @@
       "status": "OBSERVED_HEAD",
       "sha": "38e67b2930cea09c3e01a05447a6e92a67c2468f",
       "commitTime": "2026-10-01T20:48:25Z",
-      "checkedAt": "2026-10-31T05:57:57.947Z",
+      "checkedAt": "2026-10-31T12:48:48.894Z",
       "commitUrl": "https://github.com/the-static-collective/Static-live/commit/38e67b2930cea09c3e01a05447a6e92a67c2468f",
       "tags": [
         "music",
@@ -78,7 +80,7 @@
       "status": "OBSERVED_HEAD",
       "sha": "02feb4454240d482a5e0e03258f24f8b5cc0b9f5",
       "commitTime": "2026-09-30T20:39:52Z",
-      "checkedAt": "2026-10-31T05:57:57.947Z",
+      "checkedAt": "2026-10-31T12:48:48.894Z",
       "commitUrl": "https://github.com/the-static-collective/lemonPRESS/commit/02feb4454240d482a5e0e03258f24f8b5cc0b9f5",
       "tags": [
         "publishing",
@@ -94,7 +96,7 @@
       "status": "OBSERVED_HEAD",
       "sha": "265fd538266a742d033ba2f5b408a78610d0a75c",
       "commitTime": "2026-10-25T13:24:32Z",
-      "checkedAt": "2026-10-31T05:57:57.947Z",
+      "checkedAt": "2026-10-31T12:48:48.894Z",
       "commitUrl": "https://github.com/the-static-collective/GRAFT/commit/265fd538266a742d033ba2f5b408a78610d0a75c",
       "tags": [
         "commons",
@@ -110,7 +112,7 @@
       "status": "OBSERVED_HEAD",
       "sha": "9748a0772c4a13135421c4fa84a9991e0a51e05f",
       "commitTime": "2026-10-28T23:48:10Z",
-      "checkedAt": "2026-10-31T05:57:57.947Z",
+      "checkedAt": "2026-10-31T12:48:48.894Z",
       "commitUrl": "https://github.com/the-static-collective/GHoT/commit/9748a0772c4a13135421c4fa84a9991e0a51e05f",
       "tags": [
         "hardware",
@@ -126,7 +128,7 @@
       "status": "OBSERVED_HEAD",
       "sha": "5b6df7fb2a3a0c57d0fff8381108589ec2765a94",
       "commitTime": "2026-10-29T00:08:25Z",
-      "checkedAt": "2026-10-31T05:57:57.947Z",
+      "checkedAt": "2026-10-31T12:48:48.894Z",
       "commitUrl": "https://github.com/the-static-collective/planZ/commit/5b6df7fb2a3a0c57d0fff8381108589ec2765a94",
       "tags": [
         "planning",
@@ -142,7 +144,7 @@
       "status": "HOLD",
       "sha": null,
       "commitTime": null,
-      "checkedAt": "2026-10-31T05:57:57.947Z",
+      "checkedAt": "2026-10-31T12:48:48.894Z",
       "commitUrl": null,
       "tags": [
         "relationships",
@@ -159,7 +161,7 @@
       "status": "OBSERVED_HEAD",
       "sha": "62a557389013155c07e4d98578cbfb560f5f59c5",
       "commitTime": "2026-10-09T03:06:10Z",
-      "checkedAt": "2026-10-31T05:57:57.947Z",
+      "checkedAt": "2026-10-31T12:48:48.894Z",
       "commitUrl": "https://github.com/the-static-collective/CANNON/commit/62a557389013155c07e4d98578cbfb560f5f59c5",
       "tags": [
         "evidence",
@@ -174,7 +176,7 @@
       "status": "OBSERVED_HEAD",
       "sha": "1adcb3d82f736f3ca8329c3c1d0d9eba398d49ee",
       "commitTime": "2026-09-02T13:39:19Z",
-      "checkedAt": "2026-10-31T05:57:57.947Z",
+      "checkedAt": "2026-10-31T12:48:48.894Z",
       "commitUrl": "https://github.com/the-static-collective/LOADOUT/commit/1adcb3d82f736f3ca8329c3c1d0d9eba398d49ee",
       "tags": [
         "tools",
