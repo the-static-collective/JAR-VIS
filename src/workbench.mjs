@@ -279,7 +279,9 @@ export class Workbench {
     const q = question.trim().toLowerCase();
     const state = this.state();
     let answer;
-    if (/toaster|self.build|recompos|recursive|self.learn|machine that builds|memory capsule|witness memory/.test(q)) {
+    if (/boundary|marble|ecm|bus repair|rp1210|borrow.*tool/.test(q)) {
+      answer = "BOUNDARY INHABITATION 001 is a source-owned deterministic field fixture in the local Recursive Workshop. It changes viewpoints: bus owner, possible ECM custodian, possible RP1210 tool lender and each voluntary crossing. View the real two-ask invitation at https://abundent.org/paper/001/ . No compatible donor, loan or repair is confirmed. The local operator can inspect the dry-run plan at /api/boundary/001.";
+    } else if (/toaster|self.build|recompos|recursive|self.learn|machine that builds|memory capsule|witness memory/.test(q)) {
       answer = "The Recursive Workshop is installed at /workshop on this local machine. It invokes a frozen Static OS Python recomposer to build new typed proposal graphs and Toaster-inspired witness candidate families. Only your explicit feedback or generated-card observation enters its separate local journal. No live model, automatic code rewriting, GHoT execution, third-party matching or external effect occurs.";
     } else if (/consent|authoriz|approv|permission|gate|semicolon/.test(q)) {
       answer = "The semicolon is a gate, not punctuation for automatic action. Genesis 002 accepts only two separately triggered MOCK steward approvals scoped to one proposal. It cannot authenticate real human consent; absent grants mean HOLD.";
