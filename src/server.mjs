@@ -6,6 +6,7 @@ import { InheritanceBoard } from "./inheritance.mjs";
 import {validateBridgeWork} from "./bridge-work-card.mjs";
 import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
+import {compileFieldScout} from "./boundary-field-scout.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
@@ -78,6 +79,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
+        if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
         if (pathname === "/api/recursive/state") return recursive ?
           reply(res,200,{...recursive.summary(),csrfToken:csrf}) :
           reply(res,503,{error: recursiveUnavailable ?? "HOLD: recursive desk not configured"});
