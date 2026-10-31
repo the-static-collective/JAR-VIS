@@ -1,7 +1,7 @@
 {
   "schema": "static-collective/change-candidates-v1",
   "authority": "NONE",
-  "scannedAt": "2026-10-30T22:29:51.035Z",
+  "scannedAt": "2026-10-31T05:57:57.947Z",
   "monitoredRepos": [
     "webZ",
     "reLATTE",
@@ -17,6 +17,24 @@
   ],
   "disclosure": "Automatically generated source-diff CANDIDATES, not reviewed claims, canon, releases, deployments, partnerships or completed acts. No automatic admission is possible.",
   "candidates": [
+    {
+      "id": "DIFF-5A670A583BAD90B616DB",
+      "repo": "webZ",
+      "ref": "main",
+      "from": "35d94548bf03b83e4919e60e07dc8a1991421926",
+      "to": "197f71f1e57abeb14726621d1861f0c0e3cacd95",
+      "observedAt": "2026-10-31T05:57:57.947Z",
+      "compareUrl": "https://github.com/the-static-collective/webZ/compare/35d94548bf03b83e4919e60e07dc8a1991421926...197f71f1e57abeb14726621d1861f0c0e3cacd95",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "HOLD_COMPARE",
+      "reason": "COMPARE_OVERSIZE",
+      "files": [],
+      "totalFiles": null,
+      "categoryCounts": {}
+    },
     {
       "id": "DIFF-6187F5CBCB57BE1DF208",
       "repo": "GHoT",
