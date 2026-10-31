@@ -165,3 +165,31 @@ $("load-boundary").addEventListener("click",async()=>{
    target.append(footer);
  }catch(e){message.textContent=e.message}
 });
+
+
+$("load-field-scout").addEventListener("click",async()=>{
+ const target=$("field-scout-output");
+ target.replaceChildren();
+ const wait=document.createElement("p");wait.textContent="Checking source-linked possibilities, not inventory or consent...";
+ target.append(wait);
+ try{
+   const response=await fetch("/api/boundary/field-scout-002",{cache:"no-store"});
+   if(!response.ok)throw Error("Source-linked scout not available");
+   const scout=await response.json();target.replaceChildren();
+   const title=document.createElement("h3");
+   title.textContent="Four doors to knock on · none contacted";
+   target.append(title);
+   for(const candidate of scout.entries){
+     const item=document.createElement("article");item.className="witness";
+     const h=document.createElement("h3");h.textContent=candidate.name;
+     const p=document.createElement("p");p.textContent=candidate.reason;
+     const ask=document.createElement("p");ask.textContent="A first question: "+candidate.ask;
+     const contact=document.createElement("p");contact.textContent="Public contact: "+candidate.contact+" · "+candidate.phone+" · "+candidate.region;
+     const link=document.createElement("a");link.href=candidate.source;
+     link.target="_blank";link.rel="noopener noreferrer";link.textContent="Source / contact page ↗";
+     const note=document.createElement("p");note.className="small";
+     note.textContent="UNCONTACTED · NOT A DONOR · NO PART/LOAN VERIFIED · HUMAN REVIEW BEFORE OUTREACH";
+     item.append(h,p,ask,contact,link,note);target.append(item);
+   }
+ }catch(error){target.replaceChildren();const msg=document.createElement("p");msg.textContent=error.message;target.append(msg);}
+});
