@@ -19,7 +19,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify pinned Static OS source is unmodified
+        run: node --check src/recursive-workshop.mjs && node --check public/workshop.js
       - run: npm test
+      - name: Fetch the source-owned Static OS recomposer cut for byte identity
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/static-os
+          ref: e25bb810295c79b2b663f8bd8f8b5fe278c82914
+          path: static-os-recomposer-source
+          persist-credentials: false
+      - name: Assert vendored operator kernel equals the exact inspected source
+        run: |
+          cmp integrations/static-os-recomposer/question_first/recomposer.py static-os-recomposer-source/question_first/recomposer.py
+          cmp integrations/static-os-recomposer/question_first/recomposer_witness.py static-os-recomposer-source/question_first/recomposer_witness.py
+          cmp integrations/static-os-recomposer/scripts/recomposer-bridge.py static-os-recomposer-source/scripts/recomposer-bridge.py
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:
