@@ -2,13 +2,11 @@
 // Runs the frozen, source-pinned Static OS typed recomposer. No competing
 // implementation of Static OS or Haunted Toaster's authoritative renderer.
 import { createHash } from "node:crypto";
-import { execFile } from "node:child_process";
-import { promisify } from "node:util";
+import { spawn } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { LocalJournal } from "./journal.mjs";
 
-const runFile = promisify(execFile);
 const bridgeUrl = new URL("../integrations/static-os-recomposer/scripts/recomposer-bridge.py", import.meta.url);
 const sourceUrls = Object.freeze([
   [new URL("../integrations/static-os-recomposer/question_first/recomposer.py", import.meta.url), "8b6c8ec2de2dc6a6b0e75c7b8d6d9e9abc254f33"],
@@ -38,13 +36,32 @@ export async function callStaticOS(payload, {python = process.env.JARVIS_PYTHON 
   if (Buffer.byteLength(input, "utf8") > 150_000) throw bad("HOLD: source request exceeds budget", 413);
   let stdout;
   try {
-    const output = await runFile(python, ["-B", "-I", fileURLToPath(bridgeUrl)], {
-      input, encoding:"utf8", timeout: 5000, maxBuffer: 1024 * 1024,
-      windowsHide: true, env: {...process.env, PYTHONDONTWRITEBYTECODE:"1"}
+    stdout = await new Promise((resolve,reject)=>{
+      const child=spawn(python,["-B","-I",fileURLToPath(bridgeUrl)],{
+        stdio:["pipe","pipe","pipe"],windowsHide:true,
+        env:{...process.env,PYTHONDONTWRITEBYTECODE:"1"}
+      });
+      let out="",err="",total=0,settled=false;
+      const timer=setTimeout(()=>child.kill("SIGKILL"),5000);
+      const finish=(error,value)=>{
+        if(settled)return;settled=true;clearTimeout(timer);
+        if(error)reject(error);else resolve(value);
+      };
+      child.on("error",finish);
+      child.stdout.setEncoding("utf8");
+      child.stderr.setEncoding("utf8");
+      child.stdout.on("data",chunk=>{
+        total+=Buffer.byteLength(chunk);out+=chunk;
+        if(total>1024*1024)child.kill("SIGKILL");
+      });
+      child.stderr.on("data",chunk=>{err+=(chunk||"").slice(0,1000)});
+      child.on("close",code=>code===0&&total<=1024*1024?finish(null,out):
+        finish(new Error("HOLD: bridge rejected request")));
+      child.stdin.on("error",()=>{});
+      child.stdin.end(input);
     });
-    stdout = output.stdout;
-  } catch(error) {
-    // No stderr or input returned: these could contain private content.
+  } catch {
+    // Never return raw stderr or input: these may contain private content.
     throw bad("HOLD: local Static OS recomposer unavailable or refused the proposal",409);
   }
   let result;
