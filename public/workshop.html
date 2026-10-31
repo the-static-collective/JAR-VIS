@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1a2d25"><title>JAR;VIS / The Recursive Workshop</title>
+<link rel="stylesheet" href="/workshop.css"><script type="module" src="/workshop.js"></script></head>
+<body><a class="skip" href="#main">Skip to the workbench</a>
+<header class="top"><a class="brand" href="/">JAR<span>;</span>VIS</a><div class="tag">THE RECURSIVE WORKSHOP / 001</div><a href="/">← Local workbench</a></header>
+<main id="main" class="shell">
+ <div class="ticker"><span>STATIC OS ⟷ THE HAUNTED TOASTER ⟷ JAR;VIS</span><span id="machine-status">CHECKING THE RACK...</span></div>
+ <section class="hero">
+  <p class="eyebrow">MIDWEST RECURSIVE COMPUTING · 1999 EDITION</p>
+  <h1>The machine isn't finished.<br><em>Neither are we.</em></h1>
+  <p class="lead">Tell us what you're thinking. JAR;VIS asks Static OS to assemble a fresh, deterministic working graph. The Haunted Toaster's witness-memory pattern helps it try different arrangements next time.</p>
+  <p class="fine">This is a <strong>local operator experiment</strong>, not a live AI, a service matcher or an automatic executor. Your question isn't saved. Feedback and generated-card observations are recorded only after you explicitly choose to remember them in this local notebook.</p>
+ </section>
+ <section class="terminal" aria-labelledby="ask-title">
+   <div class="window-bar"><span>JAR;VIS.EXE / ONE QUESTION</span><span>● RECOMPOSITION READY</span></div>
+   <div class="terminal-content"><h2 id="ask-title">Ope. What's on your mind?</h2>
+     <form id="ask-form">
+       <label for="question">A problem, an idea, or something you might want to make.</label>
+       <textarea id="question" rows="3" maxlength="320" required placeholder="What if food and music came together at a folding table?"></textarea>
+       <div class="buttons"><button type="submit" id="ask-btn">Recompose the workshop →</button><button type="button" id="example-btn" class="secondary">Try a fictional example</button></div>
+     </form>
+     <p id="ask-status" role="status" aria-live="polite">Nothing has been sent or remembered.</p>
+   </div>
+ </section>
+ <section id="result" class="results" hidden tabindex="-1">
+   <div class="eyebrow">THE MACHINE ASSEMBLED A CANDIDATE, NOT A COMMAND</div>
+   <h2>Here's what I'd try.</h2>
+   <p id="result-context"></p>
+   <div id="paths" class="paths"></div>
+   <div class="witness">
+     <h3>Make one little thing.</h3><p>Choose a route, and we'll generate a portable invitation card. It doesn't contact anybody or prove the work happened.</p>
+     <label for="card-topic">Which door should the card describe?</label>
+     <select id="card-topic"></select>
+     <div class="buttons"><button id="make-card" type="button">Build a card →</button><button id="remember-card" type="button" class="secondary">Remember that this card was generated</button></div>
+     <textarea id="card-output" rows="9" readonly hidden aria-label="Generated card"></textarea>
+     <div class="buttons"><button id="download-card" type="button" class="secondary" hidden>Save card as .txt</button></div>
+     <p class="small">"Remember" stores only the card's content digest and its proposed route in this operator journal, not your original question. Generating isn't evidence of real-world usefulness.</p>
+   </div>
+   <div class="feedback">
+     <h3>What did the suggestion actually do for you?</h3>
+     <p>Only your explicit report can update the machine's future preferences. It may propose a reusable combination; approval is separate.</p>
+     <div class="buttons"><button id="helpful" type="button">Helpful — remember that</button><button id="not-helpful" type="button" class="secondary">Not helpful — remember that</button></div>
+     <label class="check"><input type="checkbox" id="promote"> If a two-route combination is proposed, allow the tested combination to be reused as a shortcut.</label>
+     <p id="feedback-status" role="status" aria-live="polite">No feedback recorded.</p>
+   </div>
+ </section>
+ <section class="memory" aria-labelledby="memory-title">
+  <p class="eyebrow">THE MEMORY IS AN INTERPRETATION, NOT HISTORY REWRITTEN</p>
+  <h2 id="memory-title">What the local machine remembers</h2>
+  <div class="numbers"><div><strong id="count-verdicts">–</strong><span>human verdicts</span></div><div><strong id="count-cards">–</strong><span>generated-card observations</span></div><div><strong id="count-recipes">–</strong><span>approved macros</span></div></div>
+  <p class="small">Private, machine-local operator notebook. No account separation or multi-person memory in this prototype. Don't enter personal or sensitive information.</p>
+ </section>
+ <footer><span>QUESTION ≠ COMMAND. MEMORY ≠ AUTHORITY. AN INVITATION ≠ AGREEMENT.</span><a href="/">BACK TO JAR;VIS</a></footer>
+</main></body></html>
