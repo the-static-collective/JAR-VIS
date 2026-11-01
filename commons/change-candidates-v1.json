@@ -1,7 +1,7 @@
 {
   "schema": "static-collective/change-candidates-v1",
   "authority": "NONE",
-  "scannedAt": "2026-10-31T21:44:37.758Z",
+  "scannedAt": "2026-11-01T06:27:14.878Z",
   "monitoredRepos": [
     "webZ",
     "reLATTE",
@@ -17,6 +17,51 @@
   ],
   "disclosure": "Automatically generated source-diff CANDIDATES, not reviewed claims, canon, releases, deployments, partnerships or completed acts. No automatic admission is possible.",
   "candidates": [
+    {
+      "id": "DIFF-30B0A4BCBA82D67E47FF",
+      "repo": "reLATTE",
+      "ref": "main",
+      "from": "39038d66b15f43559c48c7da8b8a40a76b883ff0",
+      "to": "d69a863943e071346527eafc79a63ef332d524af",
+      "observedAt": "2026-11-01T06:27:14.878Z",
+      "compareUrl": "https://github.com/the-static-collective/reLATTE/compare/39038d66b15f43559c48c7da8b8a40a76b883ff0...d69a863943e071346527eafc79a63ef332d524af",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "PENDING_REVIEW",
+      "reason": "NONE",
+      "totalFiles": 4,
+      "categoryCounts": {
+        "TESTS": 1,
+        "DOCUMENTATION": 1,
+        "CONFIGURATION": 0,
+        "SOURCE_CODE": 2,
+        "OTHER": 0
+      },
+      "files": [
+        {
+          "path": "docs/POSSIBILITY-001.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "src/index.ts",
+          "status": "modified",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "src/possibility.ts",
+          "status": "added",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "test/possibility.test.ts",
+          "status": "added",
+          "category": "TESTS"
+        }
+      ]
+    },
     {
       "id": "DIFF-5A670A583BAD90B616DB",
       "repo": "webZ",
