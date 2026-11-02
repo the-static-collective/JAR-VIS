@@ -1,0 +1,344 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#102c2a"><title>NODE ZERO — Garden Crossing</title><style>:root{color-scheme:light;--forest:#102c2a;--ink:#1a2927;--muted:#65716a;--cream:#f8f8f0;--paper:#fffefa;--line:#dddcd0;--orange:#e8a353;--lime:#c9e6a4;--teal:#d4ebe5;--red:#b04536;--shadow:0 12px 35px #12282012;font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}body{background:#e9eee7;color:var(--ink);margin:0;font-size:15px}button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}input,select,textarea{border:1px solid #cbd2c9;border-radius:9px;background:#fff;padding:12px 13px;width:100%;color:#243331}textarea{resize:vertical}input:focus,textarea:focus,select:focus{outline:2px solid #76bfb0;outline-offset:1px}label{font-size:12px;letter-spacing:.03em;font-weight:700;color:#465953;display:block;margin-bottom:7px}.shell{max-width:1130px;margin:0 auto;min-height:100vh;background:var(--cream);box-shadow:0 3px 60px #112c2818}.masthead{background:var(--forest);color:#fff;padding:27px 38px;display:flex;gap:24px;align-items:center;position:relative;overflow:hidden}.masthead:after{content:"";position:absolute;width:270px;height:270px;border:1px solid #5e928260;border-radius:50%;right:-110px;top:-150px;box-shadow:0 0 0 35px #ffffff06,0 0 0 75px #ffffff04;pointer-events:none}.mark{flex:0 0 83px;height:83px;display:flex;align-items:center;justify-content:center;border:2px solid var(--lime);border-radius:50%;font-family:Georgia,serif;font-size:67px;font-style:italic;line-height:1;position:relative;color:var(--lime)}.spark{font-family:serif;font-size:23px;position:absolute;right:-11px;top:-9px;color:var(--orange)}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800}.mastcopy{position:relative;z-index:1}.masthead .eyebrow{color:#9fcbb5}.masthead h1{letter-spacing:-.065em;font-size:49px;font-weight:900;margin:2px 0 0;line-height:1}.masthead h1 em{font-family:Georgia,serif;font-weight:400;color:var(--lime)}.subline{font-family:Georgia,serif;font-style:italic;color:#cfe0d8;margin-top:6px}.status-dot{margin-left:auto;white-space:nowrap;color:#d0e1d8;border:1px solid #9ec3b565;padding:8px 11px;border-radius:30px;font-size:10px;font-weight:800;letter-spacing:.07em;z-index:1}.dot{display:inline-block;height:7px;width:7px;background:#bbdb8c;border-radius:50%;margin-right:6px}.intro{display:flex;gap:20px;justify-content:space-between;align-items:center;background:#dceadf;padding:16px 38px}.intro p{margin:0;line-height:1.45}.intro span{font-size:11px;color:#527064;text-align:right;max-width:200px}.nodebar{display:flex;gap:24px;align-items:center;padding:18px 38px;background:var(--paper);border-bottom:1px solid var(--line)}.nodebar div{display:grid;gap:4px}.nodebar small{letter-spacing:.09em;font-weight:800;color:#71807a;font-size:10px}.nodebar strong{font-size:13px}.nodebar button{margin-left:auto}.mini{border:1px solid #b9cec6;border-radius:8px;background:#eff8f4;color:#295548;font-size:12px;font-weight:700;padding:8px 12px}.tabs{display:flex;overflow:auto;padding:0 38px;border-bottom:1px solid var(--line);background:var(--paper)}.tabs button{padding:16px 21px;background:transparent;border:none;border-bottom:3px solid transparent;white-space:nowrap;font-weight:800;font-size:13px;color:#84908a}.tabs button:first-child{padding-left:0}.tabs button.active{color:var(--forest);border-bottom-color:var(--orange)}main{padding:30px 38px 50px;min-height:600px}.tab{display:none}.tab.active{display:block}.section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px}.section-heading .eyebrow{color:#668579}.section-heading h2{font-family:Georgia,serif;font-size:30px;letter-spacing:-.03em;line-height:1.15;margin:7px 0}.section-heading p{color:var(--muted);max-width:610px;line-height:1.55;margin:5px 0}.annotation{font-size:12px;font-weight:800;transform:rotate(-5deg);white-space:nowrap;color:#a27b35;border-bottom:2px solid var(--orange)}.compact{margin:31px 0 15px;align-items:center}.compact h2{font-size:25px}.count{font:700 12px ui-sans-serif,sans-serif;display:inline-block;border-radius:30px;background:#e0e9df;padding:5px 9px;vertical-align:middle}.panel{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:24px;box-shadow:var(--shadow)}.panel h3{margin:0 0 10px;font-family:Georgia,serif;font-size:21px}.panel p{line-height:1.5}.editor{border-top:4px solid #a7cabb}.field{margin-bottom:15px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.form-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:18px}.form-footer span{color:#74817a;font-size:12px;line-height:1.35}.primary,.secondary,.upload,.danger{border-radius:9px;padding:12px 17px;font-weight:800;font-size:13px;display:inline-block}.primary{background:var(--forest);color:#fff;border:1px solid var(--forest)}.secondary,.upload{background:#ebf3ef;color:var(--forest);border:1px solid #bed3c7}.danger{color:#a54236;background:transparent;border:1px solid #dfaca6;margin-top:20px}.button-row{display:flex;flex-wrap:wrap;gap:10px;margin:13px 0}.card-list{display:grid;gap:12px}.card{border:1px solid #d8e0d6;border-radius:12px;padding:19px 21px;background:#fff;box-shadow:0 4px 20px #1d3f2e07}.cardtop{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}.badge{display:inline-block;font-size:10px;letter-spacing:.07em;font-weight:850;background:#e8eee7;color:#51635b;text-transform:uppercase;border-radius:5px;padding:5px 7px}.badge.orange{background:#fff0dd;color:#82501b}.badge.green{background:#e1f4e0;color:#326442}.badge.red{background:#fae5e3;color:#9d4239}.card h3{font-family:Georgia,serif;font-size:21px;margin:7px 0}.card p{margin:7px 0;line-height:1.5}.meta{font-size:12px;color:#687a70}.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.actions button{font-size:12px;padding:9px 12px;border-radius:7px;border:1px solid #bed1c7;background:#eff6f1;color:#244d41;font-weight:750}.actions button.strong{background:var(--forest);color:white}.actions button.warn{background:#fcf0e0;color:#835120;border-color:#ead2af}.offer-row{margin-top:12px;border-top:1px dashed #dce2d9;padding-top:11px}.offer-row strong{font-size:12px}.offer-row p{font-size:13px}.offer-row .meta{margin-top:4px}.prompt-row{display:flex;gap:8px;margin-top:9px}.prompt-row input{flex:1;min-width:0}.hint{font-size:11px;color:#658378;margin-top:10px}.muted{color:var(--muted)}.empty{padding:25px;text-align:center;border:1px dashed #bccfbe;background:#f2f7f1;border-radius:10px;color:#6b8074}.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin:15px 0}.cap{border:1px solid #cadbd0;border-radius:9px;padding:13px;background:#f8faf6;display:flex;gap:9px;align-items:center;font-weight:650;font-size:13px;color:#27483d}.cap input{width:18px;height:18px;accent-color:var(--forest);margin:0}.cap span{flex:1}.footnote{margin-top:15px;font-size:13px;color:#52685d;line-height:1.5;background:#edf4ef}.bulletin-placeholder{border:1px dashed #adc8b8;padding:40px 18px;margin-top:20px;text-align:center;color:#71857a;font-family:Georgia,serif;font-style:italic}.paper{margin-top:20px;background:#fff;border:1px solid #d8d1bc;padding:32px 30px;box-shadow:0 12px 24px #14291d17;color:#242925}.paper .paper-top{border-top:6px double #20362b;border-bottom:2px solid #20362b;text-align:center;padding:11px}.paper h2{font-family:Georgia,serif;font-size:40px;margin:0}.paper .paper-date{text-transform:uppercase;letter-spacing:.12em;font-size:10px}.paper h3{font-family:Georgia,serif;border-bottom:1px solid #c6c6b9;padding-bottom:5px}.paper pre{white-space:pre-wrap;line-height:1.6;font:inherit}.paper .columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}.paper .paper-card{border-bottom:1px solid #ddd;padding-bottom:10px;margin-bottom:9px}.paper .paper-card strong{display:block}.paper .paper-card small{color:#6c776c}.timeline{display:grid;gap:0}.entry{display:flex;gap:15px;padding:11px 2px;border-bottom:1px solid #e2e5de}.entry-number{font-family:monospace;color:#85a18e;font-size:12px}.entry-main{flex:1;min-width:0}.entry-kind{font-size:12px;font-weight:800}.entry-body{font-size:12px;color:#65746e;margin-top:3px;overflow-wrap:anywhere}.entry-time{font-size:11px;color:#88968e}footer{padding:23px 38px;background:var(--forest);color:#c6dbd0;display:flex;gap:15px;justify-content:space-between;align-items:center;flex-wrap:wrap;font-size:11px}footer strong{font-size:13px;color:var(--lime)}.toast{pointer-events:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--forest);color:#fff;padding:12px 18px;border-radius:10px;box-shadow:0 8px 50px #182c2544;max-width:calc(100vw - 40px);z-index:50;transition:transform .2s;opacity:0}.toast.visible{opacity:1;transform:translateX(-50%) translateY(0)}@media(max-width:650px){.masthead{padding:22px 18px;gap:14px}.mark{height:63px;flex-basis:63px;font-size:49px}.masthead h1{font-size:36px}.eyebrow{font-size:9px}.subline{font-size:12px}.status-dot{position:absolute;right:17px;bottom:10px;font-size:8px;padding:5px}.intro{padding:13px 18px;display:block}.intro p{font-size:13px}.intro span{display:block;text-align:left;margin-top:4px}.nodebar{padding:15px 18px;gap:10px}.nodebar strong{font-size:11px;overflow-wrap:anywhere}.nodebar .mini{margin-left:0}.tabs{padding:0 18px}.tabs button{padding:14px 13px;font-size:12px}main{padding:23px 17px 35px}.section-heading h2{font-size:26px}.annotation{display:none}.panel{padding:17px}.form-grid{grid-template-columns:1fr;gap:0}.form-footer{flex-direction:column;align-items:stretch}.form-footer span{order:2}.form-footer button{width:100%}.cap-grid{grid-template-columns:1fr 1fr}.paper{padding:17px}.paper h2{font-size:30px}.paper .columns{grid-template-columns:1fr}footer{padding:22px 18px}.prompt-row{flex-direction:column}.nodebar div:nth-child(2){flex:1}}
+@media print{body,.shell{background:white;box-shadow:none}.masthead,.intro,.nodebar,.tabs,main>.tab:not(#tab-live),#tab-live>.section-heading,#tab-live>.editor,footer,.actions,.toast,.bulletin-placeholder{display:none!important}#tab-live{display:block!important}main{padding:0;min-height:0}.paper{border:0;box-shadow:none;padding:0;margin:0}}
+</style></head><body>
+<div class="shell">
+  <header class="masthead">
+    <div class="mark" aria-hidden="true">0<span class="spark">✳</span></div>
+    <div class="mastcopy"><div class="eyebrow">JAR;VIS · FIRST PHYSICAL LOOP</div><h1>NODE <em>ZERO</em></h1><div class="subline">From a need to a witnessed next step.</div></div>
+    <div class="status-dot"><span class="dot"></span> LOCAL / UNSIGNED</div>
+  </header>
+  <section class="intro"><p><strong>Intelligence doesn't live in a box.</strong> It lives in the crossings between people and what they can do.</p><span>Prototype · no accounts · no payments · no AI calls</span></section>
+  <div class="nodebar"><div><small>THIS NODE</small><strong id="node-identity">Loading…</strong></div><div><small>NEARBY ON THIS WEBSITE</small><strong id="peer-count">0 other nodes</strong></div><button id="edit-alias" class="mini" type="button">Rename</button></div>
+  <nav class="tabs" aria-label="Sections"><button data-tab="garden" class="active">01 Garden</button><button data-tab="network">02 Network</button><button data-tab="live">03 Static Live</button><button data-tab="ledger">04 Ledger</button></nav>
+
+  <main>
+  <section id="tab-garden" class="tab active">
+   <div class="section-heading"><div><div class="eyebrow">THE ONE–TWO PUNCH / 01</div><h2>Something someone needs.</h2><p>Write a small need. Hold it on your node. Share only when you choose.</p></div><span class="annotation">HUMAN FIRST ↗</span></div>
+   <form id="need-form" class="panel editor"><div class="field"><label for="need-title">What is needed?</label><input id="need-title" maxlength="90" required placeholder="e.g. Help carrying pantry boxes on Saturday"></div><div class="form-grid"><div class="field"><label for="need-category">Kind</label><select id="need-category"><option value="food">Food</option><option value="transport">Transport</option><option value="tools">Tools</option><option value="labor">Work / help</option><option value="creative">Creative / print</option><option value="other">Other</option></select></div><div class="field"><label for="need-region">Broad area (no address)</label><input id="need-region" maxlength="70" required value="Waseca area"></div></div><div class="field"><label for="need-qty">Quantity / scope (optional)</label><input id="need-qty" maxlength="30" placeholder="e.g. 2 hours or 4 boxes"></div><div class="field"><label for="need-detail">Public note (optional)</label><textarea id="need-detail" maxlength="360" rows="2" placeholder="No names, contact details, exact locations, or private case information."></textarea></div><div class="form-footer"><span>Hold first. Publication is a separate choice.</span><button class="primary" type="submit">＋ Hold this need</button></div></form>
+   <div class="section-heading compact"><div><div class="eyebrow">GARDEN BOARD</div><h2>Open crossings <span id="need-total" class="count">0</span></h2></div><button class="mini" id="seed-demo" type="button">Add example</button></div>
+   <div id="needs" class="card-list" aria-live="polite"></div>
+  </section>
+
+  <section id="tab-network" class="tab">
+    <div class="section-heading"><div><div class="eyebrow">THE ONE–TWO PUNCH / 02</div><h2>The computer without a computer.</h2><p>This browser tab is a node. Another tab on the same website is another node. They discover each other without a server.</p></div></div>
+    <div class="panel"><h3>Your node capabilities</h3><p class="muted">Declare what you <em>might</em> help with. These are possibilities, not promises or permission to act.</p><div class="cap-grid" id="capabilities"></div><div class="form-footer"><span>Presence is temporary. Peer identity is not authenticated.</span><button class="secondary" id="announce" type="button">↗ Announce again</button></div></div>
+    <div class="section-heading compact"><div><div class="eyebrow">DISCOVERY</div><h2>Other nodes <span id="peers-total" class="count">0</span></h2></div></div><div id="peers" class="card-list"></div>
+    <div class="panel footnote"><strong>Cross-device path:</strong> use Ledger → Export packet bundle, transfer it however you choose, and import it on another device. It is manual and unsigned. There is no internet synchronization, remote discovery, identity verification, or third-party message delivery.</div>
+  </section>
+
+  <section id="tab-live" class="tab">
+   <div class="section-heading"><div><div class="eyebrow">NEXT DOOR / 03</div><h2>Turn the meeting into a newspaper.</h2><p>Start with the Garden's recorded needs. Add your own meeting notes. Produce a printable draft—not an automatic publication.</p></div></div>
+   <div class="panel editor"><div class="field"><label for="meeting-name">Gathering / headline</label><input id="meeting-name" maxlength="90" value="The Garden — Field Notes"></div><div class="field"><label for="meeting-notes">What happened? (public-safe notes)</label><textarea id="meeting-notes" rows="5" maxlength="1500" placeholder="Three observations, one question, and a next invitation…"></textarea></div><div class="form-footer"><span>Only locally recorded needs included. Review before sharing.</span><button id="make-bulletin" type="button" class="primary">✳ Compose bulletin</button></div></div><div id="bulletin" class="bulletin-placeholder">Your first little newspaper will appear here.</div>
+  </section>
+
+  <section id="tab-ledger" class="tab">
+   <div class="section-heading"><div><div class="eyebrow">EVERY CROSSING LEAVES A TRACE</div><h2>The ledger is not the world.</h2><p>Receipts here record what participants <em>said</em>, not independently verified physical outcomes.</p></div></div>
+   <div class="panel"><h3>Portable packets</h3><p class="muted">Export your event bundle as JSON. To move it to another node, paste JSON or select the downloaded file. Imported events are HELD for review until admitted.</p><div class="button-row"><button id="export-bundle" type="button" class="secondary">↓ Export all events</button><button id="copy-bundle" type="button" class="secondary">Copy all</button></div><div class="field"><label for="import-json">Paste a packet / bundle</label><textarea id="import-json" rows="3" placeholder='{"protocol":"node-zero/bundle/v0",…}'></textarea></div><div class="button-row"><button id="import-paste" type="button" class="primary">Hold pasted packet</button><label class="upload" for="import-file">Upload .json<input type="file" id="import-file" accept="application/json,.json" hidden></label></div></div>
+   <div class="section-heading compact"><div><div class="eyebrow">INCOMING · RECEIVER-LOCAL HOLD</div><h2>Review inbox <span id="inbox-total" class="count">0</span></h2></div></div><div id="inbox" class="card-list"></div>
+   <div class="section-heading compact"><div><div class="eyebrow">UNSIGNED EVENT HISTORY</div><h2>Trace <span id="events-total" class="count">0</span></h2></div></div><div id="events" class="timeline"></div><button id="reset-node" class="danger" type="button">Clear this node's local data</button>
+  </section>
+  </main>
+  <footer><strong>NODE ZERO / v0.1</strong><span>Attention ≠ authority · Proposal ≠ permission · Report ≠ confirmed fulfillment</span><span>JAR;VIS × Garden × Static Live / local field specimen</span></footer>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>// NODE ZERO: intentionally unsigned, portable, local-only packet protocol.
+const PROTOCOL = 'node-zero/packet/v0';
+const BUNDLE = 'node-zero/bundle/v0';
+const KINDS = ['need.opened','offer.proposed','offer.accepted','fulfillment.reported','fulfillment.confirmed'];
+const CATEGORIES = ['food','transport','tools','labor','creative','other'];
+const short = (x,n) => typeof x === 'string' && x.trim().length > 0 && x.length <= n;
+const token = x => typeof x === 'string' && /^[a-zA-Z0-9_-]{8,80}$/.test(x);
+function id() {
+  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID().replace(/-/g,'');
+  if (globalThis.crypto?.getRandomValues) return [...globalThis.crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,'0')).join('');
+  throw Error('Secure randomness unavailable');
+}
+function makePacket(kind, node, fields={}) {
+  if (!KINDS.includes(kind)) throw Error('Unknown event');
+  const packet = { protocol:PROTOCOL, id:id(), kind, at:new Date().toISOString(), node:node.id,
+    alias:node.alias.slice(0,48), needId: fields.needId || '', offerId: fields.offerId || '',
+    target:fields.target || '', payload:fields.payload || {} };
+  if (kind==='need.opened') packet.needId=packet.id;
+  if (kind==='offer.proposed') packet.offerId=packet.id;
+  const issue=validatePacket(packet);
+  if(issue) throw Error(issue);
+  return packet;
+}
+function validatePacket(p) {
+  if(!p || typeof p!=='object' || Array.isArray(p)) return 'Not a packet';
+  try { if(JSON.stringify(p).length > 5000) return 'Packet exceeds size limit'; }
+  catch { return 'Unserializable packet'; }
+  if(p.protocol!==PROTOCOL || !KINDS.includes(p.kind)) return 'Unsupported packet or event';
+  if(!token(p.id) || !token(p.node) || !token(p.needId)) return 'Invalid event/node/need id';
+  if(!short(p.alias,48) || typeof p.at!=='string' || !Number.isFinite(Date.parse(p.at))) return 'Invalid author/date';
+  if(typeof p.offerId!=='string' || (p.offerId&&!token(p.offerId))) return 'Invalid offer id';
+  if(typeof p.target!=='string' || (p.target&&!token(p.target))) return 'Invalid target';
+  if(!p.payload || typeof p.payload!=='object' || Array.isArray(p.payload)) return 'Invalid payload';
+  if(p.kind==='need.opened') {
+    const q=p.payload;
+    if(p.needId!==p.id || !short(q.title,90) || !CATEGORIES.includes(q.category) ||
+       !short(q.region,70) || typeof q.detail!=='string' || q.detail.length>360 ||
+       typeof q.quantity!=='string' || q.quantity.length>30) return 'Malformed need';
+  } else {
+    if(!token(p.offerId)) return 'Missing offer id';
+    if(p.kind==='offer.proposed' && (p.offerId!==p.id || !short(p.payload.message,220))) return 'Malformed offer';
+    if(['fulfillment.reported','fulfillment.confirmed'].includes(p.kind) && !short(p.payload.note,220)) return 'Missing report/confirmation';
+  }
+  return null;
+}
+function ingest(current, packet) {
+  const issue=validatePacket(packet);
+  if(issue) return {events:current,added:false,error:issue};
+  const found=current.find(e=>e.id===packet.id);
+  if(found) return {events:current,added:false,error:JSON.stringify(found)===JSON.stringify(packet)?'Duplicate':'Conflicting event ID'};
+  if(current.length>=1000) return {events:current,added:false,error:'Local 1,000-event cap reached'};
+  return {events:[...current,packet],added:true,error:null};
+}
+function project(events) {
+  const needs=events.filter(x=>x.kind==='need.opened').map(n=>({...n,offers:[],state:'OPEN'}));
+  const byNeed=new Map(needs.map(n=>[n.id,n]));
+  const offers=events.filter(x=>x.kind==='offer.proposed');
+  for(const o of offers){
+    const need=byNeed.get(o.needId);
+    if(!need || o.node===need.node) continue;
+    need.offers.push({...o,accepted:false,reported:false,confirmed:false});
+  }
+  const byOffer=new Map(needs.flatMap(n=>n.offers.map(o=>[o.id,{offer:o,need:n}])));
+  // Reconstruct by semantic stage, not import order; replayed bundles may be reordered.
+  for(const kind of ['offer.accepted','fulfillment.reported','fulfillment.confirmed']){
+    for(const e of events.filter(x=>x.kind===kind)){
+      const pair=byOffer.get(e.offerId);
+      if(!pair || e.needId!==pair.need.id) continue;
+      const {offer,need}=pair;
+      if(kind==='offer.accepted' && e.node===need.node && !offer.accepted &&
+          (!e.target || e.target===offer.node)) offer.accepted=true;
+      if(kind==='fulfillment.reported' && e.node===offer.node && offer.accepted && !offer.reported) {
+        offer.reported=true; offer.reportNote=e.payload.note;
+      }
+      if(kind==='fulfillment.confirmed' && e.node===need.node && offer.reported && !offer.confirmed) {
+        offer.confirmed=true;offer.confirmNote=e.payload.note;
+      }
+    }
+  }
+  for(const n of needs){
+    if(n.offers.some(o=>o.confirmed)) n.state='CONFIRMED_BY_REQUESTER';
+    else if(n.offers.some(o=>o.reported)) n.state='REPORTED_UNCONFIRMED';
+    else if(n.offers.some(o=>o.accepted)) n.state='ACCEPTED_IN_PROGRESS';
+    else if(n.offers.length) n.state='OFFERED';
+  }
+  return needs.sort((a,b)=>b.at.localeCompare(a.at));
+}
+function exportBundle(events, node){
+  return {protocol:BUNDLE,exportedAt:new Date().toISOString(),exportingNode:node.id,
+   note:'Unsigned self-attested packets. Not identity, verified work, or reLATTE receipts.',events};
+}
+function parseBundle(input){
+  let value=typeof input==='string'?JSON.parse(input):input;
+  const packets=value?.protocol===PROTOCOL?[value]:value?.protocol===BUNDLE?value.events:null;
+  if(!Array.isArray(packets)||packets.length>1000) throw Error('Expected a NODE ZERO packet or bundle (max 1000).');
+  for(const packet of packets){const issue=validatePacket(packet);if(issue)throw Error(issue);}
+  return packets;
+}
+function matches(need, capabilities){
+  const map={food:'food',transport:'transport',tools:'tools',labor:'labor',creative:'creative'};
+  return !!map[need.payload.category] && capabilities.includes(map[need.payload.category]);
+}
+
+
+const $=s=>document.querySelector(s);
+const storePrefix='nodezero/';
+const channelName='node-zero/local-room/v0';
+const capabilityNames={food:'Food help',transport:'Transport',tools:'Tools',labor:'Volunteer work',creative:'Print / create',organize:'Organize'};
+const kindLabels={'need.opened':'Need held / shared','offer.proposed':'Offer proposed','offer.accepted':'Offer accepted','fulfillment.reported':'Fulfillment reported','fulfillment.confirmed':'Requester confirmed'};
+const ts = s => {try{return new Date(s).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'});}catch{return s;}};
+const safe = x => String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function notify(message){const t=$('#toast');t.textContent=message;t.classList.add('visible');clearTimeout(notify.timer);notify.timer=setTimeout(()=>t.classList.remove('visible'),3300);}
+function dom(tag,cl,text){const el=document.createElement(tag);if(cl)el.className=cl;if(text!==undefined)el.textContent=text;return el;}
+function button(text,fn,cl=''){const b=dom('button',cl,text);b.type='button';b.addEventListener('click',fn);return b;}
+function tag(text,cl=''){return dom('span','badge '+cl,text);}
+function empty(text){return dom('div','empty',text);}
+function promptInput(parent,placeholder,onSubmit){
+ const form=dom('form','prompt-row');const field=dom('input');field.maxLength=220;field.required=true;field.placeholder=placeholder;field.setAttribute('aria-label',placeholder);
+ const b=dom('button','primary','Record');b.type='submit';form.append(field,b);form.addEventListener('submit',e=>{e.preventDefault();const message=field.value.trim();if(!message)return;onSubmit(message);});parent.append(form);field.focus();
+}
+let nodeId;
+try{nodeId=sessionStorage.getItem('node-zero/id')||id();sessionStorage.setItem('node-zero/id',nodeId);}catch{nodeId=id();}
+const storageKey=storePrefix+nodeId;
+const defaults={alias:'Node '+nodeId.slice(0,5),capabilities:['creative'],events:[],inbox:[],published:[],declined:[]};
+let data;
+try{data={...defaults,...JSON.parse(localStorage.getItem(storageKey)||'{}')};}catch{data={...defaults};notify('Private storage is unavailable: data may not persist.');}
+if(!Array.isArray(data.events))data.events=[];
+if(!Array.isArray(data.inbox))data.inbox=[];
+if(!Array.isArray(data.published))data.published=[];
+if(!Array.isArray(data.capabilities))data.capabilities=[];
+const me=()=>({id:nodeId,alias:data.alias});
+const peers=new Map();
+let channel;
+try{channel=new BroadcastChannel(channelName);}catch{}
+function persist(){
+ try{localStorage.setItem(storageKey,JSON.stringify(data));}catch{notify('Storage full or blocked. Export your event history now.');}
+ render();
+}
+function remember(packet){const r=ingest(data.events,packet);if(r.added){data.events=r.events;persist();}else if(r.error!=='Duplicate')notify(r.error);return r.added;}
+function send(packet){if(!channel)return notify('Same-site room unavailable. Export a packet instead.');channel.postMessage({type:'event',packet});}
+function create(kind,fields){const p=makePacket(kind,me(),fields);remember(p);data.published.push(p.id);persist();send(p);return p;}
+function publishNeed(packet){if(packet.node!==nodeId)return;
+ if(!data.published.includes(packet.id))data.published.push(packet.id);
+ persist();send(packet);notify('Shared with currently open same-site nodes. Not published online.');}
+function announce(type='presence'){
+ if(!channel)return;
+ channel.postMessage({type,id:nodeId,alias:data.alias.slice(0,48),capabilities:data.capabilities.filter(x=>x in capabilityNames),at:Date.now()});
+}
+function onIncoming(packet){
+ const issue=validatePacket(packet);if(issue)return;
+ if(packet.node===nodeId)return;
+ if(packet.target && packet.target!==nodeId)return;
+ if(data.events.some(x=>x.id===packet.id)||data.inbox.some(x=>x.id===packet.id)||data.declined?.includes(packet.id))return;
+ if(data.inbox.length>=250){notify('Inbox full. Review or clear pending packets.');return;}
+ data.inbox.push(packet);persist();notify('Incoming packet held for your review.');
+}
+if(channel)channel.addEventListener('message',e=>{
+ const m=e.data;if(!m || typeof m!=='object')return;
+ if(m.type==='event'){onIncoming(m.packet);return;}
+ if(['hello','presence'].includes(m.type)&&typeof m.id==='string'&&m.id!==nodeId&&/^[a-zA-Z0-9_-]{8,80}$/.test(m.id)){
+  peers.set(m.id,{id:m.id,alias:String(m.alias||'Unnamed').slice(0,48),capabilities:Array.isArray(m.capabilities)?m.capabilities.filter(x=>x in capabilityNames):[],lastSeen:Date.now()});
+  if(m.type==='hello')announce();renderPeers();
+ }
+});
+setInterval(()=>{announce();for(const [k,p] of peers){if(Date.now()-p.lastSeen>19000)peers.delete(k);}renderPeers();},7000);
+setTimeout(()=>announce('hello'),300);
+window.addEventListener('visibilitychange',()=>{if(!document.hidden)announce('hello')});
+function eventFor(kind,needId,offerId){return data.events.some(e=>e.kind===kind&&e.needId===needId&&e.offerId===offerId);}
+function renderNeeds(){
+ const list=$('#needs');list.replaceChildren();const needs=project(data.events);
+ $('#need-total').textContent=String(needs.length);
+ if(!needs.length){list.append(empty('No needs yet. Open a small, real-world question—or use “Add example” to rehearse the loop.'));return;}
+ for(const n of needs){
+  const owned=n.node===nodeId;
+  const shared=!owned||data.published.includes(n.id);
+  const card=dom('article','card');const top=dom('div','cardtop');
+  top.append(tag(n.payload.category),tag(n.state,n.state.startsWith('CONFIRMED')?'green':n.state.startsWith('REPORTED')?'orange':''));
+  top.append(tag(owned?(shared?'MY NODE · SHARED':'MY NODE · HELD'):'RECEIVED / UNSIGNED',shared?'':'orange'));
+  card.append(top,dom('h3','',n.payload.title));
+  if(n.payload.detail)card.append(dom('p','',n.payload.detail));
+  card.append(dom('div','meta',[n.alias,n.payload.region,n.payload.quantity,ts(n.at)].filter(Boolean).join(' · ')));
+  const actions=dom('div','actions');
+  if(owned&&!shared)actions.append(button('↗ Share to room',()=>publishNeed(n),'strong'));
+  actions.append(button('↓ Save need packet',()=>downloadJSON(n,`need-${n.id.slice(0,8)}.json`)));
+  if(!owned && !n.offers.some(o=>o.node===nodeId)){
+   // Offer button remains available even when another offer exists; users decide independently.
+   const b=button('＋ Offer help',()=>{b.disabled=true;promptInput(card,'What can you voluntarily offer?',msg=>{
+     create('offer.proposed',{needId:n.id,offerId:'',target:n.node,payload:{message:msg}});
+     notify('Offer sent to same-site room. Ask the requester to review their inbox.');
+   });},'strong');
+   if(n.state!=='CONFIRMED_BY_REQUESTER')actions.append(b);
+  }
+  card.append(actions);
+  for(const o of n.offers){
+   const row=dom('div','offer-row');row.append(dom('strong','',`${o.alias} offers:`),dom('p','',o.payload.message));
+   const state=o.confirmed?'REQUESTER CONFIRMED':o.reported?'REPORT SUBMITTED, NOT CONFIRMED':o.accepted?'ACCEPTED':'PROPOSED';
+   row.append(dom('div','meta',state));
+   const oa=dom('div','actions');
+   if(owned&&!o.accepted&&!n.offers.some(a=>a.accepted))oa.append(button('Accept this offer',()=>{
+     create('offer.accepted',{needId:n.id,offerId:o.id,target:o.node});notify('Acceptance sent. No physical work has been done.');
+   },'strong'));
+   if(o.node===nodeId&&o.accepted&&!o.reported){
+    const b=button('Report work',()=>{b.disabled=true;promptInput(row,'What did you actually do? (self-report only)',note=>{
+      create('fulfillment.reported',{needId:n.id,offerId:o.id,target:n.node,payload:{note}});
+    });},'strong');oa.append(b);
+   }
+   if(owned&&o.reported&&!o.confirmed){oa.append(button('Review / confirm report',()=>{
+    promptInput(row,'What can you personally confirm?',note=>{create('fulfillment.confirmed',{needId:n.id,offerId:o.id,target:o.node,payload:{note}});});
+   },'strong'));}
+   row.append(oa);
+   if(o.reportNote)row.append(dom('div','hint','Report: '+o.reportNote));
+   if(o.confirmNote)row.append(dom('div','hint','Requester statement: '+o.confirmNote));
+   card.append(row);
+  }
+  if(owned&&!shared)card.append(dom('div','hint','Private to this browser node until you explicitly share or export it.'));
+  list.append(card);
+ }
+}
+function renderPeers(){
+ const active=[...peers.values()].filter(p=>Date.now()-p.lastSeen<=19000);
+ $('#peer-count').textContent=`${active.length} other node${active.length===1?'':'s'}`;
+ $('#peers-total').textContent=String(active.length);
+ const list=$('#peers');list.replaceChildren();
+ if(!channel)list.append(empty('Browser room unsupported. Manual JSON handoff still works.'));
+ else if(!active.length)list.append(empty('No other tab discovered yet. Open this same address in a second tab; each tab gets its own node identity.'));
+ const held=project(data.events).filter(n=>n.node===nodeId&&data.published.includes(n.id)&&n.state!=='CONFIRMED_BY_REQUESTER');
+ for(const p of active){const card=dom('article','card');card.append(dom('h3','',p.alias));card.append(dom('div','meta','Node '+p.id.slice(0,8)+' · last seen now'));
+  const caps=dom('div','cardtop');for(const c of p.capabilities)caps.append(tag(capabilityNames[c]));card.append(caps);
+  const matching=held.filter(n=>matches(n,p.capabilities));
+  if(matching.length)card.append(dom('p','hint',`${matching.length} possible category match(es) with your shared needs. This is not a commitment.`));
+  list.append(card);
+ }
+}
+function renderCapabilities(){
+ const container=$('#capabilities');container.replaceChildren();
+ for(const [key,label] of Object.entries(capabilityNames)){
+  const wrap=dom('label','cap');const check=document.createElement('input');check.type='checkbox';check.checked=data.capabilities.includes(key);const text=dom('span','',label);
+  check.addEventListener('change',()=>{data.capabilities=check.checked?[...new Set([...data.capabilities,key])]:data.capabilities.filter(x=>x!==key);persist();announce();});
+  wrap.append(check,text);container.append(wrap);
+ }
+}
+function renderInbox(){
+ const list=$('#inbox');list.replaceChildren();$('#inbox-total').textContent=String(data.inbox.length);
+ if(!data.inbox.length){list.append(empty('No incoming packets held. Another node can send a need, offer, acceptance, report, or confirmation.'));return;}
+ for(const p of data.inbox){const card=dom('article','card');const type=kindLabels[p.kind]||p.kind;card.append(tag('HELD — NOT ADMITTED','orange'),dom('h3','',type),dom('div','meta',`${p.alias} · ${ts(p.at)} · ${p.node.slice(0,8)}`));
+  const detail=p.kind==='need.opened'?p.payload.title:p.kind==='offer.proposed'?p.payload.message:p.payload.note||'No note';card.append(dom('p','',detail));
+  const buttons=dom('div','actions');buttons.append(button('Keep on this node',()=>{const result=ingest(data.events,p);if(result.added)data.events=result.events;data.inbox=data.inbox.filter(x=>x.id!==p.id);persist();notify(result.added?'Admitted as unsigned testimony':'Packet already recorded.');},'strong'));
+  buttons.append(button('Refuse / discard',()=>{data.inbox=data.inbox.filter(x=>x.id!==p.id);data.declined=[...(data.declined||[]),p.id].slice(-1000);persist();}));
+  buttons.append(button('↓ Export packet',()=>downloadJSON(p,`node-zero-${p.kind}-${p.id.slice(0,8)}.json`)));
+  card.append(buttons);list.append(card);
+ }
+}
+function renderHistory(){const root=$('#events');root.replaceChildren();$('#events-total').textContent=String(data.events.length);
+ if(!data.events.length){root.append(empty('No trace yet. An admitted packet is a recorded assertion, not evidence of an independently confirmed action.'));return;}
+ for(const [i,e] of [...data.events].reverse().entries()){
+  const row=dom('div','entry');row.append(dom('div','entry-number',String(data.events.length-i).padStart(3,'0')));
+  const body=dom('div','entry-main');body.append(dom('div','entry-kind',kindLabels[e.kind]||e.kind));body.append(dom('div','entry-body',`${e.alias} · ${e.needId.slice(0,9)} · ${e.node===nodeId?'this node':'imported / unsigned'}`));row.append(body,dom('span','entry-time',ts(e.at)));root.append(row);
+ }
+}
+function render(){ $('#node-identity').textContent=`${data.alias} · ${nodeId.slice(0,7)}`;renderNeeds();renderPeers();renderInbox();renderHistory();}
+function downloadText(text,filename,mime){const blob=new Blob([text],{type:mime});const href=URL.createObjectURL(blob);const a=document.createElement('a');a.href=href;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),1000);}
+function downloadJSON(obj,name){downloadText(JSON.stringify(obj,null,2),name,'application/json');}
+function importText(raw){try{if(raw.length>2000000)throw Error('Import too large');const packets=parseBundle(raw);let count=0;
+ for(const p of packets){if(p.node===nodeId||data.events.some(e=>e.id===p.id)||data.inbox.some(e=>e.id===p.id))continue;
+  if(data.inbox.length>=250)break;data.inbox.push(p);count++;
+ }
+ persist();notify(`${count} packet(s) held for explicit review. No automatic admission.`);
+ }catch(err){notify('Import refused: '+err.message);}}
+function getPublicNeeds(){return project(data.events).filter(n=>n.node!==nodeId||data.published.includes(n.id));}
+function bulletinHtml(title,notes){const needs=getPublicNeeds();const date=new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'});
+ const articles=needs.map(n=>`<div class="item"><strong>${safe(n.payload.title)}</strong><small>${safe(n.payload.category)} · ${safe(n.payload.region)} · ${safe(n.state.replaceAll('_',' ').toLowerCase())}</small><p>${safe(n.payload.detail||'')}</p></div>`).join('')||'<em>No shared Garden needs on this node yet.</em>';
+ const noteMarkup=safe(notes||'No meeting notes recorded.').replace(/\n/g,'<br>');
+ return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safe(title)}</title><style>body{font:17px/1.55 Georgia,serif;color:#192c26;max-width:820px;padding:35px 26px;margin:auto}header{text-align:center;border-block:5px double #193b2c;padding:16px}h1{font-size:44px;line-height:1.1;margin:0}small{font:11px Arial;letter-spacing:.06em;display:block;color:#687d6d;text-transform:uppercase}main{display:grid;grid-template-columns:1fr 1fr;gap:30px}h2{font-size:23px;border-bottom:1px solid #bbb}.item{padding:12px 0;border-bottom:1px solid #ddd}.item strong{display:block}.item p{font-size:14px;margin:5px 0}footer{border-top:2px solid #173427;padding-top:12px;font:12px Arial;margin-top:30px;color:#60736a}@media(max-width:650px){main{grid-template-columns:1fr}h1{font-size:34px}}@media print{body{padding:0}}</style></head><body><header><small>STATIC LIVE / FIELD BULLETIN / REVIEW DRAFT</small><h1>${safe(title)}</h1><small>${safe(date)}</small></header><main><section><h2>From the gathering</h2><p>${noteMarkup}</p></section><section><h2>The Garden board</h2>${articles}</section></main><footer>Draft assembled locally from voluntarily recorded notes and shared Garden packets. An offer is not a commitment; a report is not verified physical completion. No automatic publication or messaging.</footer></body></html>`;
+}
+function makeBulletin(){const title=$('#meeting-name').value.trim()||'The Garden — Field Notes';const notes=$('#meeting-notes').value.trim();const root=$('#bulletin');root.replaceChildren();root.className='paper';
+ const head=dom('div','paper-top');head.append(dom('div','eyebrow','STATIC LIVE / FIRST LOCAL EDITION'),dom('h2','',title),dom('div','paper-date',new Date().toLocaleDateString()));root.append(head);
+ const cols=dom('div','columns');const left=dom('section');left.append(dom('h3','','From the gathering'),dom('pre','',notes||'No notes entered yet.'));
+ const right=dom('section');right.append(dom('h3','','The Garden board'));
+ for(const n of getPublicNeeds()){const wrap=dom('div','paper-card');wrap.append(dom('strong','',n.payload.title),dom('small','',`${n.payload.region} · ${n.state.replaceAll('_',' ').toLowerCase()}`));right.append(wrap);}
+ if(!getPublicNeeds().length)right.append(dom('p','','No shared needs held on this node yet.'));
+ cols.append(left,right);root.append(cols,dom('p','hint','Human review required before sharing. The bulletin is a local draft, not a publication.'));
+ const actions=dom('div','actions');actions.append(button('↓ Download printable HTML',()=>downloadText(bulletinHtml(title,notes),'static-live-first-edition.html','text/html')));
+ actions.append(button('Print / save as PDF',()=>window.print()));root.append(actions);notify('Bulletin composed locally from current held records.');
+}
+// UI controls
+for(const b of document.querySelectorAll('[data-tab]'))b.addEventListener('click',()=>{for(const t of document.querySelectorAll('.tabs button'))t.classList.toggle('active',t===b);for(const t of document.querySelectorAll('.tab'))t.classList.toggle('active',t.id==='tab-'+b.dataset.tab);});
+$('#edit-alias').addEventListener('click',()=>{const choice=window.prompt('Public node nickname (no real name required):',data.alias);if(choice!==null&&choice.trim().length&&choice.trim().length<=48){data.alias=choice.trim();persist();announce();}});
+$('#need-form').addEventListener('submit',e=>{e.preventDefault();try{
+ const title=$('#need-title').value.trim(),region=$('#need-region').value.trim(),category=$('#need-category').value,quantity=$('#need-qty').value.trim(),detail=$('#need-detail').value.trim();
+ const p=makePacket('need.opened',me(),{payload:{title,category,region,quantity,detail}});remember(p);$('#need-title').value='';$('#need-detail').value='';$('#need-qty').value='';notify('Held locally. Share only when you choose.');
+ }catch(err){notify(err.message);}});
+$('#seed-demo').addEventListener('click',()=>{const p=makePacket('need.opened',me(),{payload:{title:'EXAMPLE · Help move three boxes of pantry food',category:'transport',region:'Sample neighborhood',quantity:'3 boxes',detail:'FICTIONAL practice card. Not a real request or partner commitment.'}});remember(p);notify('Fictional rehearsal card held locally.');});
+$('#announce').addEventListener('click',()=>{announce('hello');notify('Presence announced to other open same-site tabs.');});
+$('#export-bundle').addEventListener('click',()=>downloadJSON(exportBundle(data.events,me()),'node-zero-unsigned-events.json'));
+$('#copy-bundle').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(JSON.stringify(exportBundle(data.events,me()),null,2));notify('Bundle copied. Only share with intended recipients.');}catch{notify('Clipboard blocked; use Export all events instead.');}});
+$('#import-paste').addEventListener('click',()=>importText($('#import-json').value));
+$('#import-file').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;if(f.size>2000000)return notify('File exceeds 2 MB');importText(await f.text());e.target.value='';});
+$('#make-bulletin').addEventListener('click',makeBulletin);
+$('#reset-node').addEventListener('click',()=>{if(window.confirm('Delete events, inbox, and alias for THIS node? Export first if needed. This cannot be undone.')){try{localStorage.removeItem(storageKey);}catch{} data={...defaults};persist();notify('This node was cleared.');}});
+renderCapabilities();render();
+</script></body></html>
