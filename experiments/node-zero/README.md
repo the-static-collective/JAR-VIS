@@ -2,6 +2,10 @@
 
 A zero-cost, dependency-free browser specimen for a voluntary **need → offer → acceptance → reported work → requester confirmation** cycle. Each tab is one local node. Local presence and packets travel between tabs on the **same website origin** using BroadcastChannel; all imported events enter a receiver-controlled HOLD inbox. JSON export/import provides a manual cross-device path. Static Live makes an HTML/print bulletin from reviewed notes and shared Garden entries. No remote backend, AI API, tracking, credentials, third-party scripts, or payments.
 
+## Standalone source in this branch
+
+This experimental branch carries a **single self-contained `index.html`** with embedded CSS and JavaScript. Open it from an HTTPS static site or on localhost. The separately downloadable source kit contains the modular `core.mjs`, `app.mjs`, `style.css`, and Node tests; those files are not committed here. This branch is not merged into `main`.
+
 ## Start
 
 ```bash
@@ -45,7 +49,7 @@ For true human use, don't claim a real exchange until an actual person has volun
 ## Test
 
 ```bash
-node --test test/core.test.mjs
+node --test test/core.test.mjs # run from the separately downloadable modular kit
 ```
 
-To host it on a free static site, publish these exact four files (`index.html`, `style.css`, `core.mjs`, `app.mjs`) under a single HTTPS directory. Do not enable public Garden intake without a consent, safety, abuse moderation, and authenticated authority design.
+To host it on a free static site, publish this branch's standalone `index.html` under a single HTTPS directory. Do not enable public Garden intake without a consent, safety, abuse moderation, and authenticated authority design.
