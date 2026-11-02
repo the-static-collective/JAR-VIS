@@ -8,7 +8,7 @@
     <div class="status-dot"><span class="dot"></span> LOCAL / UNSIGNED</div>
   </header>
   <section class="intro"><p><strong>Intelligence doesn't live in a box.</strong> It lives in the crossings between people and what they can do.</p><span>Prototype · no accounts · no payments · no AI calls</span></section>
-  <div class="nodebar"><div><small>THIS NODE</small><strong id="node-identity">Loading…</strong></div><div><small>NEARBY ON THIS WEBSITE</small><strong id="peer-count">0 other nodes</strong></div><button id="edit-alias" class="mini" type="button">Rename</button></div>
+  <div class="nodebar"><div><small>THIS NODE</small><strong id="node-identity">Loading…</strong></div><div><small>RECENTLY SEEN · SAME BROWSER</small><strong id="peer-count">0 other nodes</strong></div><button id="edit-alias" class="mini" type="button">Rename</button></div>
   <nav class="tabs" aria-label="Sections"><button data-tab="garden" class="active">01 Garden</button><button data-tab="network">02 Network</button><button data-tab="live">03 Static Live</button><button data-tab="ledger">04 Ledger</button></nav>
 
   <main>
@@ -20,10 +20,10 @@
   </section>
 
   <section id="tab-network" class="tab">
-    <div class="section-heading"><div><div class="eyebrow">THE ONE–TWO PUNCH / 02</div><h2>The computer without a computer.</h2><p>This browser tab is a node. Another tab on the same website is another node. They discover each other without a server.</p></div></div>
-    <div class="panel"><h3>Your node capabilities</h3><p class="muted">Declare what you <em>might</em> help with. These are possibilities, not promises or permission to act.</p><div class="cap-grid" id="capabilities"></div><div class="form-footer"><span>Presence is temporary. Peer identity is not authenticated.</span><button class="secondary" id="announce" type="button">↗ Announce again</button></div></div>
-    <div class="section-heading compact"><div><div class="eyebrow">DISCOVERY</div><h2>Other nodes <span id="peers-total" class="count">0</span></h2></div></div><div id="peers" class="card-list"></div>
-    <div class="panel footnote"><strong>Cross-device path:</strong> use Ledger → Export packet bundle, transfer it however you choose, and import it on another device. It is manual and unsigned. There is no internet synchronization, remote discovery, identity verification, or third-party message delivery.</div>
+    <div class="section-heading"><div><div class="eyebrow">THE ONE–TWO PUNCH / 02</div><h2>The computer without a computer.</h2><p>This browser tab is a node. Another tab in the SAME browser profile can act as a separate node. This local room does not connect different devices or browsers.</p></div></div>
+    <div class="panel"><h3>Your node capabilities</h3><p class="muted">Declare what you <em>might</em> help with. These are possibilities, not promises or permission to act.</p><div class="cap-grid" id="capabilities"></div><div class="form-footer"><span>Presence is temporary. Peer identity is not authenticated.</span><button class="secondary" id="announce" type="button">↻ Scan this browser</button></div></div>
+    <div class="section-heading compact"><div><div class="eyebrow">DISCOVERY</div><h2>Other nodes <span id="peers-total" class="count">0</span></h2></div></div><div id="peers" class="card-list"></div><div class="panel footnote" id="room-diagnostics" role="status" aria-live="polite"></div>
+    <div class="panel footnote"><strong>Cross-device path:</strong> use Ledger → Export packet bundle, transfer it however you choose, and import it on another device. It is manual and unsigned. This does not synchronize across different phones or browsers. There is no remote discovery, identity verification, or third-party message delivery.</div>
   </section>
 
   <section id="tab-live" class="tab">
@@ -161,10 +161,19 @@ function promptInput(parent,placeholder,onSubmit){
  const form=dom('form','prompt-row');const field=dom('input');field.maxLength=220;field.required=true;field.placeholder=placeholder;field.setAttribute('aria-label',placeholder);
  const b=dom('button','primary','Record');b.type='submit';form.append(field,b);form.addEventListener('submit',e=>{e.preventDefault();const message=field.value.trim();if(!message)return;onSubmit(message);});parent.append(form);field.focus();
 }
+// SessionStorage may be COPIED into a newly opened tab. A clone must not impersonate its opener.
+const instanceId=id();
+const presencePrefix=storePrefix+'presence/';
+const presenceExpiry=180000; // browsers can suspend background tabs for minutes, especially on mobile
 let nodeId;
-try{nodeId=sessionStorage.getItem('node-zero/id')||id();sessionStorage.setItem('node-zero/id',nodeId);}catch{nodeId=id();}
-const storageKey=storePrefix+nodeId;
-const defaults={alias:'Node '+nodeId.slice(0,5),capabilities:['creative'],events:[],inbox:[],published:[],declined:[]};
+try{nodeId=sessionStorage.getItem('node-zero/id')||id();}catch{nodeId=id();}
+try{
+ const claimed=JSON.parse(localStorage.getItem(presencePrefix+nodeId)||'null');
+ if(claimed && claimed.instance!==instanceId && Date.now()-claimed.at<presenceExpiry){nodeId=id();}
+ sessionStorage.setItem('node-zero/id',nodeId);
+}catch{}
+let storageKey=storePrefix+nodeId;
+let defaults={alias:'Node '+nodeId.slice(0,5),capabilities:['creative'],events:[],inbox:[],published:[],declined:[]};
 let data;
 try{data={...defaults,...JSON.parse(localStorage.getItem(storageKey)||'{}')};}catch{data={...defaults};notify('Private storage is unavailable: data may not persist.');}
 if(!Array.isArray(data.events))data.events=[];
@@ -180,14 +189,66 @@ function persist(){
  render();
 }
 function remember(packet){const r=ingest(data.events,packet);if(r.added){data.events=r.events;persist();}else if(r.error!=='Duplicate')notify(r.error);return r.added;}
-function send(packet){if(!channel)return notify('Same-site room unavailable. Export a packet instead.');channel.postMessage({type:'event',packet});}
+function send(packet){
+ // BroadcastChannel is a speed-up; signed-off public packets also live in the sender's local room record.
+ // A mobile tab may be suspended before a broadcast is heard; room scan reoffers it on return.
+ if(channel)channel.postMessage({type:'event',packet});
+}
 function create(kind,fields){const p=makePacket(kind,me(),fields);remember(p);data.published.push(p.id);persist();send(p);return p;}
 function publishNeed(packet){if(packet.node!==nodeId)return;
  if(!data.published.includes(packet.id))data.published.push(packet.id);
- persist();send(packet);notify('Shared with currently open same-site nodes. Not published online.');}
+ persist();send(packet);notify('Available to same-browser tabs when they scan the room. Not published online.');}
 function announce(type='presence'){
- if(!channel)return;
- channel.postMessage({type,id:nodeId,alias:data.alias.slice(0,48),capabilities:data.capabilities.filter(x=>x in capabilityNames),at:Date.now()});
+ const advertised={type,id:nodeId,instance:instanceId,alias:data.alias.slice(0,48),capabilities:data.capabilities.filter(x=>x in capabilityNames),at:Date.now()};
+ try{localStorage.setItem(presencePrefix+nodeId,JSON.stringify(advertised));}catch{}
+ if(channel)channel.postMessage(advertised);
+}
+function switchToNewNode(){
+ // Collision resolution favors the instance with the lexicographically smaller nonce.
+ // Its data is left intact; this new instance receives a new identity and empty ledger.
+ const oldNodeId=nodeId;
+ nodeId=id(); storageKey=storePrefix+nodeId;
+ defaults={alias:'Node '+nodeId.slice(0,5),capabilities:['creative'],events:[],inbox:[],published:[],declined:[]};
+ data={...defaults};
+ try{sessionStorage.setItem('node-zero/id',nodeId);}catch{}
+ peers.delete(oldNodeId);
+ persist();renderCapabilities();announce('hello');
+ notify('Copied tab identity detected: this tab is now a separate node.');
+}
+function scanRoom(){
+ // Same-origin storage is the fallback when mobile browsers suspend a background tab.
+ // Do not mistake this for remote discovery, authenticated identity, or proof someone is online.
+ const now=Date.now();let discovered=0;const keys=[];
+ try{for(let i=0;i<localStorage.length && keys.length<500;i++){
+  const k=localStorage.key(i);if(k && k.startsWith(storePrefix))keys.push(k);
+ }}catch{return;}
+ for(const key of keys){
+  if(!key.startsWith(presencePrefix))continue;
+  let p;try{p=JSON.parse(localStorage.getItem(key)||'null');}catch{continue;}
+  if(!p||typeof p.id!=='string'||typeof p.instance!=='string'||!Number.isFinite(p.at))continue;
+  if(p.id===nodeId){
+    if(p.instance!==instanceId && now-p.at<presenceExpiry && instanceId>p.instance)switchToNewNode();
+    continue;
+  }
+  if(now-p.at>presenceExpiry){try{localStorage.removeItem(key);}catch{}continue;}
+  if(!/^[a-zA-Z0-9_-]{8,80}$/.test(p.id))continue;
+  peers.set(p.id,{id:p.id,alias:String(p.alias||'Unnamed').slice(0,48),capabilities:Array.isArray(p.capabilities)?p.capabilities.filter(x=>x in capabilityNames):[],lastSeen:p.at});
+  discovered++;
+ }
+ // Deliver ONLY the packets their author explicitly shared, still to receiver-local HOLD.
+ // Cap scanning to avoid one oversized origin monopolizing the UI thread.
+ let checked=0;
+ for(const key of keys){
+  if(key.startsWith(presencePrefix)||key===storageKey||++checked>60)continue;
+  let foreign;try{foreign=JSON.parse(localStorage.getItem(key)||'null');}catch{continue;}
+  if(!foreign||!Array.isArray(foreign.events)||!Array.isArray(foreign.published))continue;
+  const allowed=new Set(foreign.published.slice(0,1000));
+  for(const packet of foreign.events.slice(-1000)){
+   if(allowed.has(packet?.id))onIncoming(packet);
+  }
+ }
+ for(const [k,p] of peers)if(now-p.lastSeen>presenceExpiry)peers.delete(k);
+ renderPeers();
 }
 function onIncoming(packet){
  const issue=validatePacket(packet);if(issue)return;
@@ -200,14 +261,19 @@ function onIncoming(packet){
 if(channel)channel.addEventListener('message',e=>{
  const m=e.data;if(!m || typeof m!=='object')return;
  if(m.type==='event'){onIncoming(m.packet);return;}
- if(['hello','presence'].includes(m.type)&&typeof m.id==='string'&&m.id!==nodeId&&/^[a-zA-Z0-9_-]{8,80}$/.test(m.id)){
+ if(['hello','presence'].includes(m.type)&&typeof m.id==='string'&&/^[a-zA-Z0-9_-]{8,80}$/.test(m.id)){
+  if(m.id===nodeId){if(m.instance && m.instance!==instanceId && instanceId>m.instance)switchToNewNode();return;}
   peers.set(m.id,{id:m.id,alias:String(m.alias||'Unnamed').slice(0,48),capabilities:Array.isArray(m.capabilities)?m.capabilities.filter(x=>x in capabilityNames):[],lastSeen:Date.now()});
   if(m.type==='hello')announce();renderPeers();
  }
 });
-setInterval(()=>{announce();for(const [k,p] of peers){if(Date.now()-p.lastSeen>19000)peers.delete(k);}renderPeers();},7000);
-setTimeout(()=>announce('hello'),300);
-window.addEventListener('visibilitychange',()=>{if(!document.hidden)announce('hello')});
+// Storage events also wake foreground tabs when their neighbor publishes or edits.
+window.addEventListener('storage',e=>{if(e.key?.startsWith(storePrefix))setTimeout(scanRoom,50);});
+setInterval(()=>{announce();scanRoom();},6000);
+setTimeout(()=>{announce('hello');scanRoom();},300);
+window.addEventListener('visibilitychange',()=>{if(!document.hidden){announce('hello');scanRoom();}});
+window.addEventListener('focus',()=>{announce('hello');scanRoom();});
+window.addEventListener('pagehide',()=>{try{const p=JSON.parse(localStorage.getItem(presencePrefix+nodeId)||'null');if(p?.instance===instanceId)localStorage.removeItem(presencePrefix+nodeId);}catch{}});
 function eventFor(kind,needId,offerId){return data.events.some(e=>e.kind===kind&&e.needId===needId&&e.offerId===offerId);}
 function renderNeeds(){
  const list=$('#needs');list.replaceChildren();const needs=project(data.events);
@@ -260,12 +326,12 @@ function renderNeeds(){
  }
 }
 function renderPeers(){
- const active=[...peers.values()].filter(p=>Date.now()-p.lastSeen<=19000);
+ const active=[...peers.values()].filter(p=>Date.now()-p.lastSeen<=presenceExpiry);
  $('#peer-count').textContent=`${active.length} other node${active.length===1?'':'s'}`;
  $('#peers-total').textContent=String(active.length);
+ const diagnostics=$('#room-diagnostics');if(diagnostics)diagnostics.textContent=`Site: ${location.origin} · BroadcastChannel: ${channel?'available':'unavailable'} · Local storage: ${(()=>{try{return typeof localStorage.length==='number'?'available':'unavailable';}catch{return 'unavailable';}})()} · Automatic discovery: same browser profile ONLY.`;
  const list=$('#peers');list.replaceChildren();
- if(!channel)list.append(empty('Browser room unsupported. Manual JSON handoff still works.'));
- else if(!active.length)list.append(empty('No other tab discovered yet. Open this same address in a second tab; each tab gets its own node identity.'));
+ if(!active.length)list.append(empty(channel?'No other node seen in this browser profile yet. Open the SAME URL in another tab of the SAME browser, then tap Scan room on each. Different devices and different browsers cannot discover one another here.':'BroadcastChannel unsupported. Browser storage may still discover tabs; try Scan room or transfer packets manually.'));
  const held=project(data.events).filter(n=>n.node===nodeId&&data.published.includes(n.id)&&n.state!=='CONFIRMED_BY_REQUESTER');
  for(const p of active){const card=dom('article','card');card.append(dom('h3','',p.alias));card.append(dom('div','meta','Node '+p.id.slice(0,8)+' · last seen now'));
   const caps=dom('div','cardtop');for(const c of p.capabilities)caps.append(tag(capabilityNames[c]));card.append(caps);
@@ -333,7 +399,7 @@ $('#need-form').addEventListener('submit',e=>{e.preventDefault();try{
  const p=makePacket('need.opened',me(),{payload:{title,category,region,quantity,detail}});remember(p);$('#need-title').value='';$('#need-detail').value='';$('#need-qty').value='';notify('Held locally. Share only when you choose.');
  }catch(err){notify(err.message);}});
 $('#seed-demo').addEventListener('click',()=>{const p=makePacket('need.opened',me(),{payload:{title:'EXAMPLE · Help move three boxes of pantry food',category:'transport',region:'Sample neighborhood',quantity:'3 boxes',detail:'FICTIONAL practice card. Not a real request or partner commitment.'}});remember(p);notify('Fictional rehearsal card held locally.');});
-$('#announce').addEventListener('click',()=>{announce('hello');notify('Presence announced to other open same-site tabs.');});
+$('#announce').addEventListener('click',()=>{announce('hello');scanRoom();notify('Scanned other tabs in this browser profile. Not a cross-device search.');});
 $('#export-bundle').addEventListener('click',()=>downloadJSON(exportBundle(data.events,me()),'node-zero-unsigned-events.json'));
 $('#copy-bundle').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(JSON.stringify(exportBundle(data.events,me()),null,2));notify('Bundle copied. Only share with intended recipients.');}catch{notify('Clipboard blocked; use Export all events instead.');}});
 $('#import-paste').addEventListener('click',()=>importText($('#import-json').value));
