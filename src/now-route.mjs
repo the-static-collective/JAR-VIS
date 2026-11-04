@@ -121,6 +121,7 @@ export class NowRoute {
     const o=this.offers.get(r.offerId), n=this.needs.get(needId);
     if (this.clock()>=Math.min(o.expiresAt,n.expiresAt)) throw ERR('ROUTE_EXPIRED',409);
     if (accept!==true && accept!==false) throw ERR('RESPONSE_REQUIRED');
+    if (accept && (o.state!=='OPEN' || n.state!=='OPEN')) throw ERR('ROUTE_NO_LONGER_AVAILABLE',409);
     r.state=accept?'ACCEPTED':'DECLINED';
     if (accept) {o.state='RESERVED';n.state='RESERVED';}
     this.event(accept?'RECIPIENT_ACCEPTED':'RECIPIENT_DECLINED',r.id);
