@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {projectPublicGarden,fetchPublicGarden,GARDEN_PUBLIC_FEED} from '../src/pantry-gate-public-source.mjs';
+import {readFileSync} from 'node:fs';
 
 const fixture={
   schema:'garden/public-overview-v1',
@@ -54,4 +55,22 @@ test('oversized or invalid public feeds fail closed',async()=>{
  await assert.rejects(()=>fetchPublicGarden({fetchImpl:async()=>({ok:true,headers:{get:()=>76000},text:async()=>''})}),/OVERSIZED/);
  await assert.rejects(()=>fetchPublicGarden({fetchImpl:async()=>({ok:true,headers:{get:()=>null},text:async()=>'{oops'})}),/MALFORMED/);
  await assert.rejects(()=>fetchPublicGarden({fetchImpl:async()=>({ok:false,status:502})}),/UNAVAILABLE/);
+});
+
+test('unapplied NOW-ROUTE schema isolates participation from existing Garden authority',()=>{
+ const sql=readFileSync(new URL('../docs/proposals/NOW-ROUTE-PANTRY-GATE-001.sql',import.meta.url),'utf8');
+ for(const phrase of [
+  'CREATE TABLE public.now_route_participations',
+  'CREATE TABLE public.now_route_crossings',
+  'ENABLE ROW LEVEL SECURITY',
+  'now_route_one_active_offer',
+  'now_route_one_active_need',
+  'explicit_matching_opt_in = true',
+  'REVOKE ALL ON TABLE public.now_route_crossings FROM PUBLIC, anon, authenticated',
+  'REVOKE ALL ON TABLE public.now_route_participations FROM PUBLIC, anon, authenticated',
+ ]) assert.ok(sql.includes(phrase),'schema guard missing: '+phrase);
+ assert.ok(!sql.includes('ALTER TABLE public.garden_entries'));
+ assert.ok(!sql.includes('DROP TABLE'));
+ assert.ok(!sql.includes('TRUNCATE'));
+ assert.ok(!sql.includes('CREATE POLICY'),'no unreviewed direct client access policies');
 });
