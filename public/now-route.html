@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>NOW ROUTE · Make a good thing happen</title>
+  <link rel="stylesheet" href="/now-route.css">
+  <script type="module" src="/now-route.js"></script>
+</head>
+<body>
+<header>
+  <p class="eyebrow">JAR;VIS / NOW-ROUTE 001</p>
+  <h1>Make a good thing happen. <span>Now.</span></h1>
+  <p>Someone has extra. Someone nearby could use it. Give the two a way to find each other.</p>
+  <div class="warning"><strong>Local demonstration only.</strong> Fictional participants, approximate example places, no actual recipients, no notifications, no real-world dispatch or food-safety verification. Do not enter private addresses or personal information.</div>
+</header>
+<main>
+  <section class="panel">
+    <h2>1. I have extra</h2>
+    <p>What could you give away?</p>
+    <form id="offer">
+      <label>What's available?
+        <textarea name="description" maxlength="280" required>I have extra fish, available for free.</textarea>
+      </label>
+      <div class="pair">
+        <label>Available for
+          <select name="expiresMinutes"><option value="30">30 minutes</option><option value="45" selected>45 minutes</option><option value="60">1 hour</option><option value="120">2 hours</option></select>
+        </label>
+        <label>Within
+          <select name="radiusMiles"><option value="2">2 miles</option><option value="5" selected>5 miles</option><option value="10">10 miles</option></select>
+        </label>
+      </div>
+      <label>Approximate example area
+        <select name="zone"><option value="center">Waseca center (fictional)</option><option value="north">Waseca north (fictional)</option><option value="far">Outside the 5-mile area (fictional)</option></select>
+      </label>
+      <label class="check"><input type="checkbox" name="coldChainAttested"> For any food requiring refrigeration, I affirm it has been kept safely cold. This statement is not independently verified.</label>
+      <button type="submit">Offer this gift</button>
+    </form>
+  </section>
+  <section class="panel">
+    <h2>2. I could use</h2>
+    <p>Describe a need and choose to receive relevant proposals.</p>
+    <form id="need">
+      <label>What would help?
+        <textarea name="description" maxlength="280" required>I could use some groceries today.</textarea>
+      </label>
+      <div class="pair">
+        <label>My approximate example area
+          <select name="zone"><option value="north">Waseca north (fictional)</option><option value="center">Waseca center (fictional)</option><option value="far">Outside the 5-mile area (fictional)</option></select>
+        </label>
+        <label>My pickup travel estimate
+          <select name="estimatedTravelMinutes"><option value="5">5 minutes</option><option value="12" selected>12 minutes</option><option value="25">25 minutes</option><option value="55">55 minutes</option></select>
+        </label>
+      </div>
+      <label class="check"><input type="checkbox" name="allowMatching" required> Yes, show me relevant opportunities. I can decline any offer.</label>
+      <button type="submit">Look for nearby help</button>
+    </form>
+  </section>
+  <section class="panel wide" aria-live="polite">
+    <h2>3. Live routing desk</h2>
+    <p>Each suggestion is only a proposal. A recipient must say yes, and a reported handoff still needs separate confirmation.</p>
+    <div class="toolbar"><button type="button" id="sample" class="secondary">Try fictional fish example</button><button type="button" id="reset" class="quiet">Clear local demo</button><span id="status">Opening local route…</span></div>
+    <div class="two"><div><h3>Available offers</h3><div id="offers"></div></div><div><h3>Needs opted in</h3><div id="needs"></div></div></div>
+    <h3>Suggestions and handoffs</h3><div id="suggestions"></div><div id="routes"></div>
+  </section>
+</main>
+<footer>NOW-ROUTE is an in-memory local specimen. No public release, payment, address exchange, verified delivery, or real person matching. Your browser is connected only to your local JAR;VIS workbench.</footer>
+</body>
+</html>
