@@ -38,4 +38,7 @@ jobs:
           grep -q 'nr03-private-ticket-v1' /tmp/nr03-client.js
           status=$(curl -Ss --max-time 25 -o /tmp/nr03-deny.json -w '%{http_code}' -H 'origin: https://untrusted.example' -H 'content-type: application/json' -d '{"action":"status","secret":"nonsense"}' "$base")
           test "$status" = 403
-          echo "ONLINE PAGE + HEALTH + SCRIPT + OFF-ORIGIN DENIAL PASS"
+          accepted=$(curl -Ss --max-time 25 -o /tmp/nr03-invalid.json -w '%{http_code}' -H 'origin: https://kbhqacsdvjsstzyplqij.supabase.co' -H 'content-type: application/json' -d '{"action":"status","secret":"0000000000000000000000000000000000000000000000000000000000000000"}' "$base")
+          test "$accepted" = 400
+          grep -q 'TICKET_NOT_FOUND' /tmp/nr03-invalid.json
+          echo "ONLINE PAGE + HEALTH + SCRIPT + ORIGIN DENIAL + DATABASE-BACKED INVALID-TICKET TEST PASS"
