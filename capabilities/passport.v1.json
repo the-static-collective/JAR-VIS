@@ -26,7 +26,14 @@
         "href": "https://github.com/the-static-collective/JAR-VIS/blob/main/docs/WORK-THAT-INHERITS-001.md"
       },
       "sourcePath": "docs/WORK-THAT-INHERITS-001.md",
-      "requires": "An operator must run the local workbench; no human identity or benefit is verified."
+      "requires": "An operator must run the local workbench; no human identity or benefit is verified.",
+      "contract": {
+        "inputHint": "operator.task-note/v1",
+        "outputHint": "operator.review-candidate/v1",
+        "invocation": "NOT_CONNECTED_TO_JARVIS",
+        "receipt": "LOCAL_SELF_REPORT",
+        "effect": "NO_CROSS_PROJECT_EFFECT"
+      }
     },
     {
       "id": "jarvis.catalog",
@@ -47,7 +54,14 @@
         "href": "https://github.com/the-static-collective/JAR-VIS/blob/main/docs/RECENT-WORK-FEED-001.md"
       },
       "sourcePath": "commons/recent-work-v1.json",
-      "requires": "Published descriptions are not evidence that a provider is accepting requests."
+      "requires": "Published descriptions are not evidence that a provider is accepting requests.",
+      "contract": {
+        "inputHint": "human.topic/v1",
+        "outputHint": "public.reference/v1",
+        "invocation": "NOT_CONNECTED_TO_JARVIS",
+        "receipt": "NONE",
+        "effect": "NO_CROSS_PROJECT_EFFECT"
+      }
     }
   ]
 }
