@@ -44,7 +44,7 @@ Deno.serve(async req => {
  try {
   if(b.action==='create') {
    if(b.consent!==true||!['OFFER','NEED'].includes(b.role)||!['food','tools','other'].includes(b.category)||!Object.prototype.hasOwnProperty.call(zones,b.zone)||![30,45,60,120,180].includes(b.expiresMinutes)||!publicText(b.description)||!keyPattern.test(b.inviteCode))throw Error('INVALID_OFFER');
-   if(/\b(fish|thawing|raw meat|chicken|seafood|milk|eggs|frozen)\b/i.test(b.description))throw Error('PERISHABLES_HELD');
+   if((b.role==='OFFER'&&b.category==='food'&&b.shelfStable!==true)||/\b(fish|salmon|cod|tilapia|shrimp|shellfish|thawing|raw meat|chicken|poultry|beef|pork|dairy|cheese|yogurt|milk|eggs|frozen|refrigerated|fresh seafood)\b/i.test(b.description))throw Error('PERISHABLES_HELD');
    if(b.role==='NEED'&&(!Number.isInteger(b.pickupMinutes)||b.pickupMinutes<0||b.pickupMinutes>120))throw Error('PICKUP_ESTIMATE_REQUIRED');
    await quota('create',b.inviteCode);
    const owner=makeKey();
