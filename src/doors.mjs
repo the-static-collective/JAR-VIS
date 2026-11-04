@@ -1,6 +1,11 @@
 // Capability directory only. These entries DO NOT read the named project's private state.
 export const doors = Object.freeze([
   {
+    id: "live-offer", title: "Live Offer 001", family: "CAPABILITY",
+    status: "local deterministic cartridge", role: "Now-first action planning for user-stated offers, questions and useful contributions.",
+    capability: "Node CLI can read a reviewed inert reLATTE cartridge and propose actions; browser recording and private submission remain source-owned by webZ.", connected: false
+  },
+  {
     id: "recursive-workshop", title: "The Recursive Workshop", family: "RECOMPOSITION",
     status: "local source-pinned", role: "Deterministic Static OS assemblies with Haunted Toaster-inspired feedback and artifact witness.",
     capability: "Local Python proposal-only engine; explicit opt-in memory; no actual external execution", connected: false
