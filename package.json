@@ -12,6 +12,7 @@
     "demo": "node src/demo.mjs",
     "demo:hold": "node src/demo.mjs --hold",
     "start": "node src/serve.mjs",
-    "harmony": "node tools/inspect-harmony.mjs"
+    "harmony": "node tools/inspect-harmony.mjs",
+    "live:offer": "node tools/live-offer.mjs"
   }
 }
