@@ -94,7 +94,7 @@ Deno.serve(async req => {
    return json({state:data,physicalOutcomeVerified:false});
   }
   if(b.action==='send'){
-   if(!uuidPattern.test(b.routeId||'')||!publicText(b.message)||b.message.length>200)throw Error('INVALID_MESSAGE');
+   if(!uuidPattern.test(b.routeId||'')||typeof b.message!=='string'||b.message.trim().length<2||b.message.length>200||pii.test(b.message))throw Error('INVALID_MESSAGE');
    await quota('send',b.secret);
    const {data,error}=await db.rpc('nr03_send',{p_route_id:b.routeId,p_owner_hash:digest,p_body:b.message.trim()});
    if(error)throw Error('MESSAGE_NOT_AUTHORIZED_OR_AVAILABLE');
