@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {NowRoute,inferKind,distanceMiles} from '../src/now-route.mjs';
+import {Workbench} from '../src/workbench.mjs';
 
 const WASECA={lat:44.077,lon:-93.507};
 const CLOSE={lat:44.08,lon:-93.50};
@@ -105,4 +106,11 @@ test('two competing offers cannot both reserve one opted-in need',()=>{
   const r2=router.propose({offerId:b.id,needId:need.id});
   router.respond({routeId:r1.id,needId:need.id,accept:true});
   assert.throws(()=>router.respond({routeId:r2.id,needId:need.id,accept:true}),/ROUTE_NO_LONGER_AVAILABLE/);
+});
+
+test('JAR;VIS routes an ordinary fish-surplus question to the immediate action surface',()=>{
+  const out=Workbench.prototype.attend.call({state:()=>({})},'I have extra fish from the food shelf; anyone need it?');
+  assert.match(out.answer,/\/now-route/);
+  assert.match(out.answer,/in-memory fictional/);
+  assert.doesNotMatch(out.answer,/make a poster|prepare an invitation/i);
 });
