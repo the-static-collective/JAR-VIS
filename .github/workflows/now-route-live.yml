@@ -5,6 +5,7 @@ on:
       - 'backend/edge/now-route-live/**'
       - 'backend/migrations/009_now_route_live_pilot.sql'
       - 'test/now-route-live.test.mjs'
+      - 'test/commons-001.test.mjs'
       - '.github/workflows/now-route-live.yml'
 permissions:
   contents: read
@@ -26,6 +27,7 @@ jobs:
           node --check /tmp/nr03-site.mjs
           node --check /tmp/nr03-client.mjs
           node --test test/now-route-live.test.mjs
+          node --test test/commons-001.test.mjs
       - name: Test deployed public health and web entry (read-only)
         run: |
           set -euo pipefail
