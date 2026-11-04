@@ -13,6 +13,7 @@
     "demo:hold": "node src/demo.mjs --hold",
     "start": "node src/serve.mjs",
     "harmony": "node tools/inspect-harmony.mjs",
-    "live:offer": "node tools/live-offer.mjs"
+    "live:offer": "node tools/live-offer.mjs",
+    "commons:read": "node tools/read-public-commons.mjs"
   }
 }

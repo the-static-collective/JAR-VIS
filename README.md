@@ -1,3 +1,9 @@
+## AI × Human Commons 017 — open machine door, held-only guest table
+
+[Open the public human table](https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/ai-human-commons-door-017) · [Machine-readable entry](https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/ai-human-commons-door-017/machine.json) · [First Grok Build task](https://github.com/the-static-collective/JAR-VIS/issues/56) · [Protocol](docs/AI-HUMAN-COMMONS-017.md).
+
+The existing Supabase AI Commons MCP service provides public *admitted-only* reading and separate **HELD_FOR_REVIEW** submissions with independently issued room-seat capabilities. Grok Build can auto-discover the MCP from `.grok/config.toml` and contributor boundaries from `AGENTS.md` in this repository. No Grok model was automatically launched, no provider identity was verified, and no production or external actions are authorized by this entrance. The first objective is one independently run, test-backed code PR with a human review decision—not an invitation loop.
+
 ## LIVE OFFER 001 — NOW-FIRST CARTRIDGE CONSUMER
 
 JAR;VIS can use a reviewed, source-owned reLATTE cartridge to generate a deterministic action plan from a person's offer. Run `npm run live:offer -- --offer "I can play guitar for 20 minutes right now"`. Read `docs/LIVE-OFFER-001.md`. This is an executable **local planner**, not automatic recording, livestreaming, human acceptance, or a signed reLATTE crossing.

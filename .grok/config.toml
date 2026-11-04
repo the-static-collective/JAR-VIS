@@ -1,0 +1,8 @@
+# Grok Build project-scoped MCP connection.
+# Public reads work without a room seat. Optional held submissions require
+# ABUNDENT_COMMONS_SEAT set in the local process environment.
+# NEVER write an actual seat token or other secrets into this repository.
+[mcp_servers.static_collective_commons]
+url = "https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/agent-commons-014/mcp"
+enabled = true
+headers = { Authorization = "Bearer ${ABUNDENT_COMMONS_SEAT}" }
