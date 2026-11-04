@@ -78,7 +78,7 @@ Deno.serve(async req => {
     enriched.push({id:r.id,state:r.state,
      other:byId.get(p.role==='OFFER'?r.need_id:r.offer_id)||null,notes});
    }
-   return json({ticket:{id:p.id,role:p.role,summary:p.summary,state:p.state,expiresAt:p.expires_at},possible:p.state==='OPEN'&&Date.parse(p.expires_at)>Date.now()?possible:[],routes:enriched,delivery:'IN_APP_POLL_ONLY'});
+   return json({ticket:{id:p.id,role:p.role,category:p.category,summary:p.summary,state:p.state,expiresAt:p.expires_at},possible:p.state==='OPEN'&&Date.parse(p.expires_at)>Date.now()?possible:[],routes:enriched,delivery:'IN_APP_POLL_ONLY'});
   }
   if(b.action==='propose') {
    if(p.role!=='OFFER'||!uuidPattern.test(b.otherId||''))throw Error('INVALID_PROPOSAL');
