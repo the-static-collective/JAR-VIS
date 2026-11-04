@@ -49,11 +49,14 @@ function render(){
   for(const o of state.offers){
     const box=record(o,o.description,o.kind+' · '+o.expiresInMinutes+' min left · '+o.radiusMiles+' mile radius'+
       (o.safety!=='NOT_APPLICABLE'?' · '+o.safety:''),o.state==='HOLD_SAFETY');
+    if(['OPEN','HOLD_SAFETY'].includes(o.state)) box.append(button('Withdraw this offer',()=>api('withdraw',{offerId:o.id}),'quiet'));
     $('offers').append(box);
   }
   if(state.needs.length===0)$('needs').append(text('p','No opted-in needs yet.','small'));
   for(const n of state.needs){
-    $('needs').append(record(n,n.description,n.kind+' · self-estimated pickup '+(n.estimatedTravelMinutes??'?')+' min'));
+    const box=record(n,n.description,n.kind+' · self-estimated pickup '+(n.estimatedTravelMinutes??'?')+' min');
+    if(n.state==='OPEN')box.append(button('Withdraw this need',()=>api('withdraw',{needId:n.id}),'quiet'));
+    $('needs').append(box);
   }
   let count=0;
   for(const [offerId,suggestions] of Object.entries(state.suggestions)){
