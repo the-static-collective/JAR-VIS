@@ -1,7 +1,7 @@
 {
   "schema": "static-collective/change-candidates-v1",
   "authority": "NONE",
-  "scannedAt": "2026-11-04T06:42:43.655Z",
+  "scannedAt": "2026-11-04T19:55:12.185Z",
   "monitoredRepos": [
     "webZ",
     "reLATTE",
@@ -17,6 +17,61 @@
   ],
   "disclosure": "Automatically generated source-diff CANDIDATES, not reviewed claims, canon, releases, deployments, partnerships or completed acts. No automatic admission is possible.",
   "candidates": [
+    {
+      "id": "DIFF-316AE112525E83E2BE31",
+      "repo": "reLATTE",
+      "ref": "main",
+      "from": "d69a863943e071346527eafc79a63ef332d524af",
+      "to": "d2f18b0a26d177c76ebfe45edcf93aa60c10fd49",
+      "observedAt": "2026-11-04T19:55:12.185Z",
+      "compareUrl": "https://github.com/the-static-collective/reLATTE/compare/d69a863943e071346527eafc79a63ef332d524af...d2f18b0a26d177c76ebfe45edcf93aa60c10fd49",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "PENDING_REVIEW",
+      "reason": "NONE",
+      "totalFiles": 6,
+      "categoryCounts": {
+        "TESTS": 2,
+        "DOCUMENTATION": 2,
+        "CONFIGURATION": 0,
+        "SOURCE_CODE": 0,
+        "OTHER": 2
+      },
+      "files": [
+        {
+          "path": "cartridges/any-invitation-001.json",
+          "status": "added",
+          "category": "OTHER"
+        },
+        {
+          "path": "cartridges/live-offer-001.json",
+          "status": "added",
+          "category": "OTHER"
+        },
+        {
+          "path": "docs/ANY-INVITATION-001.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "docs/LIVE-OFFER-CARTRIDGE-001.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "test/any-invitation.test.ts",
+          "status": "added",
+          "category": "TESTS"
+        },
+        {
+          "path": "test/live-offer.test.ts",
+          "status": "added",
+          "category": "TESTS"
+        }
+      ]
+    },
     {
       "id": "DIFF-30B0A4BCBA82D67E47FF",
       "repo": "reLATTE",
