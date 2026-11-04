@@ -1,0 +1,28 @@
+{
+  "schema": "jarvis.capability-index/v1",
+  "version": "2026-11-04.1",
+  "reviewedOn": "2026-11-04",
+  "authority": "PUBLIC_SOURCE_DIRECTORY_NOT_EXECUTION",
+  "sources": [
+    {
+      "repository": "the-static-collective/webZ",
+      "path": "capabilities/passport.v1.json"
+    },
+    {
+      "repository": "the-static-collective/BananaSpork",
+      "path": "capabilities/passport.v1.json"
+    },
+    {
+      "repository": "the-static-collective/reLATTE",
+      "path": "capabilities/passport.v1.json"
+    },
+    {
+      "repository": "the-static-collective/JAR-VIS",
+      "path": "capabilities/passport.v1.json"
+    },
+    {
+      "repository": "the-static-collective/GHoT",
+      "path": "capabilities/passport.v1.json"
+    }
+  ]
+}
