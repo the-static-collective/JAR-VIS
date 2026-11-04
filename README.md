@@ -1,3 +1,7 @@
+## LIVE OFFER 001 — NOW-FIRST CARTRIDGE CONSUMER
+
+JAR;VIS can use a reviewed, source-owned reLATTE cartridge to generate a deterministic action plan from a person's offer. Run `npm run live:offer -- --offer "I can play guitar for 20 minutes right now"`. Read `docs/LIVE-OFFER-001.md`. This is an executable **local planner**, not automatic recording, livestreaming, human acceptance, or a signed reLATTE crossing.
+
 ## Recursive Workshop — officially wired (LOCAL, PROPOSAL_ONLY)
 
 The [Recursive Workshop](docs/RECURSIVE-WORKSHOP-001.md) now connects **JAR;VIS → a pinned Static OS deterministic recomposer → Haunted Toaster-inspired witness memory** on the *local operator workbench*. Run `npm start` and open `http://127.0.0.1:7789/workshop`. Each question creates a fresh typed graph and a family of possible next moves; optionally record a generated-card observation or helpful/not-helpful verdict, and future questions will be recomposed from that consented history. It does not run a live AI, access third-party data, invent community partners, dispatch GHoT, store raw question text, or automatically execute/learn. A missing Python interpreter or modified pinned source results in HOLD, without breaking other desks. This is **not** a public multi-user website feature.
