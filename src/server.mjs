@@ -7,6 +7,7 @@ import {validateBridgeWork} from "./bridge-work-card.mjs";
 import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
+import {NowRoute} from "./now-route.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
@@ -19,7 +20,10 @@ const staticFiles = new Map([
   ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/workshop", [new URL("../public/workshop.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/workshop.js", [new URL("../public/workshop.js", import.meta.url), "text/javascript; charset=utf-8"]],
-  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]]
+  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]],
+  ["/now-route", [new URL("../public/now-route.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/now-route.js", [new URL("../public/now-route.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/now-route.css", [new URL("../public/now-route.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -64,6 +68,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
     catch (error) { recursiveUnavailable = "HOLD: local Python or pinned Static OS snapshot unavailable"; }
   }
   const csrf = randomBytes(24).toString("hex");
+  const nowRoute = new NowRoute(); // In-memory, fictional local demo; never a shared community directory.
   let boundPort;
   const server = createServer(async (req, res) => {
     try {
@@ -78,6 +83,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/now-route/state") return reply(res,200,{...nowRoute.state(),csrfToken:csrf});
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
         if (pathname === "/api/recursive/state") return recursive ?
@@ -95,6 +101,19 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res, 403, { error: "Missing or invalid local anti-CSRF token" });
       }
       const body = await readJson(req);
+      if (pathname.startsWith("/api/now-route/")) {
+        const operations = {
+          "/api/now-route/offer": () => nowRoute.offer(body),
+          "/api/now-route/need": () => nowRoute.need(body),
+          "/api/now-route/propose": () => nowRoute.propose(body),
+          "/api/now-route/respond": () => nowRoute.respond(body),
+          "/api/now-route/report": () => nowRoute.report(body),
+          "/api/now-route/confirm": () => nowRoute.confirm(body),
+          "/api/now-route/withdraw": () => nowRoute.withdraw(body),
+          "/api/now-route/reset": () => nowRoute.reset()
+        };
+        return operations[pathname] ? reply(res,200,operations[pathname]()) : reply(res,404,{error:"Unknown local route operation"});
+      }
       if (pathname.startsWith("/api/inheritance/")) {
         if (!inherit) return reply(res, 503, { error: "Inheritance board not configured" });
         const operations = {

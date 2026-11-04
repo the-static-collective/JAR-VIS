@@ -1,3 +1,7 @@
+## NOW-ROUTE 001 — PHYSICAL GIFTS TO NEARBY OPTED-IN NEEDS (LOCAL DEMO)
+
+Open `http://127.0.0.1:7789/now-route` after `npm start` for a human-facing local desk: type an offer like extra fish, add an opted-in nearby food need, and simulate time/radius/pickup matching, two choices, withdrawal, a reported handoff and separate confirmation. Cold-chain food is held absent an explicit safe-handling self-attestation. This is **fictional in-memory routing, not public matching, verified food safety, real consent, delivery or notification**. See [NOW-ROUTE-001](docs/NOW-ROUTE-001.md).
+
 ## LIVE OFFER 001 — NOW-FIRST CARTRIDGE CONSUMER
 
 JAR;VIS can use a reviewed, source-owned reLATTE cartridge to generate a deterministic action plan from a person's offer. Run `npm run live:offer -- --offer "I can play guitar for 20 minutes right now"`. Read `docs/LIVE-OFFER-001.md`. This is an executable **local planner**, not automatic recording, livestreaming, human acceptance, or a signed reLATTE crossing.
