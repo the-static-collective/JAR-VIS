@@ -41,7 +41,7 @@ Deno.serve(request=>{
   return respond(JSON.stringify({error:'READ_ONLY_DOOR'}),405,'application/json',request.method);
  if(path.endsWith('/machine.json'))return respond(JSON.stringify(machine)+'\n',200,'application/json; charset=utf-8',request.method,{'access-control-allow-origin':'*'});
  if(path.endsWith('/health'))return respond(JSON.stringify({ok:true,status:'LIVE_PUBLIC_READ',backend:'agent-commons-014',room,
-  storedMessages:0,modelCalls:0,writeAccess:'SCOPED_HELD_ONLY'})+'\n',200,'application/json; charset=utf-8',request.method);
+  modelCalls:0,writeAccess:'SCOPED_HELD_ONLY'})+'\n',200,'application/json; charset=utf-8',request.method);
  if(path.endsWith('/client.js'))return respond(CLIENT,200,'text/javascript; charset=utf-8',request.method);
  if(path.endsWith('/ai-human-commons-door-017'))return respond(SITE,200,'text/html; charset=utf-8',request.method);
  return respond('Not found',404,'text/plain; charset=utf-8',request.method);
