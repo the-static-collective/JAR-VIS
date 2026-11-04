@@ -109,6 +109,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
           "/api/now-route/respond": () => nowRoute.respond(body),
           "/api/now-route/report": () => nowRoute.report(body),
           "/api/now-route/confirm": () => nowRoute.confirm(body),
+          "/api/now-route/withdraw": () => nowRoute.withdraw(body),
           "/api/now-route/reset": () => nowRoute.reset()
         };
         return operations[pathname] ? reply(res,200,operations[pathname]()) : reply(res,404,{error:"Unknown local route operation"});
