@@ -24,6 +24,8 @@ The route:
 6. **REPORT** — the fictional giver marks a handoff as reported. This **does not** close the offer or count as fulfillment.
 7. **CONFIRM** — the fictional recipient independently confirms, at which point the offer and need close in the local simulation. Neither checkbox proves a physical delivery.
 
+Either party may withdraw an unaccepted offer or need, canceling associated pending proposals. A previously accepted exchange cannot be silently withdrawn in this specimen; its cancellation requires separate coordination in any real implementation.
+
 Expiry prevents new suggestions or late acceptance. Reporting a previously accepted exchange remains possible after the matching window, because the delivery receipt is separate from matching eligibility.
 
 ## Safety / control boundaries
