@@ -88,3 +88,21 @@ test('reject invalid/missing location and implausible windows',()=>{
   assert.throws(()=>router.offer({...fish,expiresMinutes:1}),/INVALID_WINDOW/);
   assert.throws(()=>router.need({...hungry,estimatedTravelMinutes:500}),/INVALID_TRAVEL_MINUTES/);
 });
+
+test('voluntary withdrawal cancels an unaccepted invitation and blocks late consent',()=>{
+  const router=make(),offer=router.offer(fish),need=router.need(hungry);
+  const route=router.propose({offerId:offer.id,needId:need.id});
+  router.withdraw({offerId:offer.id});
+  assert.equal(router.state().routes[0].state,'CANCELED');
+  assert.equal(router.state().offers[0].state,'WITHDRAWN');
+  assert.throws(()=>router.respond({routeId:route.id,needId:need.id,accept:true}),/ROUTE_NOT_AWAITING_RESPONSE/);
+  assert.equal(router.rank(offer.id).length,0);
+});
+test('two competing offers cannot both reserve one opted-in need',()=>{
+  const router=make(),a=router.offer(fish),b=router.offer({...fish,description:'Extra safely chilled fish'}),
+    need=router.need(hungry);
+  const r1=router.propose({offerId:a.id,needId:need.id});
+  const r2=router.propose({offerId:b.id,needId:need.id});
+  router.respond({routeId:r1.id,needId:need.id,accept:true});
+  assert.throws(()=>router.respond({routeId:r2.id,needId:need.id,accept:true}),/ROUTE_NO_LONGER_AVAILABLE/);
+});
