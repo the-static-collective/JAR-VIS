@@ -53,5 +53,7 @@ test('live pilot is opt-in and can be refused or withdrawn',()=>{
  assert.ok(api.includes('nr03_advance'));
  assert.ok(client.includes("action:'send'"));
  assert.ok(client.includes('CONFIRMED'));
- assert.ok(client.includes('IN_APP_POLL'));
+ assert.ok(api.includes('IN_APP_POLL_ONLY'));
+ assert.ok(client.includes('setInterval'));
+ assert.ok(client.includes('8000'));
 });
