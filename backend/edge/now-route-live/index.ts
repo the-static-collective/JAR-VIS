@@ -55,7 +55,8 @@ Deno.serve(async req => {
   if(!keyPattern.test(b.secret||''))throw Error('PRIVATE_TICKET_REQUIRED');
   const digest=await hash(b.secret);
   const {data:p,error:e}=await db.from('nr03_posts').select('*').eq('owner_hash',digest).maybeSingle();
-  if(e||!p)throw Error('TICKET_NOT_FOUND');
+  if(e)throw Error('STORE_UNAVAILABLE');
+  if(!p)throw Error('TICKET_NOT_FOUND');
   if(b.action==='status') {
    const now=new Date().toISOString(), opposite=p.role==='OFFER'?'NEED':'OFFER';
    const {data:others,error:oErr}=await db.from('nr03_posts').select('*').eq('role',opposite).eq('category',p.category).eq('state','OPEN').gt('expires_at',now).limit(60);
