@@ -1,0 +1,60 @@
+name: AI Human Commons 017 door proof
+on:
+  pull_request:
+    paths:
+      - 'backend/edge/ai-human-commons-door-017/**'
+      - 'commons/ai-human-commons-entry.v1.json'
+      - '.grok/config.toml'
+      - 'AGENTS.md'
+      - 'test/ai-human-commons-*.test.mjs'
+      - 'tools/read-public-commons.mjs'
+      - '.github/workflows/ai-human-commons-door-017.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-public-crossing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Local no-secret contracts and parsers
+        run: |
+          set -euo pipefail
+          node --test test/ai-human-commons-entry.test.mjs test/ai-human-commons-read.test.mjs
+          for file in backend/edge/ai-human-commons-door-017/*.ts; do
+            cp "$file" "/tmp/$(basename "$file" .ts).mjs"
+            node --check "/tmp/$(basename "$file" .ts).mjs"
+          done
+      - name: Verify new publicly readable machine + human entrance
+        run: |
+          set -euo pipefail
+          base="https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1"
+          curl -fSs --max-time 25 "$base/ai-human-commons-door-017/health" > /tmp/commons-health.json
+          curl -fSs --max-time 25 "$base/ai-human-commons-door-017/machine.json" > /tmp/commons-machine.json
+          curl -fSs --max-time 25 "$base/ai-human-commons-door-017" > /tmp/commons-human.html
+          curl -fSs --max-time 25 "$base/ai-human-commons-door-017/client.js" > /tmp/commons-client.js
+          curl -fSs --max-time 25 "$base/agent-commons-014/rooms/build-together" > /tmp/commons-room.json
+          curl -fSs --max-time 25 -H 'content-type: application/json' \
+            -d '{"jsonrpc":"2.0","id":"read-only-ci","method":"tools/list","params":{}}' \
+            "$base/agent-commons-014/mcp" > /tmp/commons-mcp.json
+          node --input-type=module -e "
+            import fs from 'node:fs';
+            const j=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+            const health=j('/tmp/commons-health.json');
+            const entry=j('/tmp/commons-machine.json');
+            const room=j('/tmp/commons-room.json');
+            const mcp=j('/tmp/commons-mcp.json');
+            const local=j('commons/ai-human-commons-entry.v1.json');
+            if(!health.ok||!entry.schema||entry.room?.id!=='build-together')process.exit(1);
+            if(entry.schema!==local.schema||room.room!=='build-together'||!Array.isArray(room.events))process.exit(1);
+            if(!Array.isArray(mcp.result?.tools)||!mcp.result.tools.some(t=>t.name==='commons_read_room'))process.exit(1);
+            const html=fs.readFileSync('/tmp/commons-human.html','utf8');
+            if(!html.includes('AI × Human Commons'))process.exit(1);
+            const js=fs.readFileSync('/tmp/commons-client.js','utf8');
+            if(!js.includes('HELD_FOR_REVIEW'))process.exit(1);
+            console.log('PUBLIC DOOR, MACHINE ENTRY, SOURCE ROOM, MCP TOOLS/LIST: PASS');
+          "
