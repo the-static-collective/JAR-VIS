@@ -143,6 +143,21 @@ export class NowRoute {
     this.event('RECIPIENT_CONFIRMED_HANDOFF',r.id);
     return this.publicRoute(r);
   }
+  withdraw({offerId,needId}={}) {
+    if (!!offerId === !!needId) throw ERR('SELECT_EXACTLY_ONE_PARTICIPATION');
+    const row=offerId?this.offers.get(offerId):this.needs.get(needId);
+    if (!row) throw ERR('UNKNOWN_PARTICIPATION',404);
+    if (!['OPEN','HOLD_SAFETY'].includes(row.state)) throw ERR('WITHDRAWAL_NEEDS_COORDINATION',409);
+    row.state='WITHDRAWN';
+    for (const route of this.routes.values()) {
+      if (route.state==='OFFERED' && (route.offerId===offerId || route.needId===needId)) {
+        route.state='CANCELED';
+        this.event('UNACCEPTED_PROPOSAL_CANCELED',route.id);
+      }
+    }
+    this.event('PARTICIPATION_WITHDRAWN',offerId||needId);
+    return {id:offerId||needId,state:'WITHDRAWN',note:'Local demo withdrawal only; no external participant was notified.'};
+  }
   publicRoute(r){return {id:r.id,offerId:r.offerId,needId:r.needId,state:r.state,
     note:'Local simulation; actor identity and physical delivery are not independently verified.'};}
   state(){
