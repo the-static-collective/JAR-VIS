@@ -23,7 +23,7 @@ const MARKERS=Object.freeze({
  "executable-procedure":/(\b(step\b|first\b|1\.|00.?\d\d|start\b))/i,
  "teaching-script":/(\bminute\b|\bdemonstrate\b|\bask\b)/i
 });
-const META=/^\s*(?:make|prepare|write|create|draft|find|ask someone to make)\s+(?:an?\s+)?(?:simple\s+)?(?:invitation|request|card|plan|document|ticket|instructions?)\s*[.!?]?\s*$/i;
+const META=/^\s*(?:make|prepare|write|create|draft|find|ask someone to make)\s+(?:an?\s+)?(?:(?:simple|meal|event|volunteer|generic)\s+)*(?:invitation|request|card|plan|document|ticket|instructions?|recipe)\s*[.!?]?\s*$/i;
 const bounded=(s,max=5000)=>typeof s==="string"&&s.trim().length>0&&s.length<=max;
 const fail=(reason)=>({decision:"HOLD",reason,meaning:"No useful completion is established."});
 
