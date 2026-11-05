@@ -80,6 +80,45 @@ It does not email donors, post offers, connect accounts, submit forms, or claim 
 Nothing downloads automatically. The contents are not saved to JAR;VIS's journal.</p>
 <div id="work-list" class="work-list"></div>
 </div></section>
+<section class="goal-handoff" id="handoff" hidden aria-live="polite">
+<p class="eyebrow">THE LAST INCH · CHOOSE A REAL LOCAL DOOR</p>
+<h2>Where should this confirmed goal go?</h2>
+<p class="small">Nothing opens, sends or runs by itself. JAR;VIS can show only the capabilities it currently has, and each requires a separate choice.</p>
+<div class="buttons"><button id="discover-handoff" type="button">Show my available local actions →</button></div>
+<p id="handoff-status" role="status" aria-live="polite">No external service has been contacted.</p>
+<div id="handoff-options" hidden>
+<div class="goal-cards">
+<article class="goal-card" id="workshop-door" hidden>
+<h3>Static OS workshop</h3>
+<p>Put the human-confirmed question in the local workshop's text box for review. This does not start the workshop, store the goal in a journal, or execute any machine.</p>
+<button id="open-workshop" type="button">Prefill local workshop →</button>
+</article>
+<article class="goal-card" id="mail-door" hidden>
+<h3>Your own email app — draft only</h3>
+<p>Only you can choose the recipient. Review the exact subject and body before opening an unsent draft in your own email application.</p>
+<label for="mail-recipient">Recipient address (entered by you)</label>
+<input id="mail-recipient" type="email" autocomplete="off" spellcheck="false" maxlength="150" placeholder="person@example.org" />
+<label for="mail-subject">Subject</label>
+<input id="mail-subject" type="text" maxlength="130" placeholder="A possible invitation" />
+<label for="mail-message">Your message (nothing is sent)</label>
+<textarea id="mail-message" rows="7" maxlength="1300"></textarea>
+<button id="preview-handoff" type="button">Preview exact email draft →</button>
+</article>
+</div>
+<div id="mail-review" hidden>
+<h3>Review before authorizing your mail app</h3>
+<p>To: <strong id="preview-recipient"></strong></p>
+<p>Subject: <strong id="preview-subject"></strong></p>
+<pre id="preview-message"></pre>
+<p class="small">This preview is not an outgoing email. A change to the recipient or text requires a new preview.</p>
+<button id="authorize-mail-app" type="button">Authorize opening a draft in my email app →</button>
+</div>
+<div id="mail-ready" hidden>
+<p class="small">Only a local mail-app link was prepared. The message was not sent or delivered.</p>
+<a id="mail-app-link" href="#" rel="noreferrer">Open my email application (unsent draft) ↗</a>
+</div>
+</div>
+</section>
 <footer><span>YOUR INTENT IS NOT A MODEL GUESS · CONFIRMATION IS NOT EXECUTION</span>
 <a href="/reciprocal">RETURN TO REASONING LAB</a></footer>
 </main></body></html>
