@@ -157,6 +157,20 @@ jobs:
           node --check src/motif-composable-goals.mjs
           node --check public/goal.js
           python3 -m py_compile integrations/experiments/025/example_composer.py
+      - name: Pin source-owned MOTIF-026 consent-bound local work preparation
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: a4af07cb48c201d22e34b5569496a4ac1d3deb58
+          persist-credentials: false
+          path: motif-026-owner-source
+      - name: Verify exact MOTIF-026 source bytes and local packet renderer syntax
+        run: |
+          test "$(git hash-object integrations/experiments/026/prepare_work.py)" = "529b0cea7259b1314122d6e0a5d8331f16713180"
+          cmp integrations/experiments/026/prepare_work.py motif-026-owner-source/experiments/026/prepare_work.py
+          node --check src/motif-goal-workpacket.mjs
+          node --check public/goal.js
+          python3 -m py_compile integrations/experiments/026/prepare_work.py
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:
