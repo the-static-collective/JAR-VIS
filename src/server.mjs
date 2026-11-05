@@ -59,7 +59,7 @@ async function readJson(req) {
   return value;
 }
 
-export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard, recursiveDesk, investigationFn = investigateDesk } = {}) {
+export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard, recursiveDesk, investigationFn = investigateDesk, gardenFn = growSourceGarden } = {}) {
   if (!workbench && !journalPath) throw new Error("journalPath required");
   const app = workbench ?? await Workbench.open({ journalPath });
   const inherit = inheritanceBoard ?? (journalPath ? await InheritanceBoard.open({ journalPath: journalPath + ".inheritance.jsonl" }) : null);
@@ -156,7 +156,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
           body.approvedPublicGithubSearch!==true)
           return reply(res,422,{error:"HOLD_EXPLICIT_GARDEN_SEARCH_CONSENT_REQUIRED"});
         pendingGarden=null;
-        const result=await growSourceGarden(body);
+        const result=await gardenFn(body);
         if(result.status==="HELD_SOURCE_SPECIFIC_GARDENER_RESULT")
           pendingGarden=result;
         return reply(res,200,result);
