@@ -9,7 +9,7 @@ function consumeApprovedGoalPrefill(){
   try{
     const text=decodeURIComponent(fragment.slice(6));
     if(text.length<1||text.length>320||
-       /[\\x00-\\x08\\x0b-\\x1f\\x7f]/.test(text))
+       /[\x00-\x08\x0b-\x1f\x7f]/.test(text))
       throw Error("Invalid prefill");
     $("question").value=text;
     $("ask-status").textContent=
