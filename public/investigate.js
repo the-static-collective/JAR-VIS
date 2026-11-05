@@ -4,7 +4,8 @@
 (()=>{
  const $=id=>document.getElementById(id);
  const form=$('questionForm'),status=$('status'),button=$('run');
- let latest=null;
+ let latest=null,sourceSuggestion=null;
+ const providerIds=['github','wikipedia','scholarly','githubglobal','crossref','openlibrary','europepmc'];
  const div=(tag,cls,text)=>{
   const el=document.createElement(tag);
   if(cls)el.className=cls;
@@ -15,7 +16,7 @@
   try{
    const u=new URL(url);
    return u.protocol==='https:'&&
-    ['github.com','en.wikipedia.org','openalex.org','doi.org'].includes(u.hostname)?u.href:null;
+    ['github.com','en.wikipedia.org','openalex.org','doi.org','openlibrary.org','europepmc.org'].includes(u.hostname)?u.href:null;
   }catch{return null}
  };
  const clear=el=>el.replaceChildren();
@@ -28,6 +29,8 @@
    ' · '+(item.path||'document')+':'+item.line;
   const kind=item.kind==='github_source'?'GIT SOURCE · COMMIT & BLOB PINNED':
    item.kind==='research_index'?'SCHOLARLY INDEX · METADATA':
+   item.kind==='external_public_index'?
+    'PUBLIC '+String(item.provider||'INDEX').toUpperCase()+' · DISCOVERY LEAD':
    'ENCYCLOPEDIA · INDEX RESULT';
   outer.append(div('div','kind',kind));
   const url=safeUrl(item.url);
@@ -57,6 +60,10 @@
   for(const f of e.failures||[])
    lines.push('Source limitation ('+f.provider+
     (f.repository?' · '+f.repository:'')+'): '+f.status);
+  for(const f of result.supplemental_research?.failures||[])
+   lines.push('Public index unavailable ('+f.provider+'): '+f.status);
+  if(result.supplemental_research?.providers_queried?.length)
+   lines.push('Public index results are metadata leads, not independently verified originals or complete articles.');
   for(const line of lines)box.append(p(line));
  }
  function renderPlan(r){
@@ -108,19 +115,20 @@
   $('result').hidden=false;
   const stats=$('stats');clear(stats);
   const e=data.public_research;
+  const leads=data.public_leads||e.hits||[];
   for(const [value,label] of [
    [e.catalog?.enumerated||0,'PUBLIC REPOS IN CATALOG'],
    [e.catalog?.selected||0,'REPOS EXAMINED'],
    [e.source_documents?.reduce((n,s)=>n+s.documents.length,0)||0,'FILES VERIFIED'],
-   [e.hits?.length||0,'RESEARCH LEADS']
+   [leads.length,'RESEARCH LEADS']
   ]){
    const card=div('div','stat');card.append(div('strong','',pretty(value)));
    card.append(div('span','',label));stats.append(card);
   }
   showWarnings(data);
   const sources=$('sources');clear(sources);
-  if(!e.hits?.length)sources.append(p('No verifiable public leads in this bounded search. Try another question, greater GitHub depth, or opt into another public provider.','empty'));
-  else for(const hit of e.hits)sources.append(leadNode(hit));
+  if(!leads.length)sources.append(p('No public leads in this bounded search. Try another question, greater GitHub depth, or approve a different public provider.','empty'));
+  else for(const hit of leads)sources.append(leadNode(hit));
   renderPlan(data.motif_reasoning);
   const next=$('next');clear(next);
   next.append(div('strong','','QUESTIONS WORTH ASKING NEXT'));
@@ -137,9 +145,10 @@
  }
  async function search(){
   const question=$('question').value.trim();
-  const scopes={github:$('github').checked,wikipedia:$('wikipedia').checked,
-   scholarly:$('scholarly').checked};
-  if(!Object.values(scopes).some(Boolean))throw Error('Select at least one public search provider.');
+  const scopes=Object.fromEntries(providerIds.map(id=>[id,$(id).checked]));
+  const selected=Object.values(scopes).filter(Boolean).length;
+  if(selected===0)throw Error('Select at least one public search provider.');
+  if(selected>4)throw Error('Select at most four public search providers.');
   if($('deep').checked&&!scopes.github)
    throw Error('MOTIF’s two-round GitHub reasoning requires the GitHub provider to be selected.');
   const payload={question,scopes,depth:Number($('depth').value),deep:$('deep').checked};
@@ -153,6 +162,46 @@
    throw Error('Unrecognized source-research response');
   return result;
  }
+ // These recommendations are entirely local. The visitor must explicitly
+ // click "Use these suggestions" (or choose boxes manually) before any egress.
+ $('suggest').addEventListener('click',async()=>{
+  const question=$('question').value.trim();
+  const box=$('suggestions');clear(box);
+  $('apply-suggestions').hidden=true;
+  sourceSuggestion=null;
+  try{
+   const csrf=await getCsrf();
+   const response=await fetch('/api/investigate/suggest',{method:'POST',
+    headers:{'content-type':'application/json','x-jarvis-csrf':csrf},
+    body:JSON.stringify({question}),cache:'no-store'});
+   const data=await response.json();
+   if(!response.ok)throw Error(data.error||'Source routing unavailable');
+   if(data.schema!=='alex.eagle-eye-provider-recommendation/v0')
+    throw Error('Unrecognized local routing response');
+   if(!data.recommended.length){
+    box.append(p('No strong source recommendation for this question. Choose a public source manually.'));
+    return;
+   }
+   sourceSuggestion=data;
+   box.append(p('Local recommendation only — no external sources contacted:'));
+   const list=div('ul');
+   for(const id of data.recommended){
+    const item=data.ranked.find(x=>x.id===id);
+    if(item)list.append(div('li','',item.label+' — '+item.why));
+   }
+   box.append(list);
+   $('apply-suggestions').hidden=false;
+  }catch(error){box.append(p(error.message||'HOLD: source suggestion unavailable'))}
+ });
+ $('apply-suggestions').addEventListener('click',()=>{
+  if(!sourceSuggestion||!sourceSuggestion.recommended.length)return;
+  for(const id of providerIds)$(id).checked=sourceSuggestion.recommended.includes(id);
+  if($('deep').checked&&!$('github').checked){
+   $('deep').checked=false;
+   status.textContent='MOTIF deep mode disabled: its current reasoning requires Collective GitHub.';
+  }else status.textContent='Suggested sources selected. Investigate to send this question only to those providers.';
+  $('apply-suggestions').hidden=true;
+ });
  form.addEventListener('submit',async event=>{
   event.preventDefault();
   button.disabled=true;$('download').disabled=true;

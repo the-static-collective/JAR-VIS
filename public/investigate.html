@@ -25,11 +25,21 @@
       <button type="button" data-question="Which tools help planZ and GRAFT turn public research into executable capabilities?">Plans → capability</button>
       <button type="button" data-question="What research explains why independent witnesses can make the same mistake?">Witnesses & errors</button>
     </div>
+    <div class="source-advisor" aria-label="Question-aware source recommendations">
+      <button type="button" id="suggest" class="suggest">Find the right sources ↗</button>
+      <span class="advisor-note">JAR;VIS recommends providers locally without contacting any of them.</span>
+      <div id="suggestions" class="suggestions" role="status" aria-live="polite"></div>
+      <button type="button" id="apply-suggestions" hidden>Use these suggestions</button>
+    </div>
     <fieldset class="field">
-      <legend class="label">WHERE TO LOOK <small>Each selection permits sending your question to that public service.</small></legend>
+      <legend class="label">WHERE TO LOOK <small>Choose up to four. Each selection permits sending your question to that public service.</small></legend>
       <label class="choice"><input type="checkbox" id="github" checked><span><strong>Collective GitHub</strong><small>Public repositories, source files, exact commits and line citations.</small></span></label>
       <label class="choice"><input type="checkbox" id="wikipedia"><span><strong>Wikipedia</strong><small>Public encyclopedia search results; not original-source verification.</small></span></label>
       <label class="choice"><input type="checkbox" id="scholarly"><span><strong>OpenAlex</strong><small>Public scholarly metadata and article links, not full-text reading.</small></span></label>
+      <label class="choice"><input type="checkbox" id="githubglobal"><span><strong>Global GitHub</strong><small>Find public software repositories outside the Static Collective.</small></span></label>
+      <label class="choice"><input type="checkbox" id="crossref"><span><strong>Crossref</strong><small>Find DOI-indexed scholarly publications and publisher metadata.</small></span></label>
+      <label class="choice"><input type="checkbox" id="openlibrary"><span><strong>Open Library</strong><small>Find books, authors and editions in the public catalog.</small></span></label>
+      <label class="choice"><input type="checkbox" id="europepmc"><span><strong>Europe PMC</strong><small>Find biomedical papers and preprint metadata.</small></span></label>
     </fieldset>
     <div class="options">
       <label class="depth"><span>SEARCH DEPTH <small>GitHub repositories actually inspected</small></span><select id="depth">
@@ -38,7 +48,7 @@
       </select></label>
       <label class="choice reasoning"><input type="checkbox" id="deep"><span><strong>Run MOTIF's reasoning circuit</strong><small>Two additional bounded public-source rounds using original ALEX → planZ → GRAFT code. May use more API requests.</small></span></label>
     </div>
-    <div class="callout">PUBLIC SEARCH ONLY. No private Drive, email, accounts or personal records are searched. This local service does not automatically save questions or deploy generated code.</div>
+    <div class="callout">PUBLIC SEARCH ONLY. JAR;VIS suggests where to search, but you approve which services receive the question. No private Drive, email, accounts or personal records. No automatic storage or code deployment.</div>
     <div class="actions"><button class="run" type="submit" id="run">Investigate <span aria-hidden="true">↗</span></button><span id="status" role="status" aria-live="polite">Ready for a question.</span></div>
   </form>
  </section>
