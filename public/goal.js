@@ -2,6 +2,7 @@
 const $=id=>document.getElementById(id);
 let csrf=null,statement="",choice=null,ownExample=null,freshness=undefined;
 let draft=null,previousDigest=null,busy=false,approvedDigest=null;
+let handoffCapabilities=null,mailPreview=null;
 const report=s=>{$("goal-status").textContent=s};
 const sections=["examples","clarify","contract"];
 const hide=id=>{$(id).hidden=true};
@@ -36,6 +37,8 @@ function render(r){
  hide("contract");
  hide("workkit");
  hide("work-files");
+ hide("handoff");hide("handoff-options");hide("mail-review");hide("mail-ready");
+ handoffCapabilities=null;mailPreview=null;
  approvedDigest=null;
  report(r.message+" No sources contacted.");
  if(r.status==="SHOW_TWO_EXAMPLES"){
@@ -105,6 +108,8 @@ function render(r){
    approvedDigest=r.contract_id;
    show("contract");
    show("workkit");
+   show("handoff");
+   $("handoff-status").textContent="No capability selected or external work initiated.";
    $("work-status").textContent="No files prepared. Only this separate button authorizes local file preparation.";
    $("confirm").disabled=true;
    $("confirm-status").textContent=
@@ -139,7 +144,8 @@ async function step(confirm=false){
 function startNew(){
  statement=$("need").value.trim();
  choice=null;ownExample=null;freshness=undefined;draft=null;previousDigest=null;approvedDigest=null;
- for(const id of sections)hide(id);
+ for(const id of [...sections,"workkit","work-files","handoff","handoff-options","mail-review","mail-ready"])hide(id);
+ handoffCapabilities=null;mailPreview=null;
  void step(false);
 }
 function choose(which){
@@ -147,7 +153,8 @@ function choose(which){
  ownExample=which==="custom"?$("own-example").value.trim():null;
  freshness=undefined;
  draft=null;approvedDigest=null;
- hide("clarify");hide("contract");hide("workkit");
+ hide("clarify");hide("contract");hide("workkit");hide("handoff");
+ handoffCapabilities=null;mailPreview=null;
  void step(false);
 }
 (async()=>{
@@ -181,7 +188,8 @@ $("answer").addEventListener("click",()=>{
 });
 $("change").addEventListener("click",()=>{
  draft=null;choice=null;ownExample=null;freshness=undefined;approvedDigest=null;
- hide("contract");hide("clarify");hide("workkit");
+ hide("contract");hide("clarify");hide("workkit");hide("handoff");
+ handoffCapabilities=null;mailPreview=null;
  show("examples");
  report("You can choose a different example, type your own, or edit your original question. Your previous interpretation will not be used without a fresh confirmation.");
  $("own-example").focus();
@@ -261,3 +269,150 @@ async function preparePacket(){
  }finally{button.disabled=false}
 }
 $("prepare-work").addEventListener("click",()=>void preparePacket());
+
+
+// MOTIF-027: source-bound local capability discovery; no automatic send.
+const STAGES={
+ discover:"DISCOVER_LOCAL_CAPABILITIES",
+ preview:"PREVIEW_MAIL_APP_HANDOFF",
+ open:"AUTHORIZE_MAIL_APP_OPEN"
+};
+const MAIL_SCOPE="OPEN_LOCAL_MAIL_COMPOSER_ONLY";
+function approvedGoal(){
+ if(!approvedDigest||!draft||draft.contract_id!==approvedDigest||busy)
+   throw Error("HOLD: Confirm your definition of enough before choosing a capability.");
+ return {
+   text:statement,choice,
+   ...(choice==="custom"?{own_example:ownExample}:{}),
+   ...(freshness!==undefined?{freshness_hours:freshness}:{}),
+   expected_contract_id:approvedDigest
+ };
+}
+async function handoff(payload){
+ if(!csrf)throw Error("HOLD: local research desk unavailable.");
+ const response=await fetch("/api/reciprocal/handoff",{
+   method:"POST",cache:"no-store",
+   headers:{"content-type":"application/json","x-jarvis-csrf":csrf},
+   body:JSON.stringify(payload)
+ });
+ const value=await response.json();
+ if(!response.ok)throw Error(value.error||"HOLD: source-owned handoff refused");
+ if(value.schema!=="motif.capability-handoff/v1"||
+    value.actual_message_sent!==false||value.external_delivery!==false||
+    value.public_network_gets!==0||value.transmittedByServer!==false||
+    value.actualDeliveryVerified!==false||
+    value.goal_contract_id!==approvedDigest)
+   throw Error("HOLD: unverified source authority / source-safety claim.");
+ return value;
+}
+function invalidateMailPreview(){
+ mailPreview=null;
+ hide("mail-review");hide("mail-ready");
+ const a=$("mail-app-link");a.removeAttribute("href");
+}
+async function discoverHandoff(){
+ const button=$("discover-handoff");button.disabled=true;
+ try{
+  const reply=await handoff({...approvedGoal(),stage:STAGES.discover});
+  if(reply.status!=="LOCAL_CAPABILITIES_AVAILABLE_NOT_EXECUTED"||
+     !Array.isArray(reply.capabilities))throw Error("HOLD: no compatible local capability");
+  handoffCapabilities=new Set(reply.capabilities.map(c=>c.id));
+  const hasWorkshop=handoffCapabilities.has("local_workshop");
+  const hasMail=handoffCapabilities.has("local_email_composer");
+  if(hasWorkshop)show("workshop-door");else hide("workshop-door");
+  if(hasMail){
+   $("mail-subject").value=reply.message_template_subject||"";
+   $("mail-message").value=reply.message_template_body||"";
+   $("mail-recipient").value="";
+   invalidateMailPreview();
+   show("mail-door");
+  }else hide("mail-door");
+  show("handoff-options");
+  $("handoff-status").textContent=
+    "Available local doors displayed. No recipient was chosen, no email was sent and no workshop started.";
+ }catch(error){$("handoff-status").textContent=error.message}
+ finally{button.disabled=false}
+}
+function currentMail(){
+ return {
+  recipient:$("mail-recipient").value.trim(),
+  subject:$("mail-subject").value.trim(),
+  message:$("mail-message").value
+ };
+}
+async function previewHandoff(){
+ invalidateMailPreview();
+ if(!handoffCapabilities?.has("local_email_composer"))
+   return $("handoff-status").textContent="HOLD: no outreach capability for this goal";
+ const button=$("preview-handoff");button.disabled=true;
+ try{
+  const review=currentMail();
+  const reply=await handoff({...approvedGoal(),...review,stage:STAGES.preview});
+  if(reply.status!=="LOCAL_MAIL_COMPOSER_PREVIEW_NOT_SENT"||
+     !/^[a-f0-9]{64}$/.test(reply.preview_id)||
+     reply.recipient!==review.recipient||
+     reply.subject!==review.subject||reply.message!==review.message)
+    throw Error("HOLD: preview does not match your typed message");
+  mailPreview={...review,id:reply.preview_id,contract_id:approvedDigest};
+  $("preview-recipient").textContent=review.recipient;
+  $("preview-subject").textContent=review.subject;
+  $("preview-message").textContent=review.message;
+  show("mail-review");
+  $("handoff-status").textContent=
+    "Preview ready. Read the exact recipient and message. Nothing was sent.";
+ }catch(error){$("handoff-status").textContent=error.message}
+ finally{button.disabled=false}
+}
+async function authorizeMailApp(){
+ hide("mail-ready");
+ if(!mailPreview||mailPreview.contract_id!==approvedDigest||
+    JSON.stringify(currentMail())!==JSON.stringify({
+      recipient:mailPreview.recipient,subject:mailPreview.subject,
+      message:mailPreview.message
+    })){
+   invalidateMailPreview();
+   return $("handoff-status").textContent=
+     "HOLD: recipient or message changed. Please preview again.";
+ }
+ const button=$("authorize-mail-app");button.disabled=true;
+ try{
+  const reply=await handoff({...approvedGoal(),
+    ...currentMail(),stage:STAGES.open,
+    preview_id:mailPreview.id,open_consent:true,open_permission:MAIL_SCOPE});
+  if(reply.status!=="LOCAL_MAIL_APP_HANDOFF_READY_NOT_SENT"||
+     !reply.mailto_uri?.startsWith("mailto:")||
+     reply.mailto_uri.length>3400)
+    throw Error("HOLD: reviewed mail-app handoff not available");
+  const a=$("mail-app-link");
+  a.href=reply.mailto_uri;
+  show("mail-ready");
+  $("handoff-status").textContent=
+    "Unsent mail-app link prepared. Click the link yourself to open your app. Sending requires your action there.";
+ }catch(error){$("handoff-status").textContent=error.message}
+ finally{button.disabled=false}
+}
+function prefillWorkshop(){
+ if(!handoffCapabilities?.has("local_workshop")||!approvedDigest)
+  return $("handoff-status").textContent="HOLD: local workshop unavailable.";
+ // Fragment never travels to the HTTP server; destination immediately
+ // scrubs it from the address bar before offering a separate Run button.
+ const query=encodeURIComponent(statement);
+ window.location.assign("/workshop#goal="+query);
+}
+$("discover-handoff").addEventListener("click",()=>void discoverHandoff());
+$("preview-handoff").addEventListener("click",()=>void previewHandoff());
+$("authorize-mail-app").addEventListener("click",()=>void authorizeMailApp());
+$("open-workshop").addEventListener("click",prefillWorkshop);
+for(const id of ["mail-recipient","mail-subject","mail-message"]){
+ $(id).addEventListener("input",invalidateMailPreview);
+}
+// A changed visible question or custom example also invalidates its old
+// approval rather than leaving an action button beside unapproved wording.
+for(const id of ["need","own-example"]){
+ $(id).addEventListener("input",()=>{
+  if(!approvedDigest)return;
+  approvedDigest=null;draft=null;handoffCapabilities=null;mailPreview=null;
+  hide("workkit");hide("handoff");hide("mail-ready");
+  report("Your question has changed. Review and confirm the new definition before another action.");
+ });
+}
