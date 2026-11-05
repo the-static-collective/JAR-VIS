@@ -5,6 +5,7 @@ import { Workbench } from "./workbench.mjs";
 import { InheritanceBoard } from "./inheritance.mjs";
 import {validateBridgeWork} from "./bridge-work-card.mjs";
 import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
+import {compareReciprocally,verifyMotifSource,SOURCE_BLOB} from "./motif-reciprocal.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
 
@@ -19,7 +20,9 @@ const staticFiles = new Map([
   ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/workshop", [new URL("../public/workshop.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/workshop.js", [new URL("../public/workshop.js", import.meta.url), "text/javascript; charset=utf-8"]],
-  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]]
+  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]],
+  ["/reciprocal", [new URL("../public/reciprocal.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/reciprocal.js", [new URL("../public/reciprocal.js", import.meta.url), "text/javascript; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -80,6 +83,10 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
+        if (pathname === "/api/reciprocal/state") return recursive ?
+          reply(res,200,{schema:"jarvis.motif-reciprocal-state/v1",mode:"LOCAL_PROPOSAL_ONLY",
+            sourcePin:SOURCE_BLOB,csrfToken:csrf,externalEffect:false}):
+          reply(res,503,{error:"HOLD: JAR;VIS recursive desk unavailable"});
         if (pathname === "/api/recursive/state") return recursive ?
           reply(res,200,{...recursive.summary(),csrfToken:csrf}) :
           reply(res,503,{error: recursiveUnavailable ?? "HOLD: recursive desk not configured"});
@@ -114,6 +121,10 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         };
         if (!operations[pathname]) return reply(res, 404, { error: "Not found" });
         return reply(res, 200, await operations[pathname]());
+      }
+      if (pathname === "/api/reciprocal/compare") {
+        if(!recursive)return reply(res,503,{error:"HOLD: JAR;VIS recursive desk unavailable"});
+        return reply(res,200,await compareReciprocally(body.text,recursive));
       }
       if (pathname.startsWith("/api/recursive/")) {
         if(!recursive)return reply(res,503,{error:recursiveUnavailable ?? "HOLD: recursive desk unavailable"});

@@ -25,6 +25,8 @@ jobs:
       - name: Verify pinned Static OS source is unmodified
         run: node --check src/recursive-workshop.mjs && node --check public/workshop.js
       - run: npm test
+      - name: Verify source-owned MOTIF-003 exact upstream bytes
+        run: node --check src/motif-reciprocal.mjs && node --check public/reciprocal.js
       - name: Fetch the source-owned Static OS recomposer cut for byte identity
         uses: actions/checkout@v4
         with:
@@ -37,6 +39,18 @@ jobs:
           cmp integrations/static-os-recomposer/question_first/recomposer.py static-os-recomposer-source/question_first/recomposer.py
           cmp integrations/static-os-recomposer/question_first/recomposer_witness.py static-os-recomposer-source/question_first/recomposer_witness.py
           cmp integrations/static-os-recomposer/scripts/recomposer-bridge.py static-os-recomposer-source/scripts/recomposer-bridge.py
+      - name: Fetch pinned source-owned MOTIF-003 snapshot for independent byte identity
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: main
+          path: motif-003-source
+          persist-credentials: false
+      - name: Compare native algorithm with inspected upstream source blob
+        run: |
+          test "$(git hash-object integrations/motif-003/affordance.py)" = "db25da0d50a9c8e2cd87aa576a22f969405737cf"
+          test "$(git hash-object motif-003-source/experiments/003/affordance.py)" = "db25da0d50a9c8e2cd87aa576a22f969405737cf"
+          cmp integrations/motif-003/affordance.py motif-003-source/experiments/003/affordance.py
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:
