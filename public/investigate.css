@@ -84,3 +84,16 @@ footer a{color:#455f4c}
 .source-advisor .suggestions li{padding:2px 0}
 .source-advisor #apply-suggestions[hidden]{display:none}
 @media(max-width:560px){.source-advisor{padding:13px}.source-advisor .suggest,.source-advisor #apply-suggestions{width:100%}}
+
+
+/* 026 / A distinct, explicitly authorized public source-genealogy search. */
+.source-genealogy{margin:19px 0;padding:18px 20px;border:1px solid #7f967d;background:#f5f0e3;box-shadow:3px 3px 0 #d5ddce}
+.source-genealogy h2{font-size:clamp(19px,3vw,25px);margin:0 0 8px;line-height:1.18}
+.source-genealogy p{line-height:1.5;font-size:14px;margin:8px 0}
+.source-genealogy small{display:block;color:#44624e;line-height:1.5;margin-top:8px;font-size:12px}
+.source-genealogy .discover-missing-source{border:1px solid #294b38;background:#294b38;color:#f8f3e9;font-size:14px;font-weight:700;padding:11px 15px;cursor:pointer}
+.source-genealogy .discover-missing-source:disabled{opacity:.6;cursor:wait}
+.source-genealogy #missing-source-results{padding-top:10px;font-size:13px;overflow-wrap:anywhere}
+.source-genealogy #missing-source-results .card{padding:10px;border-left:3px solid #668970;margin:8px 0;background:#fffdfa}
+.source-genealogy #download-source-discovery{border:1px solid #294b38;background:transparent;color:#294b38;padding:8px 12px;margin-top:12px;cursor:pointer}
+.source-genealogy #download-source-discovery[hidden]{display:none}
