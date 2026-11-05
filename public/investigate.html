@@ -31,6 +31,14 @@
       <div id="suggestions" class="suggestions" role="status" aria-live="polite"></div>
       <button type="button" id="apply-suggestions" hidden>Use these suggestions</button>
     </div>
+    <section class="source-genealogy" aria-labelledby="source-genealogy-title">
+      <h2 id="source-genealogy-title">What if the right source doesn't exist here?</h2>
+      <p>Look for a public API description we have not connected. Check its original source file and test an adapter offline.</p>
+      <button type="button" id="discover-missing-source" class="discover-missing-source">Investigate a missing source ↗</button>
+      <small>Clicking approves sending your question to public GitHub search. No proposed API server will be contacted, installed or authorized.</small>
+      <div id="missing-source-results" aria-live="polite"></div>
+      <button id="download-source-discovery" type="button" hidden>Save source-discovery packet (.json)</button>
+    </section>
     <fieldset class="field">
       <legend class="label">WHERE TO LOOK <small>Choose up to four. Each selection permits sending your question to that public service.</small></legend>
       <label class="choice"><input type="checkbox" id="github" checked><span><strong>Collective GitHub</strong><small>Public repositories, source files, exact commits and line citations.</small></span></label>
