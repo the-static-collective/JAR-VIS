@@ -147,12 +147,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: the-static-collective/MOTIF
-          ref: bb086b9a6a4f521213d782c438b92abd007cfa43
+          ref: 1c3c6d3474c096ce2403902a1bc5a19f1633c344
           persist-credentials: false
           path: motif-025-examples-source
       - name: Verify exact source-owned domain composer and local UI syntax
         run: |
-          test "$(git hash-object integrations/experiments/025/example_composer.py)" = "f28d5703fb5649f74ad99fffac3974834e9e36c3"
+          test "$(git hash-object integrations/experiments/025/example_composer.py)" = "47a3425c6a42bd028a836ac136223f5503e7ad9d"
           cmp integrations/experiments/025/example_composer.py motif-025-examples-source/experiments/025/example_composer.py
           node --check src/motif-composable-goals.mjs
           node --check public/goal.js

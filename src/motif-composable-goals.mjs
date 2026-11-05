@@ -7,8 +7,8 @@ import {createHash} from "node:crypto";
 import {fileURLToPath} from "node:url";
 import {verifyExamplesSource} from "./motif-goal-examples.mjs";
 
-export const SOURCE_025_COMMIT="bb086b9a6a4f521213d782c438b92abd007cfa43";
-export const SOURCE_025_BLOB="f28d5703fb5649f74ad99fffac3974834e9e36c3";
+export const SOURCE_025_COMMIT="1c3c6d3474c096ce2403902a1bc5a19f1633c344";
+export const SOURCE_025_BLOB="47a3425c6a42bd028a836ac136223f5503e7ad9d";
 const SOURCE=new URL("../integrations/experiments/025/example_composer.py",import.meta.url);
 const fail=(message,status=409)=>Object.assign(new Error("HOLD: "+message),{status});
 const hex=/^[a-f0-9]{64}$/;
