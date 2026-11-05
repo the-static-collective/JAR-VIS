@@ -267,7 +267,7 @@
  let gardenPacket=null;
  $('grow-adapter').addEventListener('click',async()=>{
   const box=$('garden-results'),button=$('grow-adapter');
-  clear(box);gardenPacket=null;$('download-garden').hidden=true;
+  clear(box);gardenPacket=null;$('download-garden').hidden=true;$('remember-garden').hidden=true;
   const question=$('question').value.trim();
   if(question.length<12){box.append(p('Write a specific question first.'));return}
   button.disabled=true;
@@ -306,6 +306,7 @@
    }
    box.append(p('Everything above uses synthetic sample data. The proposed API server was NOT contacted.'));
    $('download-garden').hidden=false;
+   $('remember-garden').hidden=r.status!=='HELD_SOURCE_SPECIFIC_GARDENER_RESULT';
   }catch(error){clear(box);box.append(p(String(error.message||error)))}
   finally{button.disabled=false}
  });
@@ -318,6 +319,79 @@
     String(gardenPacket.checksum_sha256||'packet').slice(0,12)+'.json';
   document.body.append(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),3000);
+ });
+
+ $('remember-garden').addEventListener('click',async()=>{
+  const box=$('memory-results'),btn=$('remember-garden');clear(box);
+  if(!gardenPacket||gardenPacket.status!=='HELD_SOURCE_SPECIFIC_GARDENER_RESULT'||
+     !/^[a-f0-9]{64}$/.test(gardenPacket.checksum_sha256||'')){
+   box.append(p('HOLD: run a successful synthetic Capability Gardener experiment first.'));
+   return;
+  }
+  btn.disabled=true;
+  box.append(p('Replaying the experiment and preserving it in this device’s private ledger…'));
+  try{
+   const csrf=await getCsrf();
+   const res=await fetch('/api/investigate/memory/remember',{
+    method:'POST',cache:'no-store',
+    headers:{'content-type':'application/json','x-jarvis-csrf':csrf},
+    body:JSON.stringify({
+     expectedGardenReceipt:gardenPacket.checksum_sha256,
+     approvedSyntheticCapture:true,approvedPersistentSave:true
+    })
+   });
+   const result=await res.json();
+   if(!res.ok)throw Error(result.error||'Experience not remembered');
+   if(result.schema!=='jarvis028.memory-save/v0')
+    throw Error('Unexpected memory response');
+   clear(box);
+   box.append(div('strong','',result.status));
+   box.append(p('Privately stored experiments: '+result.stored_experiments));
+   box.append(p('Record SHA-256: '+result.saved_record_sha256));
+   box.append(p('The recorded experiment can be replayed on this device after restarting JAR;VIS. It is not evidence of real-world API correctness.'));
+  }catch(error){clear(box);box.append(p(String(error.message||error)))}
+  finally{btn.disabled=false}
+ });
+ $('recall-garden').addEventListener('click',async()=>{
+  const box=$('memory-results'),btn=$('recall-garden');clear(box);
+  const question=$('question').value.trim();
+  if(question.length<12){box.append(p('Ask a specific question before recalling prior research.'));return;}
+  btn.disabled=true;
+  box.append(p('Checking the local ledger, then re-running the original remembered experiments…'));
+  try{
+   const csrf=await getCsrf();
+   const res=await fetch('/api/investigate/memory/recall',{
+    method:'POST',cache:'no-store',
+    headers:{'content-type':'application/json','x-jarvis-csrf':csrf},
+    body:JSON.stringify({question})
+   });
+   const result=await res.json();
+   if(!res.ok)throw Error(result.error||'Memory replay held');
+   if(result.schema!=='jarvis028.memory-recall/v0')
+    throw Error('Unexpected replay result');
+   clear(box);
+   box.append(div('strong','',result.status));
+   if(result.count!==undefined)
+    box.append(p('Stored experiments: '+result.count+
+      ' · structurally similar: '+result.matched.length+
+      ' · exactly replayed: '+result.replayed.length));
+   for(const m of result.matched||[]){
+    const card=div('div','card');
+    card.append(div('strong','',m.prior_outcome+
+     ' · similarity '+(m.similarity*100).toFixed(1)+'%'));
+    card.append(p('Experiment: '+m.record_sha256.slice(0,24)));
+    card.append(p('Previously rejected variants: '+m.failed_candidates));
+    card.append(p('Structural resemblance is only a lead, not a proof of the same cause.'));
+    box.append(card);
+   }
+   if(result.plan){
+    box.append(p('Classical next steps: '+result.plan.steps.join(' → ')));
+    box.append(p('Next question: '+result.plan.question));
+   }
+   if(result.status==='HOLD_NO_LABELED_RECALL_DOMAIN')
+    box.append(p('No labeled replay family for that topic yet. Memory will not invent one.'));
+  }catch(error){clear(box);box.append(p(String(error.message||error)))}
+  finally{btn.disabled=false}
  });
  $('pilot-openmeteo').addEventListener('click',async()=>{
   const box=$('pilot-results'),button=$('pilot-openmeteo');clear(box);
