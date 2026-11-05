@@ -5,6 +5,8 @@ import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {eagleEye,validatePacket as checkEagle} from '../integrations/investigation/alex/eagle-eye-024.mjs';
+import {discoverProviders,searchSelectedProviders,verifySupplemental,PUBLIC_PROVIDER_CATALOG}
+ from '../integrations/investigation/alex/eagle-eye-providers-025.mjs';
 import {investigatePublic,verifyPacket as checkAlex}
  from '../integrations/investigation/alex/motif023-live.mjs';
 import {planEvidence,verifyPlan,replanAfterObservation}
@@ -22,7 +24,7 @@ const safeNow=()=>new Date().toISOString();
 export function verifyOriginalOrgans(){
  const manifest=JSON.parse(readFileSync(new URL('pins.json',DIRECTORY)));
  if(manifest.schema!=='jarvis.investigation-organ-pins/v0'||
-   Object.keys(manifest.sources).length!==7)
+   Object.keys(manifest.sources).length!==8)
   throw Error('HOLD_UNKNOWN_RESEARCH_ORGAN_PINSET');
  for(const [p,info] of Object.entries(manifest.sources)){
   if(!/^(alex|planz|graft)\//.test(p)||
@@ -31,7 +33,7 @@ export function verifyOriginalOrgans(){
    throw Error('HOLD_SOURCE_OWNER_CODE_DRIFT_'+p);
  }
  verifyNativePlanZ();
- return {source_count:7,owners:['ALEX.2','planZ','GRAFT'],
+ return {source_count:8,owners:['ALEX.2','planZ','GRAFT'],
    research_owner:'MOTIF-023',
    source_organs_exact_pinned:true,
    source_owner_review_not_automatic:true};
@@ -45,9 +47,10 @@ function normalize(input){
   throw Error('HOLD_INVALID_QUESTION');
  const scopes=input.scopes;
  if(!scopes||typeof scopes!=='object'||Array.isArray(scopes)||
-   !['github','wikipedia','scholarly'].every(k=>typeof scopes[k]==='boolean')||
+   Object.keys(scopes).some(k=>!PUBLIC_PROVIDER_CATALOG.some(x=>x.id===k))||
+   Object.values(scopes).some(v=>typeof v!=='boolean')||
    !Object.values(scopes).some(Boolean)||
-   Object.keys(scopes).some(k=>!['github','wikipedia','scholarly'].includes(k)))
+   Object.values(scopes).filter(Boolean).length>4)
   throw Error('HOLD_PUBLIC_SEARCH_OPT_IN_REQUIRED');
  const depth=input.depth??3;
  if(!Number.isSafeInteger(depth)||depth<1||depth>6)
@@ -104,6 +107,14 @@ async function sourceReasoning(query,transport,githubToken){
    no_auto_capability_install:true};
  }
 }
+// A local, side-effect-free route recommendation. The question is not sent
+// to any public service until the operator checks providers and investigates.
+export function suggestInvestigationProviders(question){
+ return discoverProviders(question);
+}
+export function listPublicInvestigationProviders(){
+ return PUBLIC_PROVIDER_CATALOG;
+}
 export async function investigateDesk(input,options={}){
  const form=normalize(input);
  const pins=verifyOriginalOrgans(); // verify before network effects
@@ -115,9 +126,21 @@ export async function investigateDesk(input,options={}){
  const timer=AbortSignal.timeout(options.timeoutMs??50000);
  const transport=(url,opts)=>fetchImpl(url,{...opts,
   signal:opts.signal?AbortSignal.any([opts.signal,timer]):timer});
- const evidence=await eagleEye({question:form.question,scopes:form.scopes,depth:form.depth},
+ // These two research contracts stay independent: ALEX-024 signs its own
+ // GitHub/Wikipedia/OpenAlex packet; ALEX-025 signs a separate index packet.
+ const legacyScopes=Object.fromEntries(['github','wikipedia','scholarly']
+  .map(k=>[k,form.scopes[k]===true]));
+ const evidence=Object.values(legacyScopes).some(Boolean)?
+  await eagleEye({question:form.question,scopes:legacyScopes,depth:form.depth},
+   {transport,githubToken}):
+  {schema:'jarvis.no-legacy-public-provider/v0',status:'NOT_SELECTED',
+   hits:[],failures:[],source_documents:[],results_truncated:false,
+   catalog:{enumerated:0,selected:0,complete:true}};
+ if(evidence.status!=='NOT_SELECTED')checkEagle(evidence);
+ const supplemental=await searchSelectedProviders({question:form.question,scopes:form.scopes},
   {transport,githubToken});
- checkEagle(evidence);
+ verifySupplemental(supplemental);
+ const public_leads=[...evidence.hits,...supplemental.hits];
  const motif=form.deep?await sourceReasoning(form.question,transport,githubToken):
   {status:'NOT_REQUESTED',no_native_reasoning_claimed:true};
  const body={
@@ -127,15 +150,18 @@ export async function investigateDesk(input,options={}){
   source_owners:pins,
   selected_scopes:form.scopes,source_depth:form.depth,
   public_research:evidence,
+  supplemental_research:supplemental,
+  public_leads,
+  provider_recommendations:discoverProviders(form.question),
   motif_reasoning:motif,
-  status:evidence.hits.length?'PUBLIC_EVIDENCE_LEADS_AVAILABLE':
+  status:public_leads.length?'PUBLIC_EVIDENCE_LEADS_AVAILABLE':
    'HOLD_NOT_ENOUGH_PUBLIC_SOURCE_EVIDENCE',
   next_questions:[
    ...(motif.feedback_plan?.next_question?[motif.feedback_plan.next_question]:[]),
    'Which independently recoverable original would distinguish a shared source from coincidental agreement?',
    'Which additional source is not downstream from the same claimant?'
   ].slice(0,3),
-  disclosure:'Search query sent only to opted-in public providers. No private account access or automatic records storage.',
+  disclosure:'Recommendations were computed locally; the search question was sent only to explicitly selected public providers. No private account access or automatic records storage.',
   research_lead_not_answer:true,
   output_admission:'NONE',
   source_custody_verified:false,
