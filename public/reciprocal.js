@@ -121,7 +121,17 @@ async function displayEnvironment(report){
         " ms CPU. Both read "+
         report.embodiedResources.bytesReadBoth+
         " bytes. Electrical energy: NOT MEASURED. "+
-        report.embodiedResources.admission]
+        report.embodiedResources.admission ],
+      ["REALITY CHECK / 021 — WAS THE QUESTION MISENCODED?",
+        "First USGS query reported 0 fresh public sources because its URL "
+        +"ended at midnight. Full-UTC repair found 3 fresh sources; an "
+        +"independent conditional request then needed only "+
+        report.protocolIntegrity.conditional.actualRequests+
+        " actual GET ("+
+        report.protocolIntegrity.conditional.responseBodyBytes+
+        " HTTP body bytes; "+
+        (report.protocolIntegrity.conditional.elapsedWallNs/1e6).toFixed(0)+
+        " ms). Different runs: no causal energy or network savings claim."]
     ]){
       const article=document.createElement("article");article.className="witness";
       const title=document.createElement("h3");title.textContent=entry[0];
@@ -147,6 +157,10 @@ async function displayEnvironment(report){
       report.embodiedResources.nextQuestion+
       " CPU time is observed; power and Joules remain unknown.";
     holder.append(physical);
+    const queryProof=document.createElement("p");
+    queryProof.textContent="THE QUESTION ITSELF MUST BE VERIFIED: "+
+      report.protocolIntegrity.proposedNextQuestion;
+    holder.append(queryProof);
     $("environment-limits").textContent=report.evidenceLimitations[0]+
       " Research receipt: "+report.upstreamCommit+". No methods admitted or actions executed.";
   }catch(error){

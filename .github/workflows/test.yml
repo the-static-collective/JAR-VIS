@@ -101,6 +101,17 @@ jobs:
         run: |
           test "$(git hash-object integrations/motif-resource-020/embodied-resource-2026-11-05.json)" = "825c455e59e26df01157e5a4677a653fa88b8023"
           cmp integrations/motif-resource-020/embodied-resource-2026-11-05.json motif-resource-020-source/experiments/020/evidence/first-embodied-inquiry-2026-11-05.json
+      - name: Fetch exact source-owned MOTIF-021 protocol question receipt
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: cdcec6013492bb6ccd0982ee9af9f5bf1d3200f7
+          path: motif-protocol-021-source
+          persist-credentials: false
+      - name: Verify protocol repair and conditional work evidence bytes
+        run: |
+          test "$(git hash-object integrations/motif-reality-021/source-question-integrity-2026-11-05.json)" = "b5cfe73c96ab908a8e87de73e90486fc0ab0ad66"
+          cmp integrations/motif-reality-021/source-question-integrity-2026-11-05.json motif-protocol-021-source/experiments/021/evidence/first-question-integrity-2026-11-05.json
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:
