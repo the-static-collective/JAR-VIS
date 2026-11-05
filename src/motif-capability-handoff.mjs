@@ -9,8 +9,8 @@ import {readFile} from "node:fs/promises";
 import {fileURLToPath} from "node:url";
 import {verifyPrepareSource} from "./motif-goal-workpacket.mjs";
 
-export const SOURCE_027_COMMIT="073d1ffb70a8389a9727dfe0d50db6d0605164b2";
-export const SOURCE_027_BLOB="475a0c6db2d3c97f4a8928e0deb7a9bd3c0da2e8";
+export const SOURCE_027_COMMIT="90cbe6427d52286d17b74cdff48c4a81a48db3d0";
+export const SOURCE_027_BLOB="dd108e4765e9cce1e15e35a01c2fd3c2f7a83979";
 export const STAGES=Object.freeze({
  discover:"DISCOVER_LOCAL_CAPABILITIES",
  preview:"PREVIEW_MAIL_APP_HANDOFF",
@@ -62,7 +62,7 @@ export function validateHandoffInput(b){
       typeof b.subject!=="string"||b.subject.length>130||CONTROL.test(b.subject)))||
     (b.message!==undefined&&(
       typeof b.message!=="string"||b.message.length>1300||
-      /[\x00-\x08\x0b-\x09\x0e-\x1f\x7f]/.test(b.message)))||
+      /[\x00-\x08\x0b-\x1f\x7f]/.test(b.message)))||
     (b.open_consent!==undefined&&typeof b.open_consent!=="boolean")||
     (b.open_permission!==undefined&&b.open_permission!==COMPOSER_SCOPE)){
    throw deny("invalid or unsupported handoff input",400);

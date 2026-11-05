@@ -101,6 +101,8 @@ test("no mass email recipients, header injections, private network, or invented 
   "a@example.org,b@example.org",
   "person@example.org\nBcc:other@example.org",
   "user@localhost",
+  "user%40other@example.org",
+  "foo%0Abcc@example.org",
   "User Display Name <person@example.org>",
  ]){
   await assert.rejects(handoffCapability({...c,...content(),

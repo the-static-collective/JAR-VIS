@@ -221,7 +221,7 @@ The mail-app path is deliberately **three-stage, user controlled**:
 
 Underneath, `POST /api/reciprocal/handoff` runs the byte-pinned MOTIF-027 `capability_handoff.py` source through the same bounded local Python bridge, behind existing localhost Host/Origin/CSRF requirements. JAR;VIS independently verifies source identity, domain-appropriate route, exact encoded `mailto:` subject/body/recipient, no SMTP, no network sends, no journal mutation and no invented delivery receipts. It does **not** connect Proton, Gmail, Google Drive or any email provider and holds no sender credentials.
 
-MOTIF source: `the-static-collective/MOTIF`, commit `073d1ffb70a8389a9727dfe0d50db6d0605164b2`, Git blob `475a0c6db2d3c97f4a8928e0deb7a9bd3c0da2e8`. It is still in an experimental PR, not merged or publicly deployed.
+MOTIF source: `the-static-collective/MOTIF`, commit `90cbe6427d52286d17b74cdff48c4a81a48db3d0`, Git blob `dd108e4765e9cce1e15e35a01c2fd3c2f7a83979`. It is still in an experimental PR, not merged or publicly deployed.
 
 Run `npm test`, then `npm start`, and use `http://127.0.0.1:7789/goal`. The Python source relies on MOTIF-026/025/024/023/022 source-pinned local dependencies. The separate source-owner tests validate invalid recipients, header injection, stale goal and mail preview digests, missing consent and no asserted delivery.
 
