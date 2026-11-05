@@ -1,0 +1,37 @@
+name: JARVIS-025 Public Provider Discovery and Investigation Desk
+on:
+  push:
+    branches:
+      - feat/investigation-desk-provider-routing-025
+  pull_request:
+    paths:
+      - 'src/investigation-desk.mjs'
+      - 'src/server.mjs'
+      - 'integrations/investigation/**'
+      - 'public/investigate.*'
+      - 'test/investigation-providers-025.test.mjs'
+      - '.github/workflows/investigation-providers-025.yml'
+permissions:
+  contents: read
+jobs:
+  review-and-public-source-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify JS syntax and browser changes
+        run: |
+          node --check src/investigation-desk.mjs
+          node --check public/investigate.js
+          node --check integrations/investigation/alex/eagle-eye-providers-025.mjs
+      - name: Existing original JARVIS regressions and seven new end-to-end tests
+        run: npm test
+      - name: Actual read-only public index crossing — Open Library and Crossref
+        run: |
+          node --input-type=module -e "import {investigateDesk} from './src/investigation-desk.mjs'; const r=await investigateDesk({question:'Which books explain ancient philosophy and historical evidence?',scopes:{openlibrary:true,crossref:true},depth:2,deep:false}); console.log(JSON.stringify({status:r.status,hits:r.public_leads.length,providers:r.supplemental_research.providers_queried,failures:r.supplemental_research.failures,remoteWrites:r.external_writes})); if(r.status!=='PUBLIC_EVIDENCE_LEADS_AVAILABLE'||r.public_leads.length<1||r.external_writes!==0||r.source_custody_verified)process.exit(1)"
