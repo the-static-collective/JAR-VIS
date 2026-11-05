@@ -58,8 +58,17 @@ async function readJson(url,transport,token=null){
 async function enumerate(transport,token){
  const result=[];let completed=true,pages=0;
  for(let page=1;page<=LIMITS.pages;page++){
-  const entries=await readJson('https://api.github.com/orgs/'+ORG+
-   '/repos?type=public&per_page='+LIMITS.perPage+'&page='+page,transport,token);
+  let entries;
+  try{
+   entries=await readJson('https://api.github.com/orgs/'+ORG+
+    '/repos?type=public&per_page='+LIMITS.perPage+'&page='+page,transport,token);
+  }catch(error){
+   // The Static Collective is a GitHub USER owner, not necessarily an org.
+   // A 404 from /orgs is not a failure of public repository discovery.
+   if(error.message!=='HOLD_PUBLIC_PROVIDER_HTTP_404')throw error;
+   entries=await readJson('https://api.github.com/users/'+ORG+
+    '/repos?type=owner&per_page='+LIMITS.perPage+'&page='+page,transport,token);
+  }
   if(!Array.isArray(entries)||entries.length>LIMITS.perPage)
    throw Error('HOLD_INVALID_PUBLIC_ORG_INDEX');
   pages++;
