@@ -131,7 +131,8 @@ export class NetworkWeave {
  #entries(){
    const list=this.#journal.list(),known=new Set(),rows=[];
    for(const e of list){
-     if(e.kind!=="WAKE_WEAVE_ADMITTED")throw bad("unexpected event in weave journal");
+     if(!["WAKE_WEAVE_ADMITTED","WAKE_WEAVE_RECEIVED_DRAFT"].includes(e.kind))
+       throw bad("unexpected event in weave journal");
      const p=e.payload;
      if(!isObject(p)||!studyRe.test(p.studyId||"")||
         !receiptRe.test(p.packetSha256||"")||!byId.has(p.sourceNode)||
@@ -143,6 +144,15 @@ export class NetworkWeave {
         known.has(p.studyId)||
         (p.parentStudyId&&!known.has(p.parentStudyId))||
         p.parentStudyId===p.studyId)throw bad("weave ledger event inconsistent with local graph");
+     if(e.kind==="WAKE_WEAVE_RECEIVED_DRAFT" &&
+       (!studyRe.test(p.foreignOriginStudyId||"") ||
+        !byId.has(p.foreignSourceNode) ||
+        p.sourceNode===p.foreignSourceNode ||
+        p.targetNode!==null || p.parentStudyId!==null))
+       throw bad("foreign draft cannot impersonate local admission or parenthood");
+     if(e.kind==="WAKE_WEAVE_ADMITTED" &&
+       (Object.hasOwn(p,"foreignOriginStudyId")||Object.hasOwn(p,"foreignSourceNode")))
+       throw bad("local study cannot claim a foreign inbound receipt");
      known.add(p.studyId);
      rows.push({...p,at:e.at});
    }
@@ -255,8 +265,22 @@ export class NetworkWeave {
    const state=await this.#wake.create({title:p.title,context:p.context,
       small:p.asks.small,creative:p.asks.creative,autonomous:p.asks.autonomous,
       verifiedOpportunity:false,count,seed});
-   return {schema:"jarvis.weave-received-draft/v1",studyId:state.active.studyId,
-     receivedBy:target.id,sourceNode:p.sourceNode,
+   const studyId=state.active.studyId;
+   const existing=this.#entries().find(e=>e.studyId===studyId);
+   const expected={studyId,packetSha256:carrier.payloadSha256,
+     sourceNode:target.id,targetNode:null,parentStudyId:null,parentSlot:null,
+     foreignOriginStudyId:carrier.originStudyId,foreignSourceNode:p.sourceNode,
+     disposition:"LOCAL_STUDY_ONLY"};
+   if(existing){
+     if(existing.packetSha256!==expected.packetSha256 ||
+        existing.foreignOriginStudyId!==expected.foreignOriginStudyId ||
+        existing.foreignSourceNode!==expected.foreignSourceNode)
+        throw bad("already recorded study is not this foreign lineage");
+   }else{
+     await this.#journal.append("WAKE_WEAVE_RECEIVED_DRAFT",expected);
+   }
+   return {schema:"jarvis.weave-received-draft/v1",studyId,
+     reused:Boolean(existing),receivedBy:target.id,sourceNode:p.sourceNode,
      checkedPacket:carrier.payloadSha256,storedAs:"LOCAL_UNVERIFIED_DRAFT",
      recipientDisposition:"HOLD_FOR_LOCAL_OPERATOR",
      remotelyAdmitted:false,externalDelivery:false};

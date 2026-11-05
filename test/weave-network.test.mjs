@@ -143,6 +143,16 @@ test("export/inspect/receive is portable but independent HOLD and unverified dra
  const child=(await wake.state(received.studyId)).active;
  assert.equal(child.plan.spec.verified_opportunity,false);
  assert.equal(received.remotelyAdmitted,false);
+ const edges=(await weave.state()).edges;
+ assert.equal(edges.length,2);
+ assert.equal(edges[1].foreignOriginStudyId,created.studyId);
+ assert.equal(edges[1].foreignSourceNode,"fellowship");
+ assert.equal(edges[1].sourceNode,"webz");
+ assert.equal(edges[1].targetNode,null);
+ const again=await weave.receiveCarrier({carrier,independentlyReviewed:true,
+  localOperatorApproved:true,count:3,seed:33});
+ assert.equal(again.reused,true);
+ assert.equal((await weave.state()).edges.length,2);
 }));
 test("counterfeit signed, modified, extra-field or route-forged carriers all HOLD",()=>sandbox(async({weave})=>{
  const created=await admit(weave);

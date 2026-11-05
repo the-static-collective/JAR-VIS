@@ -25,7 +25,7 @@ The original JAR;VIS \`any-invitation-001\` cartridge supplies ACT, OFFER, QUEST
 
 A human may approve the public-safe export of an **unsigned portable carrier** addressed to one named *organ type*. Another JAR;VIS instance can paste it, validate its exact SHA and packet schema, HOLD it, and only after independent review make a **new unverified WAKE draft**. This is genuine file/text portability, not account authentication, network synchronization, third-party publication, or source-owner ADMIT.
 
-The weave's own hash-chained local journal records **only source node, desired target node, parent study/slot, packet hash and local study ID**. Raw operator words live in the separate WAKE local study; no people names or contacts are stored by WEAVE. The journal is unsigned, local, not tamperproof or multiparty transactional. WEAVE does not join source-owned databases.
+The weave's own hash-chained local journal records **only source node, desired target node, parent study/slot, packet hash and local study ID**. Separately approved receiving drafts record the foreign source node and origin study ID as **untrusted claimed ancestry**, never authenticated identity or local parent authority. Raw operator words live in the separate WAKE local study; no people names or contacts are stored by WEAVE. The journal is unsigned, local, not tamperproof or multiparty transactional. WEAVE does not join source-owned databases.
 
 ## Source boundaries observed
 
