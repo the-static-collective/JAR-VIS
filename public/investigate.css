@@ -114,3 +114,19 @@ footer a{color:#455f4c}
 .capability-garden small,.live-pilot small{line-height:1.45;font-size:12px}
 @media(max-width:580px){.capability-garden,.live-pilot{padding:13px}
 .capability-garden button,.live-pilot button{max-width:100%}}
+
+
+/* JAR;VIS-028: voluntary experiment memory, distinct from live research. */
+.memory-of-failure{margin-top:18px;padding:15px 17px;background:#eaf0e6;
+ border:1px solid #68836a;box-shadow:3px 3px 0 #d1ddca}
+.memory-of-failure h4{font-size:18px;color:#244933;margin:0 0 8px}
+.memory-of-failure p{font-size:14px;line-height:1.55}
+.memory-of-failure button{background:#355c44;color:#fcfaf2;padding:10px 13px;
+ border:1px solid #254734;font-weight:700;cursor:pointer;margin:5px 5px 5px 0}
+.memory-of-failure button:disabled{opacity:.55;cursor:wait}
+.memory-of-failure button[hidden]{display:none}
+.memory-of-failure #memory-results{margin-top:8px;overflow-wrap:anywhere}
+.memory-of-failure #memory-results .card{padding:9px;border-left:3px solid #5d8460;
+ margin:8px 0;background:#f7f9f4}
+@media(max-width:580px){.memory-of-failure{padding:12px}
+.memory-of-failure button{width:100%}}
