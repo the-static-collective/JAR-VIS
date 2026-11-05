@@ -77,6 +77,19 @@ jobs:
           test "$(git hash-object integrations/motif-reality-017/learned-constraints-2026-11-05.json)" = "f5b4d793945e06335e0280687b2a5f0b365a1924"
           cmp integrations/motif-reality-017/actual-event-2026-11-05.json motif-event-017-source/experiments/017/evidence/first-real-event-2026-11-05.json
           cmp integrations/motif-reality-017/learned-constraints-2026-11-05.json motif-event-017-source/experiments/017/evidence/first-lessons-2026-11-05.json
+      - name: Fetch source-owned MOTIF-019 question evolution and March physical evidence
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 1bb4028141eb20a8798bed338dcb3d851284de22
+          path: motif-question-019-source
+          persist-credentials: false
+      - name: Confirm exact upstream experimental research receipt bytes
+        run: |
+          test "$(git hash-object integrations/motif-reality-019/question-evolution-2026-11-05.json)" = "15f1e8cfecd781ca68f4eec05e1fc44e71668d1c"
+          test "$(git hash-object integrations/motif-reality-019/march-outcome-2026-11-05.json)" = "0cf1303cdeb83d9c29fe417ac19c66c217ddf63d"
+          cmp integrations/motif-reality-019/question-evolution-2026-11-05.json motif-question-019-source/experiments/019/evidence/final-question-evolution-2026-11-05.json
+          cmp integrations/motif-reality-019/march-outcome-2026-11-05.json motif-question-019-source/experiments/019/evidence/final-value-function-diagnostic-2026-11-05.json
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:

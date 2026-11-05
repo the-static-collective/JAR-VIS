@@ -79,3 +79,21 @@ MOTIF's meta-diagnostic produced three evidence-backed *hypotheses*, not changed
 JAR;VIS loads the exact source-owned 017 event and metadiagnostic Git blobs, verifies their integrity, and displays the new negative evidence and self-challenging question alongside 015/016. The original synthetic MOTIF-003 route comparison and separate consented local opinion journal remain independent. Nothing in this bridge automatically admits a learned rule, changes weights, contacts the public or acts as a flood warning.
 
 **Real source-backed run and raw response archive**: https://github.com/the-static-collective/MOTIF/actions/runs/42034382151 . Source file integrity is not independent sensor authentication. Manual receiver review required before merging.
+
+## MOTIF-019 — the evaluator questions the worth of its own questions
+
+The local reciprocal laboratory now includes a **six-iteration evidence-driven question-kind evolution** from source-owned MOTIF-019, using two sealed Git research receipts. The new question kind is `source_health`: asking whether a sensor seems available before paying for its measurement. All source-observation timestamps are historical (a proxy for availability); no actual historical health request or real-time flood forecasts occurred.
+
+The six-stage development loop on previously inspected 2025 USGS data selected dual-source queries at zero hypothetical cost, then chose **downstream-only** after imposing research credit costs. It retained downstream-only through the added missing-answer penalty, conditional question, historical health-probe question, and false-positive-health penalty. This is one genuine change in selected criterion, **not six trained improvements**.
+
+The independent March 2026 historical test contained **300** downstream hours. Both upstream sources were jointly usable on only 35 hours; Blue Earth had 35 and Le Sueur 116. The frozen downstream-only policy had **185.3333 cfs MAE**. The unselected hypothetical historical health-probe option had **150.4962 cfs raw MAE**, but **261.5924 cfs-equivalent declared weighted objective** vs **213.7933** for the zero-query baseline. The outcome appropriately **HOLDs**; the unselected lower-error method cannot be retroactively admitted.
+
+Crucially, the *price of one extra question was invented by our own evaluation*, not measured: **37.382353 cfs-equivalent**. A posthoc cost-sensitivity diagnostic shows that, on the observed 2026 sample, the historical health-probe strategy would only have won that stipulated score under a credit price below **18.8795**. This is not an empirically calibrated real-world threshold and cannot be used to revise the frozen 2026 selection.
+
+MOTIF's new deepest question:
+
+> Are our research-credit prices the wrong question? What actual latency, missing-answer and opportunity costs justify asking?
+
+JAR;VIS shows this observation and the unresolved question on `/reciprocal`; its local `GET /api/reciprocal/environment` report includes `questionAboutQuestion`. Validation rejects attempts to pass 019's negative result as an independently proven improvement. The exact JSON is compared by CI to MOTIF source commit `1bb4028141eb20a8798bed338dcb3d851284de22`. Source run and temporary original raw USGS responses: https://github.com/the-static-collective/MOTIF/actions/runs/42040857789 . Neither Git hash identity nor machine-generated source hashes authenticate original agency measurements.
+
+The physically meaningful next experiment should record actual query arrival, latency, missingness and meaningful operator-defined opportunity costs *at real issue time*, then freeze a policy before observing new future outcomes. The present implementation remains historical, non-operational, and without independent source authenticity or action authority.

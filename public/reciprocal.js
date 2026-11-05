@@ -104,7 +104,15 @@ async function displayEnvironment(report){
         report.eventLearning.data.cautiousMaeCfs+" cfs; persistence "+
         report.eventLearning.data.persistenceMaeCfs+
         " cfs. Added caution cost "+
-        report.eventLearning.data.cautiousExtraErrorCfs+" cfs. Nothing admitted."]
+        report.eventLearning.data.cautiousExtraErrorCfs+" cfs. Nothing admitted."],
+      ["QUESTION ENGINE / 019 — WHAT DOES ASKING COST?",
+        "On "+report.questionAboutQuestion.downstreamCases+
+        " real downstream hourly target cases, the frozen no-query method MAE was "+
+        report.questionAboutQuestion.selectedModelMaeCfs+
+        " cfs. The unselected historical-health approach had lower raw error ("+
+        report.questionAboutQuestion.sourceHealthModelMaeCfs+
+        " cfs), but lost under our arbitrary query-credit model. "+
+        report.questionAboutQuestion.state]
     ]){
       const article=document.createElement("article");article.className="witness";
       const title=document.createElement("h3");title.textContent=entry[0];
@@ -120,6 +128,11 @@ async function displayEnvironment(report){
       report.eventLearning.learned.diagnosticSelfChallenge+
       " Neither always choose the simpler method nor always choose the complicated one.";
     holder.append(question);
+    const costQuestion=document.createElement("p");
+    costQuestion.textContent="QUESTIONING THE VALUE FUNCTION: "+
+      report.questionAboutQuestion.deeperQuestion+
+      " The engine's source-query price is a hypothetical research assumption, not actual monetary cost.";
+    holder.append(costQuestion);
     $("environment-limits").textContent=report.evidenceLimitations[0]+
       " Research receipt: "+report.upstreamCommit+". No methods admitted or actions executed.";
   }catch(error){
