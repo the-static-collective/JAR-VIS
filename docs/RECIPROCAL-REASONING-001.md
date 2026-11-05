@@ -97,3 +97,17 @@ MOTIF's new deepest question:
 JAR;VIS shows this observation and the unresolved question on `/reciprocal`; its local `GET /api/reciprocal/environment` report includes `questionAboutQuestion`. Validation rejects attempts to pass 019's negative result as an independently proven improvement. The exact JSON is compared by CI to MOTIF source commit `1bb4028141eb20a8798bed338dcb3d851284de22`. Source run and temporary original raw USGS responses: https://github.com/the-static-collective/MOTIF/actions/runs/42040857789 . Neither Git hash identity nor machine-generated source hashes authenticate original agency measurements.
 
 The physically meaningful next experiment should record actual query arrival, latency, missingness and meaningful operator-defined opportunity costs *at real issue time*, then freeze a policy before observing new future outcomes. The present implementation remains historical, non-operational, and without independent source authenticity or action authority.
+
+## MOTIF-020 — credits-free computation witness from GHoT
+
+JAR;VIS now displays **actual source-backed GHoT resource instrumentation** alongside MOTIF-015 through 019. The GHoT source owner measured 5 trials each of 250 repeated exact-answer tasks: full source validation on every question vs source-hash-checking and reuse of the previously validated answer.
+
+- Full parse/validate median: **100.425 ms process CPU per 250 tasks**.
+- Content-verified reuse median: **28.377 ms CPU** on the same GitHub runner and repeated workload.
+- Identical answer digest; both modes read 2,426,750 bytes each per trial; parsing reduced from 250 times to 1.
+- **No attributable electrical energy measured**. Joules, watts and CO₂ explicitly remain `null`. The built-in GHoT power state/scheduler was dry-run evidence, not an actual body capability, scheduling assignment or dispatch.
+- No scalar token/credit price can replace actual CPU ns, IO bytes, network bytes, latency, thermal state or operator-defined urgency.
+
+GHoT source-owned PR #135 (https://github.com/the-static-collective/GHoT/pull/135) holds the physical runner receipt; MOTIF-020 PR #40 (https://github.com/the-static-collective/MOTIF/pull/40) checks the source receipt's raw trials and composes a HELD next question, not an automatically accepted runtime optimization. JAR;VIS pins its independent MOTIF source commit `aa838a2c419edf5cb19afc15f76b5793e2fe8855` exactly and displays its receipts read-only. Its compare and response graph still use the original unchanged synthetic affordance kernel; the physical resource witness has **no extra authority**.
+
+Next question: Can validated answer reuse reduce cost on actual operator devices without losing source freshness, accuracy or the benefit of a timely answer? Measuring process CPU on a Linux runner is not a substitute for physical watt-hours, battery drain, or real network query-latency receipts.

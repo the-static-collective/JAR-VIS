@@ -112,7 +112,16 @@ async function displayEnvironment(report){
         " cfs. The unselected historical-health approach had lower raw error ("+
         report.questionAboutQuestion.sourceHealthModelMaeCfs+
         " cfs), but lost under our arbitrary query-credit model. "+
-        report.questionAboutQuestion.state]
+        report.questionAboutQuestion.state],
+      ["REAL RESOURCE WITNESS / GHoT → MOTIF-020",
+        "Same proven answer, 250 queries: full reparse "+
+        (report.embodiedResources.reparseCpuNs/1e6).toFixed(2)+
+        " ms CPU; source-verified reuse "+
+        (report.embodiedResources.reuseCpuNs/1e6).toFixed(2)+
+        " ms CPU. Both read "+
+        report.embodiedResources.bytesReadBoth+
+        " bytes. Electrical energy: NOT MEASURED. "+
+        report.embodiedResources.admission]
     ]){
       const article=document.createElement("article");article.className="witness";
       const title=document.createElement("h3");title.textContent=entry[0];
@@ -133,6 +142,11 @@ async function displayEnvironment(report){
       report.questionAboutQuestion.deeperQuestion+
       " The engine's source-query price is a hypothetical research assumption, not actual monetary cost.";
     holder.append(costQuestion);
+    const physical=document.createElement("p");
+    physical.textContent="GHOT'S EMBODIED QUESTION: "+
+      report.embodiedResources.nextQuestion+
+      " CPU time is observed; power and Joules remain unknown.";
+    holder.append(physical);
     $("environment-limits").textContent=report.evidenceLimitations[0]+
       " Research receipt: "+report.upstreamCommit+". No methods admitted or actions executed.";
   }catch(error){

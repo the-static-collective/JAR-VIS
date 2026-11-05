@@ -90,6 +90,17 @@ jobs:
           test "$(git hash-object integrations/motif-reality-019/march-outcome-2026-11-05.json)" = "0cf1303cdeb83d9c29fe417ac19c66c217ddf63d"
           cmp integrations/motif-reality-019/question-evolution-2026-11-05.json motif-question-019-source/experiments/019/evidence/final-question-evolution-2026-11-05.json
           cmp integrations/motif-reality-019/march-outcome-2026-11-05.json motif-question-019-source/experiments/019/evidence/final-value-function-diagnostic-2026-11-05.json
+      - name: Fetch exact MOTIF-020 physical compute witness derived from GHoT
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: aa838a2c419edf5cb19afc15f76b5793e2fe8855
+          path: motif-resource-020-source
+          persist-credentials: false
+      - name: Verify owner source receipt byte identity
+        run: |
+          test "$(git hash-object integrations/motif-resource-020/embodied-resource-2026-11-05.json)" = "825c455e59e26df01157e5a4677a653fa88b8023"
+          cmp integrations/motif-resource-020/embodied-resource-2026-11-05.json motif-resource-020-source/experiments/020/evidence/first-embodied-inquiry-2026-11-05.json
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:

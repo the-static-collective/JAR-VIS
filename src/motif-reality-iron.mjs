@@ -7,6 +7,7 @@ import {readFile} from "node:fs/promises";
 import {createHash} from "node:crypto";
 import {inspectEventLearning} from "./motif-event-lessons.mjs";
 import {inspectQuestionAboutQuestion} from "./motif-question-about-question.mjs";
+import {inspectEmbodied} from "./motif-embodied-resource.mjs";
 export const WITNESS_SOURCES=Object.freeze({
   watershed:{url:new URL("../integrations/motif-reality-016/actual-watershed-2026-11-05.json",import.meta.url),
     blob:"8e0f7c9123a9d12b0ffcc95c449e4d20bd8bcfeb",schema:"motif.reality-iron-watershed/v1"},
@@ -125,5 +126,6 @@ export async function inspectRealityIron(){
   return {...inspectEvidenceBodies(bodies.watershed,bodies.weather),
     eventLearning:await inspectEventLearning(),
     questionAboutQuestion:await inspectQuestionAboutQuestion(),
+    embodiedResources:await inspectEmbodied(),
     sourceBlobs:Object.fromEntries(Object.entries(WITNESS_SOURCES).map(([n,v])=>[n,v.blob]))};
 }
