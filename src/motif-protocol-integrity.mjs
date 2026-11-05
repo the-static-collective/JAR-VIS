@@ -7,7 +7,7 @@ import {readFile} from "node:fs/promises";
 import {createHash} from "node:crypto";
 export const SOURCE_COMMIT="cdcec6013492bb6ccd0982ee9af9f5bf1d3200f7";
 export const SOURCE_GIT_BLOB="b5cfe73c96ab908a8e87de73e90486fc0ab0ad66";
-const URL=new URL("../integrations/motif-reality-021/source-question-integrity-2026-11-05.json",import.meta.url);
+const SOURCE_URL=new URL("../integrations/motif-reality-021/source-question-integrity-2026-11-05.json",import.meta.url);
 const hold=why=>Object.assign(new Error("HOLD: "+why),{status:409});
 const num=x=>typeof x==="number"&&Number.isFinite(x);
 export function inspectQuestionIntegrity(r){
@@ -71,7 +71,7 @@ export function inspectQuestionIntegrity(r){
  };
 }
 export async function inspectProtocolIntegrity(){
- const raw=await readFile(URL);
+ const raw=await readFile(SOURCE_URL);
  const actual=createHash("sha1").update(Buffer.from("blob "+raw.length+"\0")).update(raw).digest("hex");
  if(actual!==SOURCE_GIT_BLOB)throw hold("question protocol witness bytes changed");
  let data;try{data=JSON.parse(raw.toString("utf8"))}catch{throw hold("invalid protocol receipt")}
