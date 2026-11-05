@@ -29,7 +29,7 @@ const safeNow=()=>new Date().toISOString();
 export function verifyOriginalOrgans(){
  const manifest=JSON.parse(readFileSync(new URL('pins.json',DIRECTORY)));
  if(manifest.schema!=='jarvis.investigation-organ-pins/v0'||
-   Object.keys(manifest.sources).length!==12)
+   Object.keys(manifest.sources).length!==14)
   throw Error('HOLD_UNKNOWN_RESEARCH_ORGAN_PINSET');
  for(const [p,info] of Object.entries(manifest.sources)){
   if(!/^(alex|planz|graft)\//.test(p)||
@@ -39,7 +39,7 @@ export function verifyOriginalOrgans(){
  }
  verifyNativePlanZ();
  verifyAlexSource();
- return {source_count:12,owners:['ALEX.2','planZ','GRAFT'],
+ return {source_count:14,owners:['ALEX.2','planZ','GRAFT'],
    research_owner:'MOTIF-023',
    source_organs_exact_pinned:true,
    source_owner_review_not_automatic:true};
