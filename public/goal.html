@@ -7,21 +7,21 @@
 <script type="module" src="/goal.js"></script></head>
 <body>
 <a class="skip" href="#main">Skip to your goal</a>
-<header class="top"><a class="brand" href="/">JAR<span>;</span>VIS</a><div class="tag">MOTIF-024 · RIGHT TO BE WRONG</div><a href="/reciprocal">← Research desk</a></header>
+<header class="top"><a class="brand" href="/">JAR<span>;</span>VIS</a><div class="tag">MOTIF-025 · COMPOSABLE EXAMPLES</div><a href="/reciprocal">← Research desk</a></header>
 <main id="main" class="shell goal-page">
 <div class="ticker"><span>YOUR ANSWER DEFINES DONE · CORRECTIONS ARE WELCOME</span><span id="connection">CHECKING...</span></div>
 <section class="hero">
 <p class="eyebrow">THE QUESTION BEFORE THE QUESTION</p>
 <h1>What would <em>be enough?</em></h1>
-<p class="lead">Here are two possible finished answers. You can pick either, or show us what a good answer would look like in your own words.</p>
-<p class="fine">Research prototype for public river reports only. Your question goes to a LOCAL, source-verified MOTIF Python process—not a cloud model. It is not logged, and no public-source requests or other actions occur, even after you confirm.</p>
+<p class="lead">For a donor, volunteer, event, website, or another request, JAR;VIS offers two possible definitions of done—and lets you write your own.</p>
+<p class="fine">Local, credits-free research prototype. Examples come from a small, auditable set of topic patterns, not an AI that understands any possible goal. Your input is processed only by a LOCAL, source-verified Python program; it is not persisted or sent to a cloud model. Confirmation does not execute actions.</p>
 </section>
 <section class="terminal">
 <div class="window-bar"><span>MY GOAL / IN MY OWN WORDS</span><span>NO EXTERNAL INQUIRY</span></div>
 <div class="terminal-content">
 <form id="goal-form">
 <label for="need">What are you trying to find out?</label>
-<textarea id="need" maxlength="320" rows="3" required placeholder="Could you check the rivers?"></textarea>
+<textarea id="need" maxlength="320" rows="3" required placeholder="Could we get free coffee donated for our fellowship event?"></textarea>
 <div class="buttons"><button id="start" type="submit">Show me what enough could mean →</button>
 <button id="example" type="button" class="secondary">Use sample question</button></div>
 </form>
@@ -30,21 +30,24 @@
 <section class="goal-examples" id="examples" hidden aria-live="polite">
 <p class="eyebrow">TWO EXAMPLES · NEITHER IS ASSUMED</p>
 <h2>Do you mean something like this?</h2>
-<p class="small">These are illustrations of sufficient answers, not actual sensor readings. Both examples use twelve hours because that was the earlier researched test, not because your goal must.</p>
+<p class="small">These examples describe possible definitions of success. They are not actual donations, confirmed volunteers, deployed websites or measured results. Pick one, or write your own.</p>
+<p class="small" id="example-domain"></p>
 <div class="goal-cards">
 <article class="goal-card">
 <p class="goal-letter">A · One answer</p>
 <blockquote id="example-one-text"></blockquote>
+<p class="goal-proof" id="example-one-evidence"></p>
 <button id="choose-one" type="button">Yes — this would be enough</button></article>
 <article class="goal-card">
 <p class="goal-letter">B · Two specific answers</p>
 <blockquote id="example-both-text"></blockquote>
+<p class="goal-proof" id="example-both-evidence"></p>
 <button id="choose-both" type="button">Yes — this would be enough</button></article></div>
 <div class="goal-custom">
 <h3>Or type your own example</h3>
 <label for="own-example">Finish this thought: “I would consider it answered if…”</label>
-<textarea id="own-example" maxlength="320" rows="3" placeholder="It would be enough if I had one report from within the last 6 hours."></textarea>
-<p class="small">Your own definition takes precedence. The current research parser can understand only a few explicit river-report conditions; anything else stays unassumed.</p>
+<textarea id="own-example" maxlength="320" rows="3" placeholder="I would count this done when a donor confirms 80 cups of coffee and Friday pickup."></textarea>
+<p class="small">Your definition takes precedence. For an unfamiliar goal, MOTIF can preserve your exact typed words as a proposed criterion, but it does not claim to interpret or verify them.</p>
 <button id="use-custom" type="button">Try my example →</button></div>
 </section>
 <section class="goal-freshness" id="clarify" hidden aria-live="polite">
@@ -57,7 +60,7 @@
 <p class="eyebrow">YOUR DRAFT DEFINITION OF DONE</p>
 <h2>Would this count as enough?</h2>
 <p id="contract-meaning"></p><p id="contract-sources"></p><p id="contract-resource" class="small"></p>
-<p class="small">Historical response counts are not future budgets. Electrical joules were not measured.</p>
+<p class="small">Evidence and costs are unverified until real action occurs. River-report experiments have historical resource receipts; donations and other examples do not.</p>
 <div class="buttons">
 <button id="confirm" type="button">Yes — that's what I mean</button>
 <button id="change" type="button" class="secondary">Not quite — let me correct it</button>

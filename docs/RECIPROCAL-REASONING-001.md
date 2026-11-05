@@ -152,3 +152,20 @@ The new source-owned kernel is `MOTIF/experiments/024/goal_examples.py` at immut
 The interface is still **limited to this small river research grammar**, not a general human-goal understanding model. It has no evidence from actual human-participant evaluations that these examples reduce misunderstanding or improve user outcomes; that remains an independent test. See [MOTIF-024 PR #53](https://github.com/the-static-collective/MOTIF/pull/53).
 
 From this experimental branch, run `npm test` then `npm start` and open `http://127.0.0.1:7789/goal`. The page is not a public deployment.
+
+## MOTIF-025: Composable examples across community and technical goals
+
+The local human-facing `/goal` interaction now runs an experimental general **completion-criterion composer** rather than presenting two fixed river examples. A bounded source-owned cartridge registry offers two specific, visibly competing definitions of "enough" for supported contexts: **donated coffee for gatherings, volunteer staffing, community events, grocery exchange, websites and research**. Multiple overlapping categories and unrecognized requests get transparent, generic possibilities, **not a fabricated declaration of understanding**. Public river-report requests still travel through the unchanged MOTIF-024→023→022 source-evidence chain. No older physical measurement is falsely transplanted to donation or other real-world outcomes.
+
+A person saying *"Can we get free coffee donated for our fellowship event?"* sees:
+- **A / immediate outcome:** one donor confirms supply for the next gathering, with quantity, contact and pickup/handoff.
+- **B / repeatable outcome:** a donor commits to coffee for at least two gatherings, with schedule, quantity and pickup/handoff.
+- **Or type your own example:** the person can state an entirely different completion condition. This raw user text is returned only to the **same local page for exact confirmation**, labeled `HUMAN_TYPED_UNINTERPRETED`. It is not inferred to be technically validated or stored in persistent files.
+
+Selecting a proposed result forms a **new SHA-256 evidence contract**. Editing the goal, choosing the other example, or typing a different criterion changes the digest and invalidates prior approval. The human confirms the *exact proposed definition*, not permission to perform it; status remains `READY_HELD_NO_EXECUTION`. Repeated-event requests cannot silently become one-time milestones. Safety and emergency decisions HOLD.
+
+**Trust boundary:** `POST /api/reciprocal/compose` uses the existing local server's Host/Origin/CSRF defenses and a short-lived Python subprocess. JS source pin `src/motif-composable-goals.mjs` verifies source-owned MOTIF-025 byte identity to commit `1c3c6d3474c096ce2403902a1bc5a19f1633c344` and Git blob `47a3425c6a42bd028a836ac136223f5503e7ad9d`, together with older 024/023/022/GHoT physical-receipt pins. GitHub CI independently checks the copied file's exact upstream bytes, native source syntax and the Node integration tests.
+
+This is a **finite cartridge-based reasoning framework**, not a new large language model and not demonstrated unconstrained example generation. No donor has actually been contacted, no physical service completed, no notification dispatched, no source query made and no network/credit/energy savings claimed for these community tasks. Human-participant feedback and objective task-completion usefulness are not yet measured. The next stage should ask real people whether a proposed option was a helpful representation of *their* intended outcome, and record a private, opt-in correction receipt without treating it as permanent authority.
+
+This development is on [MOTIF-025 PR #56](https://github.com/the-static-collective/MOTIF/pull/56) and the stacked experimental JAR;VIS branch, **not merged or deployed**.

@@ -16,15 +16,15 @@ async function request(confirm=false){
    ...(previousDigest?{correction_of_id:previousDigest}:{}),
    ...(confirm&&draft?{confirmed:true,expected_contract_id:draft.contract_id}:{})
  };
- const response=await fetch("/api/reciprocal/examples",{
+ const response=await fetch("/api/reciprocal/compose",{
    method:"POST",cache:"no-store",
    headers:{"content-type":"application/json","x-jarvis-csrf":csrf},
    body:JSON.stringify(data)
  });
  const value=await response.json();
  if(!response.ok)throw Error(value.error||"HOLD: example interpreter unavailable");
- if(value.schema!=="motif.goal-example-correction/v1"||
-    value.source_requests_sent!==0||
+ if(value.schema!=="motif.composable-goal-examples/v1"||
+    value.network_requests_sent!==0||
     value.transmittedToNetwork!==false||
     value.persistentLearning!==false)
    throw Error("HOLD: unverified research response");
@@ -39,7 +39,12 @@ function render(r){
    const examples=r.examples||[];
    if(examples.length!==2)throw Error("HOLD: not two source-owned examples");
    $("example-one-text").textContent=examples[0].would_this_be_enough;
+   $("example-one-evidence").textContent="What would verify it: "+examples[0].evidence_needed;
    $("example-both-text").textContent=examples[1].would_this_be_enough;
+   $("example-both-evidence").textContent="What would verify it: "+examples[1].evidence_needed;
+   $("example-domain").textContent=r.domain==="generic"?
+     "These are general possibilities, not an interpretation of your particular request.":
+     "Recognized topic: "+r.domain.replaceAll("_"," ")+". These are proposed outcomes, not actual commitments.";
    show("examples");
    return;
  }
@@ -62,20 +67,29 @@ function render(r){
    draft=r;
    previousDigest=r.contract_id;
    const c=r.draft_contract;
-   $("contract-meaning").textContent=
-     (c.goal==="any_fresh"?
-      "ONE qualifying public river report is enough.":
-      "Reports from BOTH Blue Earth and Le Sueur are required.")+
-     " Maximum reported observation age: "+c.freshness_hours+" hours.";
-   $("contract-sources").textContent=
-     "Predeclared public station IDs: "+c.read_only_public_gauge_ids.join(", ")+
-     ". No sensors have been contacted.";
-   const previous=r.prior_physical_example;
-   $("contract-resource").textContent=previous?
-      "In a previous 12-hour research task: "+previous.historical_actual_request_count+
-      " actual GET(s), "+previous.historical_actual_http_body_bytes+
-      " response-body bytes. This is NOT an estimate for you.":
-      "No directly comparable historical physical run for this time threshold.";
+   if(c.schema==="motif.human-evidence-contract/v1"){
+     $("contract-meaning").textContent=
+       (c.goal==="any_fresh"?"ONE qualifying public river report would be enough.":
+       "Reports from BOTH Blue Earth and Le Sueur would be required.")+
+       " Maximum observation age: "+c.freshness_hours+" hours.";
+     $("contract-sources").textContent="Research-only public station IDs: "+
+       c.read_only_public_gauge_ids.join(", ")+". No source contacted.";
+     const oldPhysical=r.prior_physical_example;
+     $("contract-resource").textContent=oldPhysical?
+       "Older GHoT-004 physical work: "+oldPhysical.historical_actual_request_count+
+       " actual GET(s), "+oldPhysical.historical_actual_http_body_bytes+
+       " HTTP body bytes; NOT a future budget.":
+       "No matching independently measured physical outcome for that deadline.";
+   }else if(c.schema==="motif.human-completion-contract/v1"){
+     $("contract-meaning").textContent=c.completion_statement;
+     $("contract-sources").textContent=
+       (c.criterion_origin==="HUMAN_TYPED_UNINTERPRETED"?
+        "This is your wording, preserved for review. The system has NOT interpreted or verified it. ":
+        "This is only a suggested result, not evidence it happened. ")+
+       "Evidence to verify: "+c.verification_required.replaceAll("_"," ").toLowerCase()+".";
+     $("contract-resource").textContent=
+       "Physical resource cost for this human outcome is UNKNOWN. No donation, volunteer, website, or other action occurred.";
+   }else throw Error("HOLD: unsupported source contract");
    $("confirm-status").textContent=
       old&&old!==r.contract_id?
       "You corrected the earlier interpretation. That old definition no longer applies; confirm this new one.":
@@ -89,7 +103,7 @@ function render(r){
    $("confirm").disabled=true;
    $("confirm-status").textContent=
      "Your exact meaning is acknowledged for this page only. HELD: no investigation, dispatch, source GET or model training occurred.";
-   report("Goal acknowledged. The current prototype cannot execute it.");
+   report("Goal acknowledged and held. No work executed or personal goal persisted.");
    return;
  }
  if(r.status.startsWith("HOLD_")){
@@ -144,7 +158,7 @@ function choose(which){
  }
 })();
 $("example").addEventListener("click",()=>{
- $("need").value="Could you check the rivers?";
+ $("need").value="Could we get free coffee donated for our fellowship event?";
 });
 $("goal-form").addEventListener("submit",ev=>{
  ev.preventDefault();
