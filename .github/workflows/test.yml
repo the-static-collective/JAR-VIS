@@ -143,6 +143,20 @@ jobs:
           node --check src/motif-goal-examples.mjs
           node --check public/goal.js
           python3 -m py_compile integrations/experiments/024/goal_examples.py
+      - name: Checkout exact source-owner MOTIF-025 cross-domain example composer
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: bb086b9a6a4f521213d782c438b92abd007cfa43
+          persist-credentials: false
+          path: motif-025-examples-source
+      - name: Verify exact source-owned domain composer and local UI syntax
+        run: |
+          test "$(git hash-object integrations/experiments/025/example_composer.py)" = "f28d5703fb5649f74ad99fffac3974834e9e36c3"
+          cmp integrations/experiments/025/example_composer.py motif-025-examples-source/experiments/025/example_composer.py
+          node --check src/motif-composable-goals.mjs
+          node --check public/goal.js
+          python3 -m py_compile integrations/experiments/025/example_composer.py
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:
