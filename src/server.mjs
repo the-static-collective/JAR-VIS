@@ -25,6 +25,8 @@ const staticFiles = new Map([
   ["/workshop.js", [new URL("../public/workshop.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]],
   ["/reciprocal", [new URL("../public/reciprocal.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/goal", [new URL("../public/goal.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/goal.js", [new URL("../public/goal.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/reciprocal.js", [new URL("../public/reciprocal.js", import.meta.url), "text/javascript; charset=utf-8"]]
 ]);
 const headers = {
