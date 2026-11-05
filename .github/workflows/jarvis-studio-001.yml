@@ -1,0 +1,91 @@
+name: JARVIS-STUDIO-001 six repository film + planning and editorial return production
+on:
+  push:
+    branches: [experiment/jarvis-studio-return-loop-001]
+  pull_request:
+    paths:
+      - src/creative-studio-cycle.mjs
+      - test/creative-studio-cycle.test.mjs
+      - registry/studio-return-source-lock-v1.json
+      - docs/JARVIS-STUDIO-001.md
+      - .github/workflows/jarvis-studio-001.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-creative-production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify JARVIS original project and no-automatic authority first
+        run: |
+          node --check src/creative-studio-cycle.mjs
+          node --test test/creative-studio-cycle.test.mjs test/planz-attention.test.mjs
+          node src/creative-studio-cycle.mjs inspect
+      - name: Fetch ALL six original source owners, separately pinned at their actual code
+        run: |
+          git clone -q https://github.com/the-static-collective/planZ.git "$RUNNER_TEMP/planz"
+          git -C "$RUNNER_TEMP/planz" checkout -q --detach aac8349ee9be9cdbeae37f15fe13de7405ff11fd
+          git clone -q https://github.com/the-static-collective/lemonPRESS.git "$RUNNER_TEMP/lemonpress"
+          git -C "$RUNNER_TEMP/lemonpress" checkout -q --detach f60429311ba2d5fec3b1442ab783025872987a12
+          git clone -q https://github.com/the-static-collective/CANNON.git "$RUNNER_TEMP/cannon"
+          git -C "$RUNNER_TEMP/cannon" checkout -q --detach 18381a447db3310927e003ec36989840133e98b8
+          git clone -q https://github.com/the-static-collective/playdeck.git "$RUNNER_TEMP/playdeck"
+          git -C "$RUNNER_TEMP/playdeck" checkout -q --detach a7cf718421e767fd382a01894063c3eeba3d2930
+          git clone -q https://github.com/the-static-collective/the-haunted-toaster.git "$RUNNER_TEMP/toaster-still"
+          git -C "$RUNNER_TEMP/toaster-still" checkout -q --detach 3652c2a96b6b287cda316d1c92daadf7c7417eaf
+          git clone -q https://github.com/the-static-collective/the-haunted-toaster.git "$RUNNER_TEMP/toaster-motion"
+          git -C "$RUNNER_TEMP/toaster-motion" checkout -q --detach a3ce7b1349a940325cb72362e818ce907a95f35c
+          (cd "$RUNNER_TEMP/playdeck" && npm install --ignore-scripts --no-package-lock --no-audit --no-fund)
+          git -C "$RUNNER_TEMP/playdeck" restore --source=HEAD -- packages/ingest/src/cli.ts
+          git -C "$RUNNER_TEMP/playdeck" diff --exit-code
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+      - name: Execute exact original planZ and lemonPRESS source-owner tests
+        run: |
+          (cd "$RUNNER_TEMP/planz" && node --test reactor/production-return.test.mjs reactor/recursive.test.mjs)
+          (cd "$RUNNER_TEMP/lemonpress" && node --test test/screening-program.test.mjs test/vinyl-preflight.test.mjs)
+          node "$RUNNER_TEMP/cannon/scripts/creative-route-switchyard.mjs" list
+      - name: JARVIS creates plan then executes two REAL original native media paths with two back-and-forth editorial returns
+        run: |
+          node src/creative-studio-cycle.mjs build \
+            --planz "$RUNNER_TEMP/planz" --cannon "$RUNNER_TEMP/cannon" \
+            --lemonpress "$RUNNER_TEMP/lemonpress" --playdeck "$RUNNER_TEMP/playdeck" \
+            --toaster-still "$RUNNER_TEMP/toaster-still" --toaster-motion "$RUNNER_TEMP/toaster-motion" \
+            --out "$RUNNER_TEMP/jarvis-studio-film" --authorize SYNTHETIC_TEST_ONLY
+      - name: Independently cold replay ALL four evidence returns through source owners
+        run: |
+          node src/creative-studio-cycle.mjs verify \
+            --planz "$RUNNER_TEMP/planz" --cannon "$RUNNER_TEMP/cannon" \
+            --lemonpress "$RUNNER_TEMP/lemonpress" --playdeck "$RUNNER_TEMP/playdeck" \
+            --toaster-still "$RUNNER_TEMP/toaster-still" --toaster-motion "$RUNNER_TEMP/toaster-motion" \
+            --out "$RUNNER_TEMP/jarvis-studio-film"
+          node -e 'const f=require("fs"),p=process.argv[1],m=JSON.parse(f.readFileSync(p+"production-manifest.json")),r=JSON.parse(f.readFileSync(p+"screening-final/receipt.json"));if(m.actualRepos.length!==6||m.passes!==4||m.actualNativeMediaRenders!==2||m.originalEditorialPasses!==2||m.state!=="LOCAL_ARTIFACT_COMPLETE_REVIEW_HELD"||m.publicPublishingApproved||r.version!=="final"||!r.previousDraftSha256||r.published||!f.existsSync(p+"media/original-toaster-digested-playdeck.mp4")||!f.existsSync(p+"screening-final/program.html"))process.exit(3)' "$RUNNER_TEMP/jarvis-studio-film/"
+      - name: Original media forgery refusal and restoration proof
+        run: |
+          cp "$RUNNER_TEMP/jarvis-studio-film/media/original-toaster-digested-playdeck.mp4" "$RUNNER_TEMP/clean-studio-video.mp4"
+          printf 'FAKE_FINAL_VIDEO' >> "$RUNNER_TEMP/jarvis-studio-film/media/original-toaster-digested-playdeck.mp4"
+          if node src/creative-studio-cycle.mjs verify \
+            --planz "$RUNNER_TEMP/planz" --cannon "$RUNNER_TEMP/cannon" \
+            --lemonpress "$RUNNER_TEMP/lemonpress" --playdeck "$RUNNER_TEMP/playdeck" \
+            --toaster-still "$RUNNER_TEMP/toaster-still" --toaster-motion "$RUNNER_TEMP/toaster-motion" \
+            --out "$RUNNER_TEMP/jarvis-studio-film"; then exit 1; fi
+          cp "$RUNNER_TEMP/clean-studio-video.mp4" "$RUNNER_TEMP/jarvis-studio-film/media/original-toaster-digested-playdeck.mp4"
+          node src/creative-studio-cycle.mjs verify \
+            --planz "$RUNNER_TEMP/planz" --cannon "$RUNNER_TEMP/cannon" \
+            --lemonpress "$RUNNER_TEMP/lemonpress" --playdeck "$RUNNER_TEMP/playdeck" \
+            --toaster-still "$RUNNER_TEMP/toaster-still" --toaster-motion "$RUNNER_TEMP/toaster-motion" \
+            --out "$RUNNER_TEMP/jarvis-studio-film"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JARVIS-STUDIO-001-six-real-repos-two-films-four-plans-final-lemonpress-program
+          path: ${{ runner.temp }}/jarvis-studio-film/
+          retention-days: 14
+          if-no-files-found: error

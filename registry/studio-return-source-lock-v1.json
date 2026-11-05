@@ -1,0 +1,47 @@
+{
+  "schema": "jarvis.studio-return-source-lock/v1",
+  "project": "GENESIS-RETURN-001",
+  "stageCount": 4,
+  "physicalOutputs": 0,
+  "approval": "SYNTHETIC_TEST_ONLY",
+  "sourceOwners": [
+    {
+      "id": "planz",
+      "repo": "the-static-collective/planZ",
+      "commit": "aac8349ee9be9cdbeae37f15fe13de7405ff11fd",
+      "files": {
+        "reactor/production-return.mjs": "9d60d707d4a24ac8e7391cd1e8049fe818a11ac3"
+      }
+    },
+    {
+      "id": "lemonpress",
+      "repo": "the-static-collective/lemonPRESS",
+      "commit": "f60429311ba2d5fec3b1442ab783025872987a12",
+      "files": {
+        "src/screening-program.mjs": "1f74d5b86e5886cf44bcd38f122f2166ff452f7a",
+        "scripts/screening-program.mjs": "b0164f45ef7bcf5cd9e9bf1974fd1d1d83e34b58"
+      }
+    },
+    {
+      "id": "cannon",
+      "repo": "the-static-collective/CANNON",
+      "commit": "18381a447db3310927e003ec36989840133e98b8",
+      "files": {
+        "scripts/creative-route-switchyard.mjs": "a030075fabffb579303c38a0fdac0cbb0c54a6ef",
+        "registry/creative-route-switchyard-v1.json": "6ade53527a22bc93ccd0878d65a8be1d00492624"
+      }
+    }
+  ],
+  "stageRoutes": [
+    "CHECKPOINT_STILL",
+    "MOVING_EXCERPT",
+    "SCREENING_DRAFT",
+    "SCREENING_FINAL"
+  ],
+  "sourceRightsGranted": false,
+  "modelControlsExecution": false,
+  "autoPublishing": false,
+  "thirdPartyContact": false,
+  "autonomousRepeat": false,
+  "finalArtifact": "LOCAL_SCREENING_PACKAGE"
+}
