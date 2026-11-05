@@ -41,7 +41,7 @@ function transports({crossrefDown=false}={}){
 }
 test('eighth donor is byte-pinned, new public research provider inventory contains seven',()=>{
  const manifest=verifyOriginalOrgans();
- assert.equal(manifest.source_count,12);
+ assert.equal(manifest.source_count,14);
  assert.equal(manifest.source_organs_exact_pinned,true);
  const providers=listPublicInvestigationProviders();
  assert.equal(providers.length,7);

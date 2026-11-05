@@ -1,4 +1,5 @@
 import {investigateDesk,suggestInvestigationProviders,listPublicInvestigationProviders,discoverResearchSource} from "./investigation-desk.mjs";
+import {growSourceGarden,runPublicLivePilot,publicPilotDescription} from "./investigation-gardener-027.mjs";
 import { createServer } from "node:http";
 import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -141,6 +142,18 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
           allowedEffect:"NONE",sentExternally:false,partnerRecognized:false,fieldVerified:false,
           nextHumanStep:reviewed.actionLabel,
           note:"This import checks a public-only candidate. No ledger secrets, source network read, institution contact or action performed."});
+      }
+      if (pathname === "/api/investigate/garden") {
+        if(typeof body.question!=="string"||body.question.length>320||
+          body.approvedPublicGithubSearch!==true)
+          return reply(res,422,{error:"HOLD_EXPLICIT_GARDEN_SEARCH_CONSENT_REQUIRED"});
+        return reply(res,200,await growSourceGarden(body));
+      }
+      if (pathname === "/api/investigate/pilot") {
+        if(!body||body.approvedPublicPilot!==true||
+          Object.keys(body).some(k=>k!=="approvedPublicPilot"))
+          return reply(res,422,{error:"HOLD_PUBLIC_LIVE_PILOT_CONSENT_REQUIRED"});
+        return reply(res,200,await runPublicLivePilot(body));
       }
       if (pathname === "/api/investigate/discover") {
         if(typeof body.question!=="string"||body.question.length>320||

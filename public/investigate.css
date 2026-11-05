@@ -97,3 +97,20 @@ footer a{color:#455f4c}
 .source-genealogy #missing-source-results .card{padding:10px;border-left:3px solid #668970;margin:8px 0;background:#fffdfa}
 .source-genealogy #download-source-discovery{border:1px solid #294b38;background:transparent;color:#294b38;padding:8px 12px;margin-top:12px;cursor:pointer}
 .source-genealogy #download-source-discovery[hidden]{display:none}
+
+
+/* JARVIS-027 — separate specimen garden and explicit fixed-host live pilot. */
+.capability-garden,.live-pilot{border:1px solid #9caa90;background:#fffbf1;
+ padding:15px 17px;margin-top:14px;box-shadow:2px 2px 0 #e3e8dc}
+.capability-garden h3,.live-pilot h3{font-size:20px;line-height:1.2;margin:0 0 8px;color:#244533}
+.capability-garden button,.live-pilot button{border:1px solid #254c38;background:#315b45;color:#fff;
+ font-weight:700;padding:10px 14px;cursor:pointer}
+.capability-garden button:hover,.live-pilot button:hover{background:#44795c}
+.capability-garden button:disabled,.live-pilot button:disabled{opacity:.6;cursor:wait}
+.capability-garden .card{border-left:3px solid #608371;padding:8px 11px;margin:10px 0;
+ background:#f8f5eb}
+.capability-garden #download-garden[hidden]{display:none}
+.capability-garden #garden-results,.live-pilot #pilot-results{padding-top:10px;overflow-wrap:anywhere}
+.capability-garden small,.live-pilot small{line-height:1.45;font-size:12px}
+@media(max-width:580px){.capability-garden,.live-pilot{padding:13px}
+.capability-garden button,.live-pilot button{max-width:100%}}
