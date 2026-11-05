@@ -8,6 +8,7 @@ import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
 import {SOURCE_BLOB} from "./motif-reciprocal.mjs";
 import {ReciprocalLab} from "./motif-reciprocal-lab.mjs";
 import {inspectRealityIron} from "./motif-reality-iron.mjs";
+import {askHumanGoal} from "./motif-human-goal.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
 
@@ -130,6 +131,10 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         };
         if (!operations[pathname]) return reply(res, 404, { error: "Not found" });
         return reply(res, 200, await operations[pathname]());
+      }
+      if (pathname === "/api/reciprocal/goal") {
+        if(!reciprocal)return reply(res,503,{error:"HOLD: local reciprocal desk unavailable"});
+        return reply(res,200,await askHumanGoal(body));
       }
       if (pathname === "/api/reciprocal/compare") {
         if(!reciprocal)return reply(res,503,{error:"HOLD: reciprocal desk unavailable"});
