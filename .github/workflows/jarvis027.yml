@@ -1,0 +1,36 @@
+name: JARVIS-027 Capability Garden and Approved Public Read
+on:
+  push:
+    branches: [feat/investigation-gardener-027]
+  pull_request:
+    paths:
+      - 'src/investigation-gardener-027.mjs'
+      - 'src/investigation-desk.mjs'
+      - 'src/server.mjs'
+      - 'public/investigate.*'
+      - 'integrations/investigation/**'
+      - 'test/investigation-gardener-027.test.mjs'
+      - '.github/workflows/jarvis027.yml'
+permissions:
+  contents: read
+jobs:
+  test-public-research-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check server and client JavaScript
+        run: node --check src/investigation-gardener-027.mjs && node --check public/investigate.js
+      - name: Original JARVIS suites and new gardener source/consent tests
+        run: npm test
+      - name: Live public example read in explicit CI-approved test (no personal location)
+        run: |
+          node --input-type=module -e "import {runPublicLivePilot} from './src/investigation-gardener-027.mjs';import {writeFileSync} from 'node:fs';const p=await runPublicLivePilot({approvedPublicPilot:true});if(p.status!=='READ_ONLY_THIRD_PARTY_RESPONSE_OBSERVED'||p.requests!==1||p.code_installed)process.exit(1);writeFileSync('jarvis027-live-public-example.json',JSON.stringify(p,null,2));console.log(JSON.stringify({status:p.status,source:p.source,host:p.endpoint_host,example:p.example_location,credentialsUsed:p.credentials_sent,notDiscoveredHost:true}));"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jarvis027-one-public-live-read
+          path: jarvis027-live-public-example.json
+          retention-days: 14
