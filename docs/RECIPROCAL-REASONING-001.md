@@ -135,3 +135,20 @@ The actual protocol is `ASK_ONE_DECISIVE_QUESTION` → `CONFIRM_REQUIRED` → `R
 The finite parser does not have general natural-language comprehension. In particular, it refuses ordinary nonriver community needs rather than claiming broad utility. Synthetic tests verify conflicting answers, uncertainty about recency, named-source preservation, no question persistence, exact-contract consent, and the localhost API's CSRF gate. The upstream MOTIF Python source commit is `5051af387eb05f1611d7f12e473dab58078719cb`, and its physical evidence is pinned at upstream Git blob `ee545add1b71f97eb3fae2e5151398f81814a89b`.
 
 To try it locally, run `npm test`, `npm start` and open `http://127.0.0.1:7789/goal`. No public deployment. The unresolved next question is whether **real people** agree that this is the right clarification and the right definition of done.
+
+## MOTIF-024 — Two examples, or show what enough means in your own words
+
+The earlier `/goal` page asked abstractly about one or two river sources. This version makes that question concrete by offering **exactly two illustrative finished-answer examples**:
+
+- **A:** A single USGS public river discharge report from any one of three fixed gauges, timestamped within the last 12 hours, would be enough.
+- **B:** Distinct recent discharge reports from **both** the Blue Earth and Le Sueur gauges, each within the last 12 hours.
+
+Each card asks **"Would this be enough?"**, plus a separate **"Or type your own example"** field. The human can correct the interpretation before and after a draft contract is shown. A clear custom example such as "One report from within the last 6 hours would be enough" creates a **different** formal contract, without falsely inheriting the older 12-hour GHoT-004 resource measurements. A custom description with no time cutoff triggers one explicit follow-up rather than assuming 12 hours. Unsupported, negative, high-stakes or semantically ambiguous custom examples remain HELD, and the person's original wording is never silently overwritten.
+
+Correcting a draft produces a **new SHA-256 contract identifier**; old confirmation is no longer valid. The page requires fresh acknowledgment for the corrected meaning. This is **in-session correction**, not memory or autonomous model training. The corrections and raw user input are not sent to any cloud service or saved to the local review journal. Even approved goals remain `READY_HELD_NO_EXECUTION`. There is no query to USGS, no execution, no bill, and no inferred electrical energy measurement.
+
+The new source-owned kernel is `MOTIF/experiments/024/goal_examples.py` at immutable commit `66dbc1a1b566609a4fc7cf0764bc374e31842d15` (Git blob `b5f8b21a13819ff6eb7c3ce06f02b71966f5cc06`), vendored byte-identically at `integrations/experiments/024/goal_examples.py`. JAR;VIS's local-only `POST /api/reciprocal/examples` uses a bounded subprocess with exact source integrity checks, localhost Host/Origin/CSRF restrictions, and no persistence. Node integration tests confirm two alternative examples, arbitrary typed example, required age clarification, revision invalidate/reconfirm, hold for unsafe requests, and no journal writes.
+
+The interface is still **limited to this small river research grammar**, not a general human-goal understanding model. It has no evidence from actual human-participant evaluations that these examples reduce misunderstanding or improve user outcomes; that remains an independent test. See [MOTIF-024 PR #53](https://github.com/the-static-collective/MOTIF/pull/53).
+
+From this experimental branch, run `npm test` then `npm start` and open `http://127.0.0.1:7789/goal`. The page is not a public deployment.
