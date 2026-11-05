@@ -171,6 +171,21 @@ jobs:
           node --check src/motif-goal-workpacket.mjs
           node --check public/goal.js
           python3 -m py_compile integrations/experiments/026/prepare_work.py
+      - name: Fetch exact MOTIF-027 source-owned last-inch handoff
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 073d1ffb70a8389a9727dfe0d50db6d0605164b2
+          persist-credentials: false
+          path: motif-027-owner-source
+      - name: Verify actual MOTIF-027 gate, mailto handling and local UI syntax
+        run: |
+          test "$(git hash-object integrations/experiments/027/capability_handoff.py)" = "475a0c6db2d3c97f4a8928e0deb7a9bd3c0da2e8"
+          cmp integrations/experiments/027/capability_handoff.py motif-027-owner-source/experiments/027/capability_handoff.py
+          python3 -m py_compile integrations/experiments/027/capability_handoff.py
+          node --check src/motif-capability-handoff.mjs
+          node --check public/goal.js
+          node --check public/workshop.js
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:
