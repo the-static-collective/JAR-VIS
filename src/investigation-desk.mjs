@@ -7,6 +7,11 @@ import path from 'node:path';
 import {eagleEye,validatePacket as checkEagle} from '../integrations/investigation/alex/eagle-eye-024.mjs';
 import {discoverProviders,searchSelectedProviders,verifySupplemental,PUBLIC_PROVIDER_CATALOG}
  from '../integrations/investigation/alex/eagle-eye-providers-025.mjs';
+import {identifyGap,discoverMissingProvider,verifyDiscovery}
+ from '../integrations/investigation/alex/api-discovery-026.mjs';
+import {evaluateFixture,verifyAlexSource}
+ from '../integrations/investigation/graft/src/discovered-adapter-026.mjs';
+import {solve} from '../integrations/investigation/planz/motif-classical.mjs';
 import {investigatePublic,verifyPacket as checkAlex}
  from '../integrations/investigation/alex/motif023-live.mjs';
 import {planEvidence,verifyPlan,replanAfterObservation}
@@ -24,7 +29,7 @@ const safeNow=()=>new Date().toISOString();
 export function verifyOriginalOrgans(){
  const manifest=JSON.parse(readFileSync(new URL('pins.json',DIRECTORY)));
  if(manifest.schema!=='jarvis.investigation-organ-pins/v0'||
-   Object.keys(manifest.sources).length!==8)
+   Object.keys(manifest.sources).length!==12)
   throw Error('HOLD_UNKNOWN_RESEARCH_ORGAN_PINSET');
  for(const [p,info] of Object.entries(manifest.sources)){
   if(!/^(alex|planz|graft)\//.test(p)||
@@ -33,7 +38,8 @@ export function verifyOriginalOrgans(){
    throw Error('HOLD_SOURCE_OWNER_CODE_DRIFT_'+p);
  }
  verifyNativePlanZ();
- return {source_count:8,owners:['ALEX.2','planZ','GRAFT'],
+ verifyAlexSource();
+ return {source_count:12,owners:['ALEX.2','planZ','GRAFT'],
    research_owner:'MOTIF-023',
    source_organs_exact_pinned:true,
    source_owner_review_not_automatic:true};
@@ -166,6 +172,66 @@ export async function investigateDesk(input,options={}){
   output_admission:'NONE',
   source_custody_verified:false,
   external_writes:0,no_contact_or_deployment:true
+ };
+ return {...body,receipt_sha256:hash(body)};
+}
+
+// Separate explicit door: missing-specialized-provider investigation.
+//
+// The capability compiler never contacts a discovered API server. Even the
+// public GitHub *specification search* requires an explicit user action.
+export async function discoverResearchSource(input,options={}){
+ if(!input||typeof input!=='object'||Array.isArray(input)||
+   typeof input.question!=='string'||input.question.length>320||
+   input.approvedPublicGithubSearch!==true)
+  throw Error('HOLD_PUBLIC_SPEC_SEARCH_CONSENT_REQUIRED');
+ const originals=verifyOriginalOrgans();
+ const gap=identifyGap(input.question);
+ const discovery=await discoverMissingProvider({
+  question:input.question,approvedPublicGithubSearch:true
+ },{transport:options.transport??globalThis.fetch,
+    githubToken:options.githubToken??null});
+ verifyDiscovery(discovery);
+ const candidate=discovery.public_provider_proposals?.[0]??null;
+ let review=null;
+ if(candidate){
+  // Original planZ classical solver, not a handwritten fake plan.
+  const a=(name,cost,pre,add)=>({name,cost,pre,add,del:[]});
+  const domain=[
+   a('VERIFY_PUBLIC_GIT_BLOB',1,['DISCOVERED'],['SOURCE_SEEN']),
+   a('REVIEW_SECURITY_AND_LICENSING',1,['SOURCE_SEEN'],['LIMITATIONS_KNOWN']),
+   a('COMPILE_OFFLINE_FIXTURE',2,['LIMITATIONS_KNOWN'],['FIXTURE_AVAILABLE']),
+   a('PRETEND_PUBLIC_HOST_IS_TRUSTED',9,['LIMITATIONS_KNOWN'],['FIXTURE_AVAILABLE']),
+   a('REQUIRE_HUMAN_OWNER_DECISION',1,['FIXTURE_AVAILABLE'],['REVIEW_READY'])
+  ];
+  const plan=solve(domain,['DISCOVERED'],['REVIEW_READY']);
+  if(plan.status!=='PLAN_FOUND'||plan.steps.includes('PRETEND_PUBLIC_HOST_IS_TRUSTED'))
+   throw Error('HOLD_UNSAFE_CLASSICAL_PROVIDER_PLAN');
+  const fixture=await evaluateFixture(discovery,0,{
+   status:200,contentType:'application/json',
+   body:{demonstration:'SYNTHETIC_NOT_REAL_API_RESPONSE',records:[1,2]}
+  });
+  review={
+   classical_plan:{steps:plan.steps,declared_cost:plan.cost,
+    original_optimizer:'planZ/STRIPS_DIJKSTRA',field_steps_executed:0},
+   compiled_fixture:fixture.compiled,
+   offline_observation:fixture.observation,
+   next_question:'Which official provider can authenticate this API specification, license, security requirements and safe production access?',
+   requires_separate_owner_review:true
+  };
+ }
+ const body={
+  schema:'jarvis.missing-provider-discovery/v0',question:input.question,
+  research_gap:gap,discovery,
+  review,imported_source_owners:originals,
+  status:review?'REVIEWABLE_API_ADAPTER_PROPOSAL':
+   'HOLD_NO_VERIFIED_PUBLIC_SPEC_ADAPTER',
+  public_github_index_only:true,
+  reported_source_origin_identity_not_verified:true,
+  proposed_provider_server_contacted:false,
+  private_sources_read:false,
+  adapter_installed:false,
+  external_writes:0,authority:'none'
  };
  return {...body,receipt_sha256:hash(body)};
 }
