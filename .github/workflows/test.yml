@@ -112,6 +112,23 @@ jobs:
         run: |
           test "$(git hash-object integrations/motif-reality-021/source-question-integrity-2026-11-05.json)" = "b5cfe73c96ab908a8e87de73e90486fc0ab0ad66"
           cmp integrations/motif-reality-021/source-question-integrity-2026-11-05.json motif-protocol-021-source/experiments/021/evidence/first-question-integrity-2026-11-05.json
+      - name: Pin source-owned MOTIF-023 human goal handshake and GHoT-004 physical evidence
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 5051af387eb05f1611d7f12e473dab58078719cb
+          persist-credentials: false
+          path: motif-023-native-source
+      - name: Verify actual MOTIF-022/023 byte identity and local no-LLM goal UI
+        run: |
+          test "$(git hash-object integrations/experiments/023/human_goal.py)" = "00c6f648588f2cbe0ad153d6c90d91e03247c847"
+          test "$(git hash-object integrations/experiments/022/cost_of_knowing.py)" = "ce59dc4495c29eccc30aabf8fbeec7cf0b99b1f3"
+          test "$(git hash-object integrations/experiments/022/evidence/ghot-004-actual-2026-11-05.json)" = "ee545add1b71f97eb3fae2e5151398f81814a89b"
+          cmp integrations/experiments/023/human_goal.py motif-023-native-source/experiments/023/human_goal.py
+          cmp integrations/experiments/022/cost_of_knowing.py motif-023-native-source/experiments/022/cost_of_knowing.py
+          cmp integrations/experiments/022/evidence/ghot-004-actual-2026-11-05.json motif-023-native-source/experiments/022/evidence/ghot-004-actual-2026-11-05.json
+          node --check src/motif-human-goal.mjs
+          node --check public/goal.js
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:
