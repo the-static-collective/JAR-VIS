@@ -1,0 +1,21 @@
+@import url("/wake.css");
+.organ-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin:1.3rem 0}
+.organ{border:1px solid #c9baa1;background:#fffaf0;padding:1rem;min-width:0}
+.organ strong{display:block;font:1.1rem/1.3 Georgia,serif}.organ p{font-size:.8rem;line-height:1.5;margin:.4rem 0}.organ .state{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:#9a593f}
+.organ a{font-size:.78rem;word-break:break-word}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.1rem}.pair label{margin-top:.5rem}
+.fork{margin:1.2rem 0;padding:1rem;background:#efe9d5;border:1px dashed #b8aa92}
+.fork summary{cursor:pointer;font-weight:700}
+.preview-panel{margin:1.8rem 0 0;border-top:2px solid var(--ink);padding:1rem 0}
+.preview-panel h4{margin-bottom:.5rem}
+.route{border-left:3px solid var(--accent);background:#fcf8ec;margin:.5rem 0;padding:.5rem .8rem;font-size:.84rem}
+.route strong{display:block}.route small{color:var(--fade)}
+.edges{margin:1rem 0 2rem}.edge{border-bottom:1px solid var(--line);padding:.9rem .1rem;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem}
+.edge strong{display:block;font:1.2rem Georgia,serif}.edge small{font-family:monospace;overflow-wrap:anywhere;color:var(--fade);font-size:.77rem}
+.edge a{white-space:nowrap}
+.link-button{display:inline-block;text-decoration:none}
+#incoming{font-family:monospace;font-size:.83rem}
+hr{border:0;border-top:1px dashed var(--line);margin:2rem 0}
+#receive-panel{border:1px solid #ccb896;background:#f4eedc;padding:1.2rem}
+@media(max-width:850px){.organ-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pair{grid-template-columns:1fr}}
+@media(max-width:520px){.organ-grid{grid-template-columns:1fr}.edge{grid-template-columns:1fr}}

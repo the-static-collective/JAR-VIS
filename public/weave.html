@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#efe9d8"><title>NETWORK WEAVE · JAR;VIS</title>
+<link rel="stylesheet" href="/weave.css"><script type="module" src="/weave.js"></script></head>
+<body><a class="skip" href="#main">Skip to Network Weave</a>
+<header class="mast"><a class="brand" href="/">JAR<span>;</span>VIS</a><span class="edition">NETWORK WEAVE / 002</span><a class="back" href="/wake">WAKE Desk →</a></header>
+<main id="main">
+<section class="hero"><p class="eyebrow">THE WHOLE NETWORK · MANY ROOMS, NO CENTRAL CROWN</p>
+ <h1>Put out a chair.<br><em>Leave the light on.</em></h1>
+ <p>Make a real opportunity visible across independent worlds. Ask for one small action, one new idea, or one self-directed contribution. A person remains free to act, pass, fork—or decline.</p>
+ <div class="rail"><span>NOTICE</span><b>→</b><span>INVITE</span><b>→</b><span>ACT</span><b>→</b><span>WITNESS</span><b>→</b><span>REWEAVE</span></div>
+</section>
+<div class="notice"><strong>NONE OF THESE ROOMS IS AUTOMATICALLY CONNECTED.</strong> The atlas is a source-linked map of possibilities, not a directory of cooperating humans, verified partners, or active receiver APIs. Nothing sends messages, crawls private data, or grants a stranger authority. Keep personal details out.</div>
+<section class="sheet" id="atlas" aria-labelledby="atlas-heading">
+ <div class="section-bar"><span>00 / SEE THE ROOMS</span><span class="stamp">SOURCE-LINKED, NOT ENROLLED</span></div>
+ <h2 id="atlas-heading">One weave. Distinct owners.</h2><p class="subtle">Choose a source organ, not a person. Open its public source manually. A suggested road is only a thematic possibility.</p>
+ <div id="organ-grid" class="organ-grid" aria-live="polite"></div>
+</section>
+<section class="sheet" id="composer" aria-labelledby="compose-heading">
+ <div class="section-bar"><span>01 / PROPOSE A THREAD</span><span class="stamp">HUMAN REVIEW</span></div>
+ <h2 id="compose-heading">What opportunity should cross?</h2>
+ <div class="presets"><button type="button" data-preset="fellowship">Fellowship</button><button type="button" data-preset="garden">Garden</button><button type="button" data-preset="commons">Commons</button></div>
+ <form id="thread-form">
+   <div class="pair"><label>Source context <select id="source" required></select></label><label>Proposed destination <select id="target"></select></label></div>
+   <div class="pair"><label>Kind <select id="kind"><option value="open">Open</option><option value="food">Food</option><option value="creative">Creative</option><option value="transport">Transport</option><option value="make">Make</option><option value="question">Question</option></select></label>
+   <label>When? <select id="when"><option value="open">Open; no implied deadline</option><option value="now">Now (human-confirmed)</option><option value="soon">Soon</option></select></label></div>
+   <label>Opportunity <input id="title" required maxlength="180" placeholder="A human-sized thing to do"></label>
+   <label>Public-safe context <textarea id="context" rows="3" required maxlength="500" placeholder="No names, addresses, phone numbers, links or private case details"></textarea></label>
+   <div class="three-arms">
+    <div class="arm"><span class="arm-label">A / SMALL</span><label>One quick step <textarea id="small" required maxlength="500"></textarea></label></div>
+    <div class="arm"><span class="arm-label">B / CREATIVE</span><label>One unexpected idea <textarea id="creative" required maxlength="500"></textarea></label></div>
+    <div class="arm"><span class="arm-label">C / AUTONOMOUS</span><label>One self-directed task <textarea id="autonomous" required maxlength="500"></textarea></label></div>
+   </div>
+   <details class="fork"><summary>Fork from an unexpected action recorded in WAKE (optional)</summary>
+     <div class="pair"><label>Parent local study ID <input id="parent-study" maxlength="20" pattern="[a-f0-9]{20}" placeholder="20-char study ID"></label>
+     <label>Parent slot <input id="parent-slot" maxlength="4" pattern="P[0-9]{3}" placeholder="P001"></label></div>
+     <p class="subtle">The original WAKE ledger must contain an operator-attested <strong>novel_action</strong> on this exact slot. A reply or prediction is insufficient.</p>
+   </details>
+   <button class="primary" id="preview-button" type="submit">Preview the crossing →</button>
+ </form>
+ <p id="compose-status" role="status">No source imported or invitation generated.</p>
+ <section id="preview-panel" class="preview-panel" hidden>
+   <h3>A proposal, not an action.</h3>
+   <p id="preview-summary" class="subtle"></p><div class="letter"><p class="letter-tag">EXACT REVIEWED WORDS</p><pre id="preview-packet"></pre></div>
+   <div class="pair"><div><h4>Possible receiver rooms</h4><div id="receivers"></div></div><div><h4>Existing Any Invitation cartridge</h4><div id="invitation-actions"></div></div></div>
+   <p id="preview-hash" class="quiet"></p>
+   <label class="check"><input type="checkbox" id="reviewed"> I reviewed these exact words and this proposed crossing.</label>
+   <label class="check"><input type="checkbox" id="carry-ok"> I have the right to carry this particular non-sensitive wording; I am not impersonating any source owner.</label>
+   <label class="check"><input type="checkbox" id="verified"> I independently confirmed this opportunity actually exists. This is my assertion, not source proof.</label>
+   <div class="pair"><label>Invitation slots <input type="number" min="3" max="100" id="count" value="12"></label><label>Random seed <input type="number" min="0" max="999999999" id="seed" value="2026"></label></div>
+   <button class="primary" type="button" id="admit">Create an isolated local WAKE study →</button>
+   <p id="admit-status" role="status">Not yet stored. No messages delivered.</p>
+ </section>
+</section>
+<section class="sheet" id="lineage">
+ <div class="section-bar"><span>02 / THE KNOWN THREADS</span><span class="stamp">LOCAL LEDGER</span></div>
+ <h2>What has actually been prepared?</h2><p class="subtle">Links here are locally operator-approved *candidates*, not confirmed human or institutional ties. Completed actions live in their original WAKE studies.</p>
+ <div id="edges" class="edges" aria-live="polite"></div>
+ <a class="primary link-button" href="/wake">Open the WAKE ledger →</a>
+</section>
+<section class="sheet" id="cross-room">
+ <div class="section-bar"><span>03 / SEND NOTHING, CARRY A TRACE</span><span class="stamp">UNSIGNED / HOLD</span></div>
+ <h2>One room offers. Another decides.</h2><p>Export a reviewed, portable draft addressed to a *type of receiving room*. The file may be carried by a human, but it is never delivered by JAR;VIS. The receiving room checks the content SHA and may create an independent unverified local draft.</p>
+ <div class="pair"><label>Local woven study <select id="carrier-study"></select></label><label>Receiving organ <select id="carrier-target"></select></label></div>
+ <label class="check"><input type="checkbox" id="share-reviewed"> I inspected this complete study text for public sharing and have permission to carry it.</label>
+ <button class="primary" id="export-carrier" type="button">Prepare unsigned HOLD carrier (.json) →</button>
+ <p id="carrier-status" role="status">No carrier exported or shared.</p>
+ <hr>
+ <label for="incoming">Paste an unsigned foreign carrier for independent review</label>
+ <textarea id="incoming" maxlength="14000" rows="5" placeholder="{ &quot;schema&quot;: &quot;jarvis.weave-handoff/v1&quot;, ... }"></textarea>
+ <div class="action-row"><button class="secondary" type="button" id="inspect-carrier">Inspect incoming carrier →</button></div>
+ <p id="incoming-status" role="status">Nothing has been received or admitted.</p>
+ <div id="receive-panel" hidden>
+  <p id="receive-summary"></p>
+  <label class="check"><input id="independent-review" type="checkbox"> I independently reviewed this foreign content and understand the original sender is not authenticated.</label>
+  <label class="check"><input id="accept-local" type="checkbox"> I want a new <strong>unverified local draft only</strong>, not an admitted action or automatic reply.</label>
+  <button class="primary" id="receive-carrier" type="button">Prepare local HOLD draft →</button>
+ </div>
+</section>
+<footer>MANY ROOMS ≠ ONE STATE · PREVIEW ≠ DELIVERY · REVIEW ≠ PROOF · RETURN ≠ CONSENT · <a href="/wake">WAKE</a> · <a href="/">HOME</a></footer>
+</main></body></html>
