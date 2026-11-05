@@ -49,3 +49,24 @@
  border:1px solid #d8cfba;padding:.8rem;background:#f8f6ef;color:#24231f}
 .goal-page .work-file button{margin-top:auto}
 @media(max-width:680px){.goal-page .work-list{grid-template-columns:1fr}}
+
+/* MOTIF-027: transparent local capability handoff, never auto-sending. */
+.goal-page .goal-handoff{margin:1.4rem 0;padding:clamp(1rem,3vw,2rem);
+ border:2px solid #74877e;background:#f0f4ee;color:#25302a;border-radius:3px}
+.goal-page .goal-handoff h2,.goal-page .goal-handoff h3{color:#26372e}
+.goal-page .goal-handoff p,.goal-page .goal-handoff .small{color:#38453d;line-height:1.55}
+.goal-page .goal-handoff .eyebrow{color:#465f51}
+.goal-page .goal-handoff .goal-card{border-color:#b3c9b9;background:#fffefa}
+.goal-page .goal-handoff input,.goal-page .goal-handoff textarea{display:block;
+ width:100%;box-sizing:border-box;margin:.4rem 0 .85rem;padding:.7rem;
+ border:1px solid #879e8d;background:#fff;color:#252920;font:inherit}
+.goal-page .goal-handoff label{display:block;font-weight:600;color:#283b2d}
+.goal-page #mail-review,.goal-page #mail-ready{border:1px dashed #799581;
+ padding:1rem;margin-top:1.2rem;background:#fffefa}
+.goal-page #preview-message{white-space:pre-wrap;overflow-wrap:anywhere;
+ font:14px/1.55 ui-monospace,monospace;padding:.75rem;background:#f6f6f1;
+ border:1px solid #cfd6cb;max-height:22rem;overflow:auto}
+.goal-page #mail-app-link{display:inline-block;padding:.75rem 1rem;
+ border:2px solid #31523e;background:#eaf2e5;color:#20432e;
+ font-weight:750;text-decoration:underline}
+.goal-page #mail-app-link:focus-visible{outline:3px solid #b8752b;outline-offset:3px}
