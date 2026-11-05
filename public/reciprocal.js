@@ -95,7 +95,16 @@ async function displayEnvironment(report){
         " aligned river hours. Validation preferred "+report.watershed.selectedOnValidation+
         "; test MAE "+report.watershed.holdoutCandidateCfs+
         " cfs vs persistence "+report.watershed.holdoutPersistenceCfs+
-        " cfs. "+report.watershed.disposition]
+        " cfs. "+report.watershed.disposition],
+      ["HISTORIC FLOOD / 017 — THE DIAGNOSTIC CAN LOSE",
+        report.eventLearning.data.observedCompleteHours+" of "+
+        report.eventLearning.data.calendarHours+
+        " hours had complete river sensor coverage. Legacy MAE "+
+        report.eventLearning.data.originalSelectedMaeCfs+" cfs; cautious fallback "+
+        report.eventLearning.data.cautiousMaeCfs+" cfs; persistence "+
+        report.eventLearning.data.persistenceMaeCfs+
+        " cfs. Added caution cost "+
+        report.eventLearning.data.cautiousExtraErrorCfs+" cfs. Nothing admitted."]
     ]){
       const article=document.createElement("article");article.className="witness";
       const title=document.createElement("h3");title.textContent=entry[0];
@@ -106,6 +115,11 @@ async function displayEnvironment(report){
     contrast.textContent="JAR;VIS ↔ MOTIF: "+report.reciprocalDisagreement.motifToJarvis+
       " Next discriminating test: "+report.reciprocalDisagreement.singleMostUsefulNextTest;
     holder.append(contrast);
+    const question=document.createElement("p");
+    question.textContent="THE META-DIAGNOSTIC QUESTIONS ITSELF: "+
+      report.eventLearning.learned.diagnosticSelfChallenge+
+      " Neither always choose the simpler method nor always choose the complicated one.";
+    holder.append(question);
     $("environment-limits").textContent=report.evidenceLimitations[0]+
       " Research receipt: "+report.upstreamCommit+". No methods admitted or actions executed.";
   }catch(error){

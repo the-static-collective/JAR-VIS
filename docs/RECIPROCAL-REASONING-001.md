@@ -59,3 +59,23 @@ Both experiments returned HOLD. This is deliberate scientific pressure on the me
 The next receiver-owned admission gate must independently archive raw provider snapshots, use locked out-of-sample hydrologic episodes and reliable forecast-issue-time metadata, then compare any JAR;VIS/MOTIF proposed strategy against persistence and classical hydrology. Do not use these experimental metrics to send environmental alerts or affect public safety.
 
 Source run: https://github.com/the-static-collective/MOTIF/actions/runs/42030670309
+
+## MOTIF-017: learning through disagreement with itself
+
+We then actually challenged the 016 conclusion in a **pre-registered, two-stage retrospective replay of the documented June 2024 flood**. This was not a 2024 issued flood prediction: it is archived sensor data evaluated now. Source commit `9f238548a0c1d8bcb6034df0e6992950541b40b8`; immutable proof-of-research receipts in `integrations/motif-reality-017/`.
+
+Result (117 complete of 264 possible hours; 32 rising-flow cases):
+
+| Frozen strategy | 2024 event test MAE |
+| --- | ---: |
+| Original validation winner, cross-gauge ridge | **1,293.0220 cfs** |
+| Cautious origin-only out-of-distribution fallback | 1,966.8894 cfs |
+| Simple persistence | 2,027.3504 cfs |
+
+**The new cautious policy was 673.8674 cfs worse than the original method on the complete-case event subset**. This does not establish the original method as generally superior: the June 2024 flood had **only 44.32% complete joined sensor coverage**. The Rapidan dam crisis affected gauge power; the scored subset may be systematically biased toward hours with functioning sensors.
+
+MOTIF's meta-diagnostic produced three evidence-backed *hypotheses*, not changed weights: (1) no universally best complexity level across distinct regimes, (2) excessive caution and inaction have measurable costs, and (3) the diagnostic itself may be learning from selectively observed data. It explicitly permits its own inadequacy and proposes event-blocked replication, dropout tests, and a predeclared cost of inaction.
+
+JAR;VIS loads the exact source-owned 017 event and metadiagnostic Git blobs, verifies their integrity, and displays the new negative evidence and self-challenging question alongside 015/016. The original synthetic MOTIF-003 route comparison and separate consented local opinion journal remain independent. Nothing in this bridge automatically admits a learned rule, changes weights, contacts the public or acts as a flood warning.
+
+**Real source-backed run and raw response archive**: https://github.com/the-static-collective/MOTIF/actions/runs/42034382151 . Source file integrity is not independent sensor authentication. Manual receiver review required before merging.
