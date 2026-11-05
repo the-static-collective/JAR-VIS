@@ -1,0 +1,44 @@
+name: NOW-ROUTE live smoke
+on:
+  pull_request:
+    paths:
+      - 'backend/edge/now-route-live/**'
+      - 'backend/migrations/009_now_route_live_pilot.sql'
+      - 'test/now-route-live.test.mjs'
+      - '.github/workflows/now-route-live.yml'
+permissions:
+  contents: read
+jobs:
+  local-and-public-readonly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Parse Edge script and run local invariant tests
+        run: |
+          cp backend/edge/now-route-live/index.ts /tmp/nr03-index.mjs
+          cp backend/edge/now-route-live/site.ts /tmp/nr03-site.mjs
+          cp backend/edge/now-route-live/client.ts /tmp/nr03-client.mjs
+          node --check /tmp/nr03-index.mjs
+          node --check /tmp/nr03-site.mjs
+          node --check /tmp/nr03-client.mjs
+          node --test test/now-route-live.test.mjs
+      - name: Test deployed public health and web entry (read-only)
+        run: |
+          set -euo pipefail
+          base="https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/now-route-live"
+          curl -fSs --max-time 25 "$base/health" > /tmp/nr03-health.json
+          node -e "const x=require('/tmp/nr03-health.json');if(!x.ok||x.mode!=='INVITE_ONLY_PILOT')process.exit(1);"
+          curl -fSs --max-time 25 "$base" > /tmp/nr03-site.html
+          grep -q 'NOW ROUTE' /tmp/nr03-site.html
+          curl -fSs --max-time 25 "$base/client.js" > /tmp/nr03-client.js
+          grep -q 'nr03-private-ticket-v1' /tmp/nr03-client.js
+          status=$(curl -Ss --max-time 25 -o /tmp/nr03-deny.json -w '%{http_code}' -H 'origin: https://untrusted.example' -H 'content-type: application/json' -d '{"action":"status","secret":"nonsense"}' "$base")
+          test "$status" = 403
+          accepted=$(curl -Ss --max-time 25 -o /tmp/nr03-invalid.json -w '%{http_code}' -H 'origin: https://kbhqacsdvjsstzyplqij.supabase.co' -H 'content-type: application/json' -d '{"action":"status","secret":"0000000000000000000000000000000000000000000000000000000000000000"}' "$base")
+          test "$accepted" = 400
+          grep -q 'TICKET_NOT_FOUND' /tmp/nr03-invalid.json
+          echo "ONLINE PAGE + HEALTH + SCRIPT + ORIGIN DENIAL + DATABASE-BACKED INVALID-TICKET TEST PASS"
