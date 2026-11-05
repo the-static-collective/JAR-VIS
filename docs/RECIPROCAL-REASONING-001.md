@@ -202,3 +202,27 @@ npm start
 ```
 
 **Research status:** Source-owned experiment and UI review branch, not merged or publicly deployed.
+
+## MOTIF-027 — The Last Inch: choosing an actual local application
+
+The next frontier moves from producing useful standalone materials toward **explicitly selected application handoffs**, without treating goal approval as permission to contact anyone.
+
+When the user confirms an exact completion contract on local `/goal`, the page offers **Show my available local actions**. That calls a source-owned deterministic capability router, not a hosted LLM. Only supported local options are presented for that specific domain:
+
+- **Local work kit**: MOTIF-026's separate preparation grant, producing checklist, CSV tracker, unsent draft and printable page. The user must click to download individual files.
+- **Static OS local workshop prefill**: an explicit button transfers the human's original question to the existing `/workshop` text box as a *one-use local browser URL fragment*. The receiving browser script immediately removes the fragment from the address bar. **It does not run `Recompose`, record feedback, create files or save any work**; the operator reviews and clicks separately.
+- **Mail-app composer handoff**: supported only for community/outreach domains such as donated coffee, volunteers, gatherings and local food exchange. The person must **type exactly one recipient** and review a subject/body. No donor or contact is inferred from a search, scraped, or assumed to exist.
+
+The mail-app path is deliberately **three-stage, user controlled**:
+
+1. Person enters a recipient, subject and body and clicks **Preview exact email draft**. The source verifies the same already-confirmed goal and returns a digest of **goal ID + recipient + subject + full message**, *without* an outgoing link.
+2. A separate **Authorize opening a draft in my email app** button replays those exact bytes with `open_consent:true` and `open_permission:"OPEN_LOCAL_MAIL_COMPOSER_ONLY"`. If the recipient, subject, body or goal ID changed, the source **holds** and requires a new preview.
+3. The UI reveals **Open my email application (unsent draft)**. Only this final link is a `mailto:` URI that the person explicitly clicks. The mail app may or may not be installed, can ask to sign in, and may still require a send click. **Opening or preparing a mail draft is not proof of sending or delivery.**
+
+Underneath, `POST /api/reciprocal/handoff` runs the byte-pinned MOTIF-027 `capability_handoff.py` source through the same bounded local Python bridge, behind existing localhost Host/Origin/CSRF requirements. JAR;VIS independently verifies source identity, domain-appropriate route, exact encoded `mailto:` subject/body/recipient, no SMTP, no network sends, no journal mutation and no invented delivery receipts. It does **not** connect Proton, Gmail, Google Drive or any email provider and holds no sender credentials.
+
+MOTIF source: `the-static-collective/MOTIF`, commit `90cbe6427d52286d17b74cdff48c4a81a48db3d0`, Git blob `dd108e4765e9cce1e15e35a01c2fd3c2f7a83979`. It is still in an experimental PR, not merged or publicly deployed.
+
+Run `npm test`, then `npm start`, and use `http://127.0.0.1:7789/goal`. The Python source relies on MOTIF-026/025/024/023/022 source-pinned local dependencies. The separate source-owner tests validate invalid recipients, header injection, stale goal and mail preview digests, missing consent and no asserted delivery.
+
+**Scientific and capability limit:** This is a functioning bridge into a user's **own existing mail application composer** or a **local workshop input**, not an authenticated email sender, verified outreach event, validated donation, automatically executable GRAFT capability, autonomous multi-app access or guaranteed operator benefit. No external power/energy Joules were measured, no purchased model tokens were used, and no assertion of general natural language understanding is made.

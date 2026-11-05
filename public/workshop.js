@@ -1,4 +1,26 @@
 const $ = id => document.getElementById(id);
+/** One-use, explicit local goal prefill: browser fragment is never sent to
+ * the server; erase it before rendering, and DO NOT start the workshop.
+ */
+function consumeApprovedGoalPrefill(){
+  const fragment=window.location.hash;
+  if(!fragment.startsWith("#goal="))return;
+  window.history.replaceState(null,"",window.location.pathname);
+  try{
+    const text=decodeURIComponent(fragment.slice(6));
+    if(text.length<1||text.length>320||
+       /[\x00-\x08\x0b-\x1f\x7f]/.test(text))
+      throw Error("Invalid prefill");
+    $("question").value=text;
+    $("ask-status").textContent=
+      "Prefilled from your separately chosen MOTIF goal. No workshop computation has run. Review or edit the text, then press Recompose if you wish.";
+  }catch{
+    $("ask-status").textContent=
+      "HOLD: the local goal prefill could not be read. Type your request manually.";
+  }
+}
+consumeApprovedGoalPrefill();
+
 let csrf=null, current=null, cardText="";
 const run = async (url, payload) => {
   const response = await fetch(url,{method:"POST",headers:{"content-type":"application/json","x-jarvis-csrf":csrf},
