@@ -1,4 +1,4 @@
-import {investigateDesk} from "./investigation-desk.mjs";
+import {investigateDesk,suggestInvestigationProviders,listPublicInvestigationProviders} from "./investigation-desk.mjs";
 import { createServer } from "node:http";
 import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -82,7 +82,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
-        if (pathname === "/api/investigate/meta") return reply(res,200,{schema:"jarvis.investigation-desk-meta/v0",mode:"READ_ONLY_LOCAL_SERVICE",providers:["github-public-account","wikipedia-index","openalex-index"],native_motif023_available:true,private_sources_connected:false,published_page:false});
+        if (pathname === "/api/investigate/meta") return reply(res,200,{schema:"jarvis.investigation-desk-meta/v1",mode:"READ_ONLY_LOCAL_SERVICE",providers:listPublicInvestigationProviders(),native_motif023_available:true,private_sources_connected:false,published_page:false,automatic_external_search:false});
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
         if (pathname === "/api/recursive/state") return recursive ?
@@ -142,10 +142,18 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
           nextHumanStep:reviewed.actionLabel,
           note:"This import checks a public-only candidate. No ledger secrets, source network read, institution contact or action performed."});
       }
+      if (pathname === "/api/investigate/suggest") {
+        try{return reply(res,200,suggestInvestigationProviders(body.question));}
+        catch{return reply(res,422,{error:"HOLD_INVALID_PROVIDER_SUGGESTION"});}
+      }
       if (pathname === "/api/investigate") {
+        const providerIds=new Set(listPublicInvestigationProviders().map(p=>p.id));
         if(!body||typeof body.question!=="string"||body.question.length>320||
-          !body.scopes||typeof body.scopes!=="object"||
-          Object.keys(body.scopes).some(x=>!["github","wikipedia","scholarly"].includes(x)))
+          !body.scopes||typeof body.scopes!=="object"||Array.isArray(body.scopes)||
+          Object.keys(body.scopes).some(x=>!providerIds.has(x))||
+          Object.values(body.scopes).some(v=>typeof v!=="boolean")||
+          Object.values(body.scopes).filter(Boolean).length<1||
+          Object.values(body.scopes).filter(Boolean).length>4)
           return reply(res,422,{error:"HOLD_INVALID_PUBLIC_SEARCH_REQUEST"});
         return reply(res,200,await investigationFn(body));
       }
