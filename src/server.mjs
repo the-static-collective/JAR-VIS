@@ -12,6 +12,7 @@ import {askHumanGoal} from "./motif-human-goal.mjs";
 import {askGoalExamples} from "./motif-goal-examples.mjs";
 import {composeHumanExamples} from "./motif-composable-goals.mjs";
 import {prepareLocalWork} from "./motif-goal-workpacket.mjs";
+import {handoffCapability} from "./motif-capability-handoff.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
 
@@ -137,6 +138,10 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         };
         if (!operations[pathname]) return reply(res, 404, { error: "Not found" });
         return reply(res, 200, await operations[pathname]());
+      }
+      if (pathname === "/api/reciprocal/handoff") {
+        if(!reciprocal)return reply(res,503,{error:"HOLD: local reciprocal desk unavailable"});
+        return reply(res,200,await handoffCapability(body));
       }
       if (pathname === "/api/reciprocal/prepare-work") {
         if(!reciprocal)return reply(res,503,{error:"HOLD: local reciprocal desk unavailable"});
