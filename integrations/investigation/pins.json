@@ -39,6 +39,12 @@
       "repository": "the-static-collective/planZ",
       "blob": "22d75c26039e5783b59cf71be02982428603128c",
       "role": "GRAFT_VENDOR_NATIVE_OPTIMIZER"
+    },
+    "alex/eagle-eye-providers-025.mjs": {
+      "repository": "the-static-collective/ALEX.2",
+      "branch": "research/025-provider-routing-public",
+      "blob": "5c095be409d2ace0d39765c4316471702d88acb5",
+      "role": "SEVEN_PROVIDER_ROUTER_AND_FOUR_NEW_PUBLIC_INDEXES"
     }
   },
   "limits": {
@@ -49,5 +55,6 @@
     "no_deployment": true
   },
   "motif023_source": "the-static-collective/MOTIF@research/023-open-question-field",
-  "origin_note": "Byte identity establishes intact imported code; not evidence authority or owner approval."
+  "origin_note": "Byte identity establishes intact imported code; not evidence authority or owner approval.",
+  "feature_notes": "ALEX-025 selection recommendations are local and do not send queries; searching new providers requires explicit scope booleans."
 }
