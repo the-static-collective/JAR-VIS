@@ -1,0 +1,53 @@
+{
+  "schema": "jarvis.investigation-organ-pins/v0",
+  "sources": {
+    "alex/eagle-eye-024.mjs": {
+      "repository": "the-static-collective/ALEX.2",
+      "branch": "research/024-eagle-eye-public-discovery",
+      "blob": "3597661324a241b1066878386351008e30b6b6e6",
+      "role": "BROAD_PUBLIC_DISCOVERY"
+    },
+    "alex/motif023-live.mjs": {
+      "repository": "the-static-collective/ALEX.2",
+      "commit": "e678b0a0596a6391f92e18b6b8135477ad49658d",
+      "blob": "00690d5b8f540f5a59719f97349710eba17254f5",
+      "role": "PINNED_MOTIF_SOURCE_SCOUT"
+    },
+    "planz/motif023-replan.mjs": {
+      "repository": "the-static-collective/planZ",
+      "commit": "a36ab06e2ac151a03b769bad9162a61946430270",
+      "blob": "5e4073cd245714eaca63036d60190780feb22171",
+      "role": "CLASSICAL_REPLAN"
+    },
+    "planz/motif-classical.mjs": {
+      "repository": "the-static-collective/planZ",
+      "blob": "22d75c26039e5783b59cf71be02982428603128c",
+      "role": "OPTIMAL_STRIPS"
+    },
+    "graft/src/motif023-compiler.mjs": {
+      "repository": "the-static-collective/GRAFT",
+      "commit": "9d02b83bc259ee0eaa68d4e6da7b526d9afc8ee4",
+      "blob": "751bb4955265e32ba5fe55d242321d56ac9597ee",
+      "role": "SOURCE_OWNED_COMPILER"
+    },
+    "graft/vendor/planZ/motif023-replan.mjs": {
+      "repository": "the-static-collective/planZ",
+      "blob": "5e4073cd245714eaca63036d60190780feb22171",
+      "role": "GRAFT_VENDOR_NATIVE_VALIDATOR"
+    },
+    "graft/vendor/planZ/motif-classical.mjs": {
+      "repository": "the-static-collective/planZ",
+      "blob": "22d75c26039e5783b59cf71be02982428603128c",
+      "role": "GRAFT_VENDOR_NATIVE_OPTIMIZER"
+    }
+  },
+  "limits": {
+    "public_only": true,
+    "no_personal_credentials_export": true,
+    "no_unlicensed_private_sources": true,
+    "no_auto_repos_write": true,
+    "no_deployment": true
+  },
+  "motif023_source": "the-static-collective/MOTIF@research/023-open-question-field",
+  "origin_note": "Byte identity establishes intact imported code; not evidence authority or owner approval."
+}
