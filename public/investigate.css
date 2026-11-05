@@ -71,3 +71,16 @@ footer a{color:#455f4c}
  .actions{align-items:stretch}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+
+/* 025 / SOURCE ADVISOR: suggestions do not authorize an outbound query. */
+.source-advisor{margin:21px 0;padding:16px 19px;background:#fffdf6;border:1px dashed #66876b;display:flex;align-items:flex-start;gap:13px;flex-wrap:wrap}
+.source-advisor .suggest,.source-advisor #apply-suggestions{background:#305946;color:#fff8e7;border:1px solid #244736;padding:10px 15px;cursor:pointer;font-weight:750}
+.source-advisor .suggest:hover,.source-advisor #apply-suggestions:hover{background:#497154}
+.source-advisor .advisor-note{font-size:13px;max-width:400px;color:#516c57;line-height:1.45}
+.source-advisor .suggestions{flex-basis:100%;font-size:14px;line-height:1.5}
+.source-advisor .suggestions p{margin:5px 0}
+.source-advisor .suggestions ul{margin:8px 0 0;padding-left:22px}
+.source-advisor .suggestions li{padding:2px 0}
+.source-advisor #apply-suggestions[hidden]{display:none}
+@media(max-width:560px){.source-advisor{padding:13px}.source-advisor .suggest,.source-advisor #apply-suggestions{width:100%}}
