@@ -23,6 +23,7 @@ function weatherCases(){
    body:{current:{temperature_2m:8}}},reject:true}
  ]};
 }
+export function getSyntheticGardenCases(){return structuredClone(weatherCases());}
 const action=(name,cost,pre,add)=>({name,cost,pre,add,del:[]});
 function reviewPlan(evaluation){
  const winner=!!evaluation.winner;

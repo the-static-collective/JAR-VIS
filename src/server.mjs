@@ -1,5 +1,6 @@
 import {investigateDesk,suggestInvestigationProviders,listPublicInvestigationProviders,discoverResearchSource} from "./investigation-desk.mjs";
 import {growSourceGarden,runPublicLivePilot,publicPilotDescription} from "./investigation-gardener-027.mjs";
+import {InvestigationMemory} from "./investigation-memory-028.mjs";
 import { createServer } from "node:http";
 import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -58,7 +59,7 @@ async function readJson(req) {
   return value;
 }
 
-export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard, recursiveDesk, investigationFn = investigateDesk } = {}) {
+export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard, recursiveDesk, investigationFn = investigateDesk, gardenFn = growSourceGarden } = {}) {
   if (!workbench && !journalPath) throw new Error("journalPath required");
   const app = workbench ?? await Workbench.open({ journalPath });
   const inherit = inheritanceBoard ?? (journalPath ? await InheritanceBoard.open({ journalPath: journalPath + ".inheritance.jsonl" }) : null);
@@ -69,6 +70,10 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
     catch (error) { recursiveUnavailable = "HOLD: local Python or pinned Static OS snapshot unavailable"; }
   }
   const csrf = randomBytes(24).toString("hex");
+  // No automatic captures. Memory entries exist only after separate explicit
+  // synthetic-capture AND private-persistence consent.
+  const memory = journalPath ? InvestigationMemory.open({journalPath}) : null;
+  let pendingGarden = null;
   let boundPort;
   const server = createServer(async (req, res) => {
     try {
@@ -83,6 +88,9 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/investigate/memory") return memory ?
+          reply(res,200,memory.summary()) :
+          reply(res,503,{error:"HOLD_LOCAL_MEMORY_NOT_CONFIGURED"});
         if (pathname === "/api/investigate/meta") return reply(res,200,{schema:"jarvis.investigation-desk-meta/v1",mode:"READ_ONLY_LOCAL_SERVICE",providers:listPublicInvestigationProviders(),native_motif023_available:true,private_sources_connected:false,published_page:false,automatic_external_search:false});
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
@@ -147,7 +155,33 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         if(typeof body.question!=="string"||body.question.length>320||
           body.approvedPublicGithubSearch!==true)
           return reply(res,422,{error:"HOLD_EXPLICIT_GARDEN_SEARCH_CONSENT_REQUIRED"});
-        return reply(res,200,await growSourceGarden(body));
+        pendingGarden=null;
+        const result=await gardenFn(body);
+        if(result.status==="HELD_SOURCE_SPECIFIC_GARDENER_RESULT")
+          pendingGarden=result;
+        return reply(res,200,result);
+      }
+      if (pathname === "/api/investigate/memory/remember") {
+        if(!memory)return reply(res,503,{error:"HOLD_LOCAL_MEMORY_NOT_CONFIGURED"});
+        if(body.approvedSyntheticCapture!==true||
+          body.approvedPersistentSave!==true||
+          typeof body.expectedGardenReceipt!=="string"||
+          !/^[a-f0-9]{64}$/.test(body.expectedGardenReceipt)||
+          Object.keys(body).some(k=>!["approvedSyntheticCapture",
+            "approvedPersistentSave","expectedGardenReceipt"].includes(k)))
+          return reply(res,422,{error:"HOLD_MEMORY_CONSENT_OR_RECEIPT_REQUIRED"});
+        if(!pendingGarden||
+          pendingGarden.checksum_sha256!==body.expectedGardenReceipt)
+          return reply(res,409,{error:"HOLD_NO_MATCHING_LOCAL_GARDEN_RUN"});
+        const result=await memory.rememberGarden(pendingGarden,body);
+        return reply(res,200,result);
+      }
+      if (pathname === "/api/investigate/memory/recall") {
+        if(!memory)return reply(res,503,{error:"HOLD_LOCAL_MEMORY_NOT_CONFIGURED"});
+        if(typeof body.question!=="string"||body.question.length>320||
+          Object.keys(body).some(k=>k!=="question"))
+          return reply(res,422,{error:"HOLD_INVALID_MEMORY_QUERY"});
+        return reply(res,200,await memory.recall(body.question));
       }
       if (pathname === "/api/investigate/pilot") {
         if(!body||body.approvedPublicPilot!==true||

@@ -1,0 +1,29 @@
+name: JARVIS-028 Memory of Failure
+on:
+  push:
+    branches: [feat/investigation-memory-028]
+  pull_request:
+    paths:
+      - 'src/investigation-memory-028.mjs'
+      - 'src/investigation-gardener-027.mjs'
+      - 'src/investigation-desk.mjs'
+      - 'src/server.mjs'
+      - 'integrations/investigation/**'
+      - 'public/investigate.*'
+      - 'test/investigation-memory-028.test.mjs'
+      - '.github/workflows/jarvis028.yml'
+permissions:
+  contents: read
+jobs:
+  private-local-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Frontend and local server syntax
+        run: node --check src/investigation-memory-028.mjs && node --check public/investigate.js
+      - name: Original JARVIS regression plus explicit memory and server restart tests
+        run: npm test

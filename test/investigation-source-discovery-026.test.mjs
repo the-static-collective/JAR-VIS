@@ -43,7 +43,7 @@ function fixture({privateRepo=false,corrupted=false}={}){
 }
 test('all twelve original research modules preserved with byte-verified ALEX / GRAFT provider machinery',()=>{
  const original=verifyOriginalOrgans();
- assert.equal(original.source_count,14);
+ assert.equal(original.source_count,15);
  assert.equal(original.source_organs_exact_pinned,true);
  assert.equal(original.source_owner_review_not_automatic,true);
 });
