@@ -202,6 +202,68 @@
   }else status.textContent='Suggested sources selected. Investigate to send this question only to those providers.';
   $('apply-suggestions').hidden=true;
  });
+ let sourceDiscovery=null;
+ $('discover-missing-source').addEventListener('click',async()=>{
+  const btn=$('discover-missing-source'),box=$('missing-source-results');
+  clear(box);sourceDiscovery=null;$('download-source-discovery').hidden=true;
+  const question=$('question').value.trim();
+  if(question.length<12){
+   box.append(p('Ask a specific question about a missing kind of live data first.'));
+   return;
+  }
+  btn.disabled=true;
+  box.append(p('Reading public GitHub source descriptions and checking their original file hashes…'));
+  try{
+   const csrf=await getCsrf();
+   const response=await fetch('/api/investigate/discover',{
+    method:'POST',cache:'no-store',
+    headers:{'content-type':'application/json','x-jarvis-csrf':csrf},
+    body:JSON.stringify({question,approvedPublicGithubSearch:true})
+   });
+   const result=await response.json();
+   if(!response.ok)throw Error(result.error||'Source discovery was held');
+   if(result.schema!=='jarvis.missing-provider-discovery/v0')
+    throw Error('Unrecognized research packet');
+   sourceDiscovery=result;
+   clear(box);
+   box.append(div('strong','',result.status==='REVIEWABLE_API_ADAPTER_PROPOSAL'?
+    'Candidate source discovered (NOT connected)':'HOLD — no authenticated new adapter candidate'));
+   const discovery=result.discovery;
+   box.append(p('Public repository search requests: '+(discovery.origin_searches_executed||0)+
+    ' · Original API specifications: '+(discovery.unreviewed_spec_documents?.length||0)+
+    ' · Reviewable proposals: '+(discovery.public_provider_proposals?.length||0)));
+   for(const candidate of discovery.public_provider_proposals||[]){
+    const item=div('div','card');
+    item.append(div('strong','',candidate.provider_name||'Unverified API publisher'));
+    item.append(p('Proposed operation: '+candidate.operation.method+' '+candidate.operation.path));
+    item.append(p('Original source: '+candidate.repository+
+      ' · '+candidate.spec_path+' · blob '+candidate.git_blob.slice(0,14)));
+    item.append(p('The advertised API host has NOT been contacted or authenticated.'));
+    box.append(item);
+   }
+   if(result.review){
+    box.append(p('Classical plan: '+result.review.classical_plan.steps.join(' → ')));
+    box.append(p('GRAFT ran a synthetic, offline response fixture only. Code installed: NO.'));
+    box.append(p(result.review.next_question));
+   }else{
+    box.append(p('No candidate has been admitted. Public GitHub search may have returned YAML-only specifications, incomplete data, or no matching sources.'));
+   }
+   if(discovery.errors?.length)
+    box.append(p(discovery.errors.length+' source limitations recorded in the packet.'));
+   $('download-source-discovery').hidden=false;
+  }catch(error){
+   clear(box);box.append(p(error.message||'HOLD: unavailable public source discovery'));
+  }finally{btn.disabled=false}
+ });
+ $('download-source-discovery').addEventListener('click',()=>{
+  if(!sourceDiscovery)return;
+  const blob=new Blob([JSON.stringify(sourceDiscovery,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='jarvis-source-discovery-'+
+   String(sourceDiscovery.receipt_sha256||'packet').slice(0,12)+'.json';
+  document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),3000);
+ });
  form.addEventListener('submit',async event=>{
   event.preventDefault();
   button.disabled=true;$('download').disabled=true;
