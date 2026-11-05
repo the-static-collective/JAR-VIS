@@ -1,0 +1,29 @@
+name: JARVIS-026 Source Discovery from Missing Capabilities
+on:
+  push:
+    branches: [feat/investigation-provider-discovery-026]
+  pull_request:
+    paths:
+      - 'src/investigation-desk.mjs'
+      - 'src/server.mjs'
+      - 'public/investigate.*'
+      - 'integrations/investigation/**'
+      - 'test/investigation-source-discovery-026.test.mjs'
+      - '.github/workflows/jarvis026.yml'
+permissions:
+  contents: read
+jobs:
+  source-provider-proposal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: node --check src/investigation-desk.mjs && node --check public/investigate.js
+      - name: Execute all original JARVIS tests plus six new source-custody and consent tests
+        run: npm test
