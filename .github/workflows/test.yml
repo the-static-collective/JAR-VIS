@@ -2,7 +2,7 @@ name: JAR;VIS Genesis tests
 
 on:
   push:
-    branches: [main]
+    branches: [main, feat/motif-025-composable-goals]
   pull_request:
 
 permissions:
