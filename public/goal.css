@@ -1,0 +1,34 @@
+/* Physical paper clarity for the two examples; local-first, no external fonts. */
+.goal-page .goal-examples,.goal-page .goal-freshness,.goal-page .goal-contract{
+ margin:1.4rem 0;padding:clamp(1rem,3vw,2rem);
+ border:1px solid #c8b89b;background:#f9f5eb;color:#28291f;
+ box-shadow:3px 4px 0 #6d5f463b;border-radius:3px;
+}
+.goal-page .goal-examples h2,.goal-page .goal-contract h2,
+.goal-page .goal-freshness h2{color:#27261d;margin-top:.2em}
+.goal-page .goal-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1rem 0}
+.goal-page .goal-card{display:flex;flex-direction:column;gap:.65rem;min-width:0;
+ border:1px solid #b6a686;background:#fffdf8;padding:1.25rem}
+.goal-page .goal-letter{font-size:.8rem;letter-spacing:.1em;font-weight:750;text-transform:uppercase;
+ color:#645331;margin:0}
+.goal-page blockquote{margin:0 0 auto;border-left:3px solid #d7b76c;
+ padding:.5rem .2rem .5rem 1rem;color:#22231c;font-size:1.05rem;line-height:1.48}
+.goal-page .goal-custom{border-top:1px dashed #ae9b76;padding-top:1rem;margin-top:1rem}
+.goal-page .goal-custom h3{color:#26251e;margin:.2rem 0 .75rem}
+.goal-page .goal-custom textarea{display:block;width:100%;min-height:6rem;box-sizing:border-box;
+ border:1px solid #99896a;background:#fff;color:#24241e;padding:.9rem;
+ font:inherit;resize:vertical;margin:.5rem 0 1rem}
+.goal-page .goal-custom label,.goal-page .goal-freshness label{display:block;color:#333126}
+.goal-page .goal-freshness select{display:block;width:min(100%,26rem);
+ margin:1rem 0;padding:.8rem;border:1px solid #99896a;background:#fff;color:#222}
+.goal-page .goal-examples button,.goal-page .goal-freshness button,
+.goal-page .goal-contract button{cursor:pointer}
+.goal-page .goal-contract{border-left:5px solid #77784b}
+.goal-page .goal-contract p{line-height:1.5;color:#2c2a22}
+.goal-page .goal-contract .small,.goal-page .goal-examples .small{font-size:.89rem;color:#5d584d}
+.goal-page .goal-examples .eyebrow,.goal-page .goal-contract .eyebrow,.goal-page .goal-freshness .eyebrow{color:#61573c}
+.goal-page button:focus-visible,.goal-page textarea:focus-visible,.goal-page select:focus-visible{
+ outline:3px solid #b8733d;outline-offset:3px}
+.goal-page button:disabled{opacity:.6;cursor:wait}
+.goal-page [hidden]{display:none!important}
+@media(max-width:680px){.goal-page .goal-cards{grid-template-columns:1fr}}
