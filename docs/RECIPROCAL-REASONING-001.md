@@ -169,3 +169,36 @@ Selecting a proposed result forms a **new SHA-256 evidence contract**. Editing t
 This is a **finite cartridge-based reasoning framework**, not a new large language model and not demonstrated unconstrained example generation. No donor has actually been contacted, no physical service completed, no notification dispatched, no source query made and no network/credit/energy savings claimed for these community tasks. Human-participant feedback and objective task-completion usefulness are not yet measured. The next stage should ask real people whether a proposed option was a helpful representation of *their* intended outcome, and record a private, opt-in correction receipt without treating it as permanent authority.
 
 This development is on [MOTIF-025 PR #56](https://github.com/the-static-collective/MOTIF/pull/56) and the stacked experimental JAR;VIS branch, **not merged or deployed**.
+
+## MOTIF-026 — From a confirmed goal to four **real local work artifacts**
+
+Human-defined success is not the same as permission to take action. The `/goal` page now has a **second explicit button**, shown **only after** the person's SHA-256-identified completion contract is confirmed:
+
+> **Yes — prepare my local work kit.**
+
+This authorizes only `PREPARE_LOCAL_PACKET_ONLY`, not contacting donors, publishing invitations, retrieving environmental data, deploying apps, sending email or collecting money.
+
+The local JAR;VIS `POST /api/reciprocal/prepare-work` endpoint independently verifies the person's original text, selected example or custom wording, accepted exact SHA-256 goal digest, `consent:true` and the exact action. It calls the source-pinned MOTIF-026 `prepare_work.py` via bounded **local Python** only. A contract whose meaning has changed since confirmation **HOLDS**, as does missing or wrong action permission. Neither the user input nor the resulting materials are persisted to JAR;VIS's journal.
+
+On success, JAR;VIS's own deterministic, offline `src/motif-goal-workpacket.mjs` renders **four actual, inspectable text-based files in server memory**:
+
+1. **Action checklist (.txt)** — human-accountable steps and what remains unverified.
+2. **CSV tracker (.csv)** — blank structured columns, no invented donors, commitments, verified matches, or completed results.
+3. **Unsent contact draft (.txt)** — a *draft only*, with no real recipient, no delivery and no implicit third-party authority.
+4. **Printable HTML work page (.html)** — escaped user-provided text, task checklist, and places for real evidence/witness.
+
+The browser presents each for review and provides a separate **Download this file** click. Nothing downloads automatically, and no file is saved to the operator's device until that click. There are no hosted LLM calls or paid token/credit costs. Attribution of electrical Joules remains unknown, and the physical-source river branch still does not issue a public USGS GET or safety instruction.
+
+The source-owned recipe at `MOTIF/experiments/026/prepare_work.py` is pinned to upstream commit `a4af07cb48c201d22e34b5569496a4ac1d3deb58` and blob `529b0cea7259b1314122d6e0a5d8331f16713180`. JAR;VIS's CI checks the exact bytes and new negative tests, rendering, signature binding, XSS escaping, localhost-only CSRF, and no review-journal mutation.
+
+**No real-world outcome is claimed.** Preparing materials is useful work but not a confirmed coffee donation, volunteer arrangement, public website or energy savings. Future outbound actions must require their own independently reviewed capability, separate permission and evidence of actual delivery.
+
+To reproduce on the experimental branch:
+
+```sh
+npm test
+npm start
+# open http://127.0.0.1:7789/goal
+```
+
+**Research status:** Source-owned experiment and UI review branch, not merged or publicly deployed.
