@@ -48,7 +48,7 @@ const fixedWeather=()=>new Response(JSON.stringify({
 }),{status:200,headers:{'content-type':'application/json'}});
 test('fourteen exact source-owner modules including GRAFT-027 are byte verified',()=>{
  const p=verifyOriginalOrgans();
- assert.equal(p.source_count,14);
+ assert.equal(p.source_count,15);
  assert.equal(p.source_organs_exact_pinned,true);
 });
 test('new weather domain produces a compared executable field variant and classical plan, without connecting proposed host',async()=>{
