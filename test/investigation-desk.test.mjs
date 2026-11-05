@@ -58,7 +58,7 @@ function form(deep=true,scopes={github:true,wikipedia:false,scholarly:false}){
 }
 test('all seven original ALEX planZ GRAFT code blobs are verified before reading outside sources',()=>{
  const pins=verifyOriginalOrgans();
- assert.equal(pins.source_count,14);
+ assert.equal(pins.source_count,15);
  assert.equal(pins.source_organs_exact_pinned,true);
  assert.equal(pins.source_owner_review_not_automatic,true);
 });
