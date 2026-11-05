@@ -75,6 +75,8 @@ export async function growSourceGarden(input={},options={}){
 export async function runPublicLivePilot(input={},options={}){
  if(!input||input.approvedPublicPilot!==true)
   throw Error('HOLD_EXPLICIT_PUBLIC_LIVE_CONSENT_REQUIRED');
+ if(Object.keys(input).some(k=>k!=='approvedPublicPilot'))
+  throw Error('HOLD_UNSUPPORTED_LIVE_API_ARGUMENTS');
  verifyOriginalOrgans();
  return probePublicExample({approvedPublicPilot:true},{
   transport:options.transport??globalThis.fetch});
