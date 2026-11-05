@@ -141,6 +141,7 @@ export class NetworkWeave {
         (p.parentStudyId!==null&&!studyRe.test(p.parentStudyId||""))||
         (p.parentStudyId===null? p.parentSlot!==null:!/^P[0-9]{3}$/.test(p.parentSlot||""))||
         p.disposition!=="LOCAL_STUDY_ONLY"||
+        !KINDS.has(p.kind)||!TIMES.has(p.when)||
         known.has(p.studyId)||
         (p.parentStudyId&&!known.has(p.parentStudyId))||
         p.parentStudyId===p.studyId)throw bad("weave ledger event inconsistent with local graph");
@@ -211,6 +212,7 @@ export class NetworkWeave {
    const already=entries.find(e=>e.studyId===studyId);
    if(already){
      if(already.packetSha256!==packetSha256||already.sourceNode!==p.sourceNode||
+       already.kind!==p.kind||already.when!==p.when||
        already.targetNode!==p.targetNode||already.parentStudyId!==p.parentStudyId||
        already.parentSlot!==p.parentSlot)throw bad("same study has different declared lineage; create distinct content",409);
      return {reused:true,studyId,sourceNode:p.sourceNode,
@@ -219,6 +221,7 @@ export class NetworkWeave {
    }
    await this.#journal.append("WAKE_WEAVE_ADMITTED",{
     studyId,packetSha256,sourceNode:p.sourceNode,targetNode:p.targetNode,
+    kind:p.kind,when:p.when,
     parentStudyId:p.parentStudyId,parentSlot:p.parentSlot,
     disposition:"LOCAL_STUDY_ONLY"
    });
@@ -238,7 +241,7 @@ export class NetworkWeave {
   const state=await this.#wake.state(studyId);
   const spec=state.active.plan.spec;
   const payload=normalize({sourceNode:link.sourceNode,targetNode:target.id,
-    kind:"open",when:"open",title:spec.title,context:spec.context,asks:spec.actions,
+    kind:link.kind,when:link.when,title:spec.title,context:spec.context,asks:spec.actions,
     parentStudyId:link.parentStudyId,parentSlot:link.parentSlot});
   return {schema:"jarvis.weave-handoff/v1",payload,payloadSha256:sha(payload),
     originStudyId:studyId,sourceNode:link.sourceNode,targetNode:target.id,
@@ -268,11 +271,13 @@ export class NetworkWeave {
    const studyId=state.active.studyId;
    const existing=this.#entries().find(e=>e.studyId===studyId);
    const expected={studyId,packetSha256:carrier.payloadSha256,
-     sourceNode:target.id,targetNode:null,parentStudyId:null,parentSlot:null,
+     sourceNode:target.id,targetNode:null,kind:p.kind,when:p.when,
+     parentStudyId:null,parentSlot:null,
      foreignOriginStudyId:carrier.originStudyId,foreignSourceNode:p.sourceNode,
      disposition:"LOCAL_STUDY_ONLY"};
    if(existing){
      if(existing.packetSha256!==expected.packetSha256 ||
+        existing.kind!==expected.kind||existing.when!==expected.when ||
         existing.foreignOriginStudyId!==expected.foreignOriginStudyId ||
         existing.foreignSourceNode!==expected.foreignSourceNode)
         throw bad("already recorded study is not this foreign lineage");

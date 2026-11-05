@@ -75,6 +75,8 @@ test("admission yields native WAKE study and preserves no personal copy in weave
  const edge=(await weave.state()).edges[0];
  assert.equal(edge.sourceNode,"fellowship");
  assert.equal(edge.targetNode,"garden");
+ assert.equal(edge.kind,"open");
+ assert.equal(edge.when,"open");
  assert.equal(edge.studyId,result.studyId);
  assert.equal(edge.packetSha256.length,64);
  const raw=await readFile(join(dir,"network.jsonl"),"utf8");
@@ -132,6 +134,8 @@ test("export/inspect/receive is portable but independent HOLD and unverified dra
  assert.equal(carrier.externalDelivery,false);
  assert.equal(carrier.sourceNode,"fellowship");
  assert.equal(carrier.targetNode,"webz");
+ assert.equal(carrier.payload.kind,"open");
+ assert.equal(carrier.payload.when,"open");
  const inspected=await weave.inspectCarrier(carrier);
  assert.equal(inspected.disposition,"HOLD_FOR_INDEPENDENT_REVIEW");
  assert.equal(inspected.externallyAuthenticated,false);
@@ -149,10 +153,20 @@ test("export/inspect/receive is portable but independent HOLD and unverified dra
  assert.equal(edges[1].foreignSourceNode,"fellowship");
  assert.equal(edges[1].sourceNode,"webz");
  assert.equal(edges[1].targetNode,null);
+ assert.equal(edges[1].kind,"open");
+ assert.equal(edges[1].when,"open");
  const again=await weave.receiveCarrier({carrier,independentlyReviewed:true,
   localOperatorApproved:true,count:3,seed:33});
  assert.equal(again.reused,true);
  assert.equal((await weave.state()).edges.length,2);
+}));
+test("carrier preserves originally expressed urgency and kind without claiming it remains current",()=>sandbox(async({weave})=>{
+ const urgent={...sample,title:"Time-labelled trial",kind:"food",when:"now"};
+ const study=await admit(weave,urgent);
+ const carrier=await weave.prepareCarrier({studyId:study.studyId,targetNode:"now-route",humanShareReviewed:true});
+ assert.equal(carrier.payload.kind,"food");
+ assert.equal(carrier.payload.when,"now");
+ assert.equal((await weave.inspectCarrier(carrier)).receivedAuthority,false);
 }));
 test("counterfeit signed, modified, extra-field or route-forged carriers all HOLD",()=>sandbox(async({weave})=>{
  const created=await admit(weave);
