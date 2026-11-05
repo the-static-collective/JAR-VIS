@@ -94,7 +94,7 @@ test("live JAR;VIS /wake page and HTTP endpoints are localhost and CSRF gated",(
   assert.equal(page.status,200);assert.match(await page.text(),/Ping the possibility/);
   const script=await fetch(server.url+"/wake.js");
   assert.equal(script.status,200);
-  assert.match(await script.text(),/No response does not mean AFK/);
+  assert.match(await script.text(),/No invitation was sent/);
   const stateResponse=await fetch(server.url+"/api/wake/state");
   assert.equal(stateResponse.status,200);
   const state=await stateResponse.json();
