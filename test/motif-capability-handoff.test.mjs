@@ -122,7 +122,10 @@ test("website route offers a local workshop but never a donor email app",async()
  assert.ok(x.capabilities.some(t=>t.id==="local_workshop"));
  assert.equal(x.capabilities.some(t=>t.id==="local_email_composer"),false);
  assert.equal(x.mail_app_supported,false);
- await assert.rejects(handoffCapability({...c,...content(),stage:STAGES.preview}),/HOLD/);
+ const noMail=await handoffCapability({...c,...content(),stage:STAGES.preview});
+ assert.equal(noMail.status,"HOLD_MAIL_HANDOFF_NOT_SUPPORTED_FOR_THIS_GOAL");
+ assert.equal(noMail.mailto_uri,null);
+ assert.equal(noMail.actual_message_sent,false);
 });
 test("river-source contract has no mailto or local workshop dispatch",async()=>{
  const c=await contract("Could you check the rivers?");
