@@ -8,6 +8,7 @@ import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
 import {WakeDesk} from "./wake-signal.mjs";
+import {NetworkWeave} from "./weave-network.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
@@ -23,7 +24,10 @@ const staticFiles = new Map([
   ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]],
   ["/wake", [new URL("../public/wake.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/wake.js", [new URL("../public/wake.js", import.meta.url), "text/javascript; charset=utf-8"]],
-  ["/wake.css", [new URL("../public/wake.css", import.meta.url), "text/css; charset=utf-8"]]
+  ["/wake.css", [new URL("../public/wake.css", import.meta.url), "text/css; charset=utf-8"]],
+  ["/weave", [new URL("../public/weave.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/weave.js", [new URL("../public/weave.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/weave.css", [new URL("../public/weave.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -72,6 +76,11 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
     try{wake=await WakeDesk.open({directory:journalPath+".wake-signal"});}
     catch{wakeUnavailable="HOLD: pinned MOTIF WAKE source or local Python unavailable";}
   }
+  let weaveUnavailable=null, weave=null;
+  if(wake && journalPath){
+    try{weave=await NetworkWeave.open({wake,journalPath:journalPath+".network-weave.jsonl"});}
+    catch{weaveUnavailable="HOLD: local network weave journal or source unavailable";}
+  }
   const csrf = randomBytes(24).toString("hex");
   let boundPort;
   const server = createServer(async (req, res) => {
@@ -90,6 +99,9 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
+        if (pathname === "/api/weave/state") return weave ?
+          reply(res,200,{...await weave.state(),csrfToken:csrf}) :
+          reply(res,503,{error:weaveUnavailable ?? "HOLD: network weave unavailable"});
         if (pathname === "/api/wake/state") return wake ?
           reply(res,200,{...await wake.state(requestUrl.searchParams.get("studyId")),csrfToken:csrf}) :
           reply(res,503,{error:wakeUnavailable ?? "HOLD: WAKE desk unavailable"});
@@ -108,6 +120,18 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res, 403, { error: "Missing or invalid local anti-CSRF token" });
       }
       const body = await readJson(req);
+      if (pathname.startsWith("/api/weave/")) {
+        if(!weave)return reply(res,503,{error:weaveUnavailable ?? "HOLD: network weave unavailable"});
+        const endpoints={
+          "/api/weave/preview":()=>weave.preview(body.packet),
+          "/api/weave/admit":()=>weave.admit(body),
+          "/api/weave/carrier":()=>weave.prepareCarrier(body),
+          "/api/weave/inspect-carrier":()=>weave.inspectCarrier(body.carrier),
+          "/api/weave/receive":()=>weave.receiveCarrier(body)
+        };
+        if(!endpoints[pathname])return reply(res,404,{error:"Unknown network weave operation"});
+        return reply(res,200,await endpoints[pathname]());
+      }
       if (pathname.startsWith("/api/wake/")) {
         if(!wake)return reply(res,503,{error:wakeUnavailable ?? "HOLD: WAKE desk unavailable"});
         if(pathname==="/api/wake/create")
