@@ -7,6 +7,7 @@ import {validateBridgeWork} from "./bridge-work-card.mjs";
 import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
 import {SOURCE_BLOB} from "./motif-reciprocal.mjs";
 import {ReciprocalLab} from "./motif-reciprocal-lab.mjs";
+import {inspectRealityIron} from "./motif-reality-iron.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
 
@@ -89,6 +90,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
+        if (pathname === "/api/reciprocal/environment") return reply(res,200,await inspectRealityIron());
         if (pathname === "/api/reciprocal/state") return reciprocal ?
           reply(res,200,{...reciprocal.summary(),csrfToken:csrf,mode:"LOCAL_PROPOSAL_ONLY",
             sourcePin:SOURCE_BLOB,externalEffect:false}):

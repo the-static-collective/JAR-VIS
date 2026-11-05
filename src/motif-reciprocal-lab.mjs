@@ -5,6 +5,7 @@
 import {createHash} from "node:crypto";
 import {LocalJournal} from "./journal.mjs";
 import {compareReciprocally,SOURCE_BLOB} from "./motif-reciprocal.mjs";
+import {inspectRealityIron} from "./motif-reality-iron.mjs";
 
 const digest=x=>createHash("sha256").update(JSON.stringify(x)).digest("hex");
 const bad=(reason,status=400)=>Object.assign(new Error("HOLD: "+reason),{status});
@@ -76,7 +77,8 @@ export class ReciprocalLab {
       const body=fields(x.target,x.proposal);
       return {...body,id:"proposal:"+digest(body)};
     });
-    return {...result,comparisonId,cartridges,
+    const realityIron=await inspectRealityIron();
+    return {...result,comparisonId,cartridges,realityIron,
       operatorFeedback:this.summary(),
       reviewStatus:this.#events.some(e=>e.comparisonId===comparisonId)?
         "ALREADY_REVIEWED":"AVAILABLE_WITH_CONSENT"};

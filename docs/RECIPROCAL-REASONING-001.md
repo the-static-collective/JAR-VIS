@@ -42,3 +42,20 @@ The optional `POST /api/reciprocal/review` endpoint accepts only a comparison is
 For each comparison the bridge also produces two content-addressed `jarvis.motif-improvement-cartridge/v1` JSON objects with `HELD_FOR_TEST` status, a source blob pin, proposed adjustment, explicit evidence limitations and a required independent evaluation method. The user can export them via the browser, but **nothing imports, admits or applies them automatically**.
 
 This establishes an inspectable *feedback cycle* without claiming that feedback is currently making either model more accurate. The next milestone is a proper frozen evaluation loop with independent observation and tests that can reject both the routing policy and the affordance diagnostic.
+
+## Environmental reality witnesses (MOTIF-015 and 016)
+
+The reciprocal page now displays **two actual source-backed experimental receipts**, independent of the synthetic route-ranking routine:
+
+- Archived Open-Meteo forecasts against NWS KMKT physical station reports: 88 aligned pairs; 30 held-out; raw weather MAE **1.6000°C**, adjusted MAE **1.6126°C**; adjustment **lost**.
+- USGS Blue Earth, Le Sueur, and Mankato streamflow reports: 324 aligned hours; 178 train, 64 validation, 82 held-out test. Validation preferred cross-gauge regression; on the untouched test its MAE was **20.9575 cfs**, compared with **13.1402 cfs** for persistence (candidate **lost**).
+
+The cards are checked against exact upstream Git blobs from MOTIF commit `23267b297094012d81525ddef2c5c36d6a5560b2`; GitHub CI independently checks byte equality against the same source commit. This protects against unreviewed changes in the checked-in research receipts, **not** against errors or manipulation in upstream station services. The original raw public API responses were not archived; the source-produced SHA256 fingerprints are available, but those are not standalone proof of independent agency-source verification. The research ledger **does not promote any model**.
+
+The operator may inspect the evidence at `GET /api/reciprocal/environment`; the `POST /api/reciprocal/compare` response includes it as a separate `realityIron` sibling to the local route-proposal comparison. **Environmental measurements are not fed into the synthetic route heuristic as authority.** Instead they falsify the proxy's presumed value and create controlled future test candidates.
+
+Both experiments returned HOLD. This is deliberate scientific pressure on the meta-diagnostic: a method that wins on validation can still fail on later physical observations. A *longer imagined plan* is not a *more accurate environmental prediction*.
+
+The next receiver-owned admission gate must independently archive raw provider snapshots, use locked out-of-sample hydrologic episodes and reliable forecast-issue-time metadata, then compare any JAR;VIS/MOTIF proposed strategy against persistence and classical hydrology. Do not use these experimental metrics to send environmental alerts or affect public safety.
+
+Source run: https://github.com/the-static-collective/MOTIF/actions/runs/42030670309

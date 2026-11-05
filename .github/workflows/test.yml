@@ -51,6 +51,19 @@ jobs:
           test "$(git hash-object integrations/motif-003/affordance.py)" = "db25da0d50a9c8e2cd87aa576a22f969405737cf"
           test "$(git hash-object motif-003-source/experiments/003/affordance.py)" = "db25da0d50a9c8e2cd87aa576a22f969405737cf"
           cmp integrations/motif-003/affordance.py motif-003-source/experiments/003/affordance.py
+      - name: Verify that the real source-backed MOTIF-015/016 receipt pins match exact upstream bytes
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 23267b297094012d81525ddef2c5c36d6a5560b2
+          path: motif-reality-016-source
+          persist-credentials: false
+      - name: Reject changed environmental witness cards
+        run: |
+          test "$(git hash-object integrations/motif-reality-016/actual-watershed-2026-11-05.json)" = "8e0f7c9123a9d12b0ffcc95c449e4d20bd8bcfeb"
+          test "$(git hash-object integrations/motif-reality-016/actual-weather-2026-11-05.json)" = "a57535a31da37bf9caee4cd3feaf009941749b6f"
+          cmp integrations/motif-reality-016/actual-watershed-2026-11-05.json motif-reality-016-source/experiments/016/evidence/actual-watershed-2026-11-05.json
+          cmp integrations/motif-reality-016/actual-weather-2026-11-05.json motif-reality-016-source/experiments/016/evidence/actual-weather-2026-11-05.json
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:
