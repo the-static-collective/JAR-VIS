@@ -129,6 +129,20 @@ jobs:
           cmp integrations/experiments/022/evidence/ghot-004-actual-2026-11-05.json motif-023-native-source/experiments/022/evidence/ghot-004-actual-2026-11-05.json
           node --check src/motif-human-goal.mjs
           node --check public/goal.js
+      - name: Fetch source-owned MOTIF-024 concrete examples and corrections
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 66dbc1a1b566609a4fc7cf0764bc374e31842d15
+          persist-credentials: false
+          path: motif-024-examples-source
+      - name: Check exact source identity and bounded browser flow
+        run: |
+          test "$(git hash-object integrations/experiments/024/goal_examples.py)" = "b5f8b21a13819ff6eb7c3ce06f02b71966f5cc06"
+          cmp integrations/experiments/024/goal_examples.py motif-024-examples-source/experiments/024/goal_examples.py
+          node --check src/motif-goal-examples.mjs
+          node --check public/goal.js
+          python3 -m py_compile integrations/experiments/024/goal_examples.py
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:
