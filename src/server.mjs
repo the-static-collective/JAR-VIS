@@ -1,3 +1,4 @@
+import {investigateDesk} from "./investigation-desk.mjs";
 import { createServer } from "node:http";
 import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -19,7 +20,10 @@ const staticFiles = new Map([
   ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/workshop", [new URL("../public/workshop.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/workshop.js", [new URL("../public/workshop.js", import.meta.url), "text/javascript; charset=utf-8"]],
-  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]]
+  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]],
+  ["/investigate", [new URL("../public/investigate.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/investigate.js", [new URL("../public/investigate.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/investigate.css", [new URL("../public/investigate.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -53,7 +57,7 @@ async function readJson(req) {
   return value;
 }
 
-export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard, recursiveDesk } = {}) {
+export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard, recursiveDesk, investigationFn = investigateDesk } = {}) {
   if (!workbench && !journalPath) throw new Error("journalPath required");
   const app = workbench ?? await Workbench.open({ journalPath });
   const inherit = inheritanceBoard ?? (journalPath ? await InheritanceBoard.open({ journalPath: journalPath + ".inheritance.jsonl" }) : null);
@@ -78,6 +82,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/investigate/meta") return reply(res,200,{schema:"jarvis.investigation-desk-meta/v0",mode:"READ_ONLY_LOCAL_SERVICE",providers:["github-public-account","wikipedia-index","openalex-index"],native_motif023_available:true,private_sources_connected:false,published_page:false});
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
         if (pathname === "/api/recursive/state") return recursive ?
@@ -136,6 +141,13 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
           allowedEffect:"NONE",sentExternally:false,partnerRecognized:false,fieldVerified:false,
           nextHumanStep:reviewed.actionLabel,
           note:"This import checks a public-only candidate. No ledger secrets, source network read, institution contact or action performed."});
+      }
+      if (pathname === "/api/investigate") {
+        if(!body||typeof body.question!=="string"||body.question.length>320||
+          !body.scopes||typeof body.scopes!=="object"||
+          Object.keys(body.scopes).some(x=>!["github","wikipedia","scholarly"].includes(x)))
+          return reply(res,422,{error:"HOLD_INVALID_PUBLIC_SEARCH_REQUEST"});
+        return reply(res,200,await investigationFn(body));
       }
       if (pathname === "/api/propose") return reply(res, 200, await app.proposeNeed(body.needId));
       if (pathname === "/api/grant") return reply(res, 200, await app.grant(body));
