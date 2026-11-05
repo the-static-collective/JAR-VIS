@@ -264,6 +264,85 @@
   document.body.append(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),3000);
  });
+ let gardenPacket=null;
+ $('grow-adapter').addEventListener('click',async()=>{
+  const box=$('garden-results'),button=$('grow-adapter');
+  clear(box);gardenPacket=null;$('download-garden').hidden=true;
+  const question=$('question').value.trim();
+  if(question.length<12){box.append(p('Write a specific question first.'));return}
+  button.disabled=true;
+  box.append(p('Checking original sources and challenging generated variants with held-out examples…'));
+  try{
+   const csrf=await getCsrf();
+   const res=await fetch('/api/investigate/garden',{
+    method:'POST',cache:'no-store',
+    headers:{'content-type':'application/json','x-jarvis-csrf':csrf},
+    body:JSON.stringify({question,approvedPublicGithubSearch:true})
+   });
+   const r=await res.json();
+   if(!res.ok)throw Error(r.error||'Gardener unavailable');
+   if(r.schema!=='jarvis027.source-garden/v0')throw Error('Unexpected garden receipt');
+   gardenPacket=r;clear(box);
+   box.append(div('strong','',r.status));
+   const report=r.comparison;
+   if(!report){
+    box.append(p('HOLD: no source-verified candidate or labeled fixture family available for this question.'));
+   }else{
+    box.append(p('Executable variants tested: '+report.variants_tested+
+     ' · individual fixture checks: '+report.automated_tests_executed));
+    for(const item of (report.leaderboard||[]).slice(0,6)){
+     const card=div('div','card');
+     card.append(div('strong','',item.selector.join(' → ')+
+      (item.admissible_for_fixture_review?' · PASSED':' · HELD')));
+     card.append(p('Training '+item.training_pass+'/'+item.training_total+
+      ' · withheld '+item.withheld_pass+'/'+item.withheld_total+
+      ' · invalid cases '+item.negative_pass+'/'+item.negative_total));
+     if(item.failures.length)card.append(p('Failed: '+item.failures.join(', ')));
+     box.append(card);
+    }
+    if(report.winner)
+     box.append(p('Best source-review candidate: '+report.winner.selector.join('.')));
+    box.append(p('Next plan: '+(r.plan?.next_question||'Further owner review required.')));
+   }
+   box.append(p('Everything above uses synthetic sample data. The proposed API server was NOT contacted.'));
+   $('download-garden').hidden=false;
+  }catch(error){clear(box);box.append(p(String(error.message||error)))}
+  finally{button.disabled=false}
+ });
+ $('download-garden').addEventListener('click',()=>{
+  if(!gardenPacket)return;
+  const url=URL.createObjectURL(new Blob([JSON.stringify(gardenPacket,null,2)],
+   {type:'application/json'}));
+  const a=document.createElement('a');
+  a.href=url;a.download='jarvis-garden-'+
+    String(gardenPacket.checksum_sha256||'packet').slice(0,12)+'.json';
+  document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),3000);
+ });
+ $('pilot-openmeteo').addEventListener('click',async()=>{
+  const box=$('pilot-results'),button=$('pilot-openmeteo');clear(box);
+  button.disabled=true;
+  box.append(p('Attempting exactly one read from the fixed public Open-Meteo example endpoint…'));
+  try{
+   const csrf=await getCsrf();
+   const res=await fetch('/api/investigate/pilot',{
+    method:'POST',cache:'no-store',
+    headers:{'content-type':'application/json','x-jarvis-csrf':csrf},
+    body:JSON.stringify({approvedPublicPilot:true})
+   });
+   const r=await res.json();
+   if(!res.ok)throw Error(r.error||'Public read held');
+   clear(box);
+   box.append(div('strong','',r.status));
+   if(r.status==='READ_ONLY_THIRD_PARTY_RESPONSE_OBSERVED'){
+    box.append(p('Berlin example: '+r.observation.temperature_2m+' '+
+      (r.observation.unit||'')+' · reported at '+r.observation.time));
+    box.append(p('Actual response SHA-256: '+r.actual_response_digest_sha256));
+   }
+   box.append(p('Only api.open-meteo.com contacted. No private location, credential, generated provider call, or deployment.'));
+  }catch(error){clear(box);box.append(p(String(error.message||error)))}
+  finally{button.disabled=false}
+ });
  form.addEventListener('submit',async event=>{
   event.preventDefault();
   button.disabled=true;$('download').disabled=true;
