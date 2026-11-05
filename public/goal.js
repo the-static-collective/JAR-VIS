@@ -1,7 +1,7 @@
 /** Human examples. Input and correction are in-memory and LOCAL only. */
 const $=id=>document.getElementById(id);
 let csrf=null,statement="",choice=null,ownExample=null,freshness=undefined;
-let draft=null,previousDigest=null,busy=false;
+let draft=null,previousDigest=null,busy=false,approvedDigest=null;
 const report=s=>{$("goal-status").textContent=s};
 const sections=["examples","clarify","contract"];
 const hide=id=>{$(id).hidden=true};
@@ -34,6 +34,9 @@ async function request(confirm=false){
 function render(r){
  hide("clarify");
  hide("contract");
+ hide("workkit");
+ hide("work-files");
+ approvedDigest=null;
  report(r.message+" No sources contacted.");
  if(r.status==="SHOW_TWO_EXAMPLES"){
    const examples=r.examples||[];
@@ -99,7 +102,10 @@ function render(r){
    return;
  }
  if(r.status==="READY_HELD_NO_EXECUTION"){
+   approvedDigest=r.contract_id;
    show("contract");
+   show("workkit");
+   $("work-status").textContent="No files prepared. Only this separate button authorizes local file preparation.";
    $("confirm").disabled=true;
    $("confirm-status").textContent=
      "Your exact meaning is acknowledged for this page only. HELD: no investigation, dispatch, source GET or model training occurred.";
@@ -132,7 +138,7 @@ async function step(confirm=false){
 }
 function startNew(){
  statement=$("need").value.trim();
- choice=null;ownExample=null;freshness=undefined;draft=null;previousDigest=null;
+ choice=null;ownExample=null;freshness=undefined;draft=null;previousDigest=null;approvedDigest=null;
  for(const id of sections)hide(id);
  void step(false);
 }
@@ -140,8 +146,8 @@ function choose(which){
  choice=which;
  ownExample=which==="custom"?$("own-example").value.trim():null;
  freshness=undefined;
- draft=null;
- hide("clarify");hide("contract");
+ draft=null;approvedDigest=null;
+ hide("clarify");hide("contract");hide("workkit");
  void step(false);
 }
 (async()=>{
@@ -174,10 +180,84 @@ $("answer").addEventListener("click",()=>{
  void step(false);
 });
 $("change").addEventListener("click",()=>{
- draft=null;choice=null;ownExample=null;freshness=undefined;
- hide("contract");hide("clarify");
+ draft=null;choice=null;ownExample=null;freshness=undefined;approvedDigest=null;
+ hide("contract");hide("clarify");hide("workkit");
  show("examples");
  report("You can choose a different example, type your own, or edit your original question. Your previous interpretation will not be used without a fresh confirmation.");
  $("own-example").focus();
 });
 $("confirm").addEventListener("click",()=>{if(draft)void step(true)});
+
+
+/** This is a *second* explicit consent: preparing local artifacts, not acting on the world. */
+async function preparePacket(){
+ if(!csrf||!approvedDigest||!draft||busy){
+   $("work-status").textContent="HOLD: Confirm the exact definition of done first.";
+   return;
+ }
+ if(draft.contract_id!==approvedDigest){
+   $("work-status").textContent="HOLD: The contract changed. Please reconfirm it.";
+   return;
+ }
+ const button=$("prepare-work");
+ button.disabled=true;
+ $("work-status").textContent="Preparing four local files without external calls...";
+ try{
+   const payload={
+     text:statement,choice,
+     ...(choice==="custom"?{own_example:ownExample}:{}),
+     ...(freshness!==undefined?{freshness_hours:freshness}:{}),
+     expected_contract_id:approvedDigest,
+     consent:true,action:"PREPARE_LOCAL_PACKET_ONLY"
+   };
+   const response=await fetch("/api/reciprocal/prepare-work",{
+     method:"POST",cache:"no-store",
+     headers:{"content-type":"application/json","x-jarvis-csrf":csrf},
+     body:JSON.stringify(payload)
+   });
+   const result=await response.json();
+   if(!response.ok)throw Error(result.error||"HOLD: local work packet unavailable");
+   if(result.schema!=="jarvis.goal-work-packet/v1"||
+      result.status!=="LOCAL_ARTIFACTS_PREPARED_IN_MEMORY"||
+      result.goal_contract_id!==approvedDigest||
+      result.external_delivery!==false||
+      result.saved_to_disk!==false||result.claimed_real_world_completion!==false||
+      !Array.isArray(result.artifacts)||result.artifacts.length!==4)
+     throw Error("HOLD: local work-packet boundary failed");
+   const el=$("work-list");el.replaceChildren();
+   for(const file of result.artifacts){
+     if(typeof file.content!=="string"||
+        typeof file.file_name!=="string"||
+        !/^jarvis-[a-z-]+-(checklist|csv_tracker|unsent_message|html_workpage)\.(txt|csv|html)$/.test(file.file_name)||
+        file.downloaded!==false||file.saved_to_disk!==false||file.external_delivery!==false)
+       throw Error("HOLD: unverified local file");
+     const box=document.createElement("article");box.className="work-file";
+     const title=document.createElement("strong");
+     title.textContent=file.kind.replaceAll("_"," ")+" · "+file.file_name;
+     const details=document.createElement("details");
+     const summary=document.createElement("summary");
+     summary.textContent="Review contents";
+     const pre=document.createElement("pre");pre.textContent=file.content;
+     details.append(summary,pre);
+     const button=document.createElement("button");button.type="button";
+     button.textContent="Download this file";
+     button.addEventListener("click",()=>{
+       const blob=new Blob([file.content],{type:file.mime});
+       const url=URL.createObjectURL(blob);
+       const anchor=document.createElement("a");
+       anchor.href=url;anchor.download=file.file_name;
+       document.body.append(anchor);anchor.click();anchor.remove();
+       setTimeout(()=>URL.revokeObjectURL(url),2000);
+       $("work-status").textContent="Browser download requested for "+file.file_name+
+         ". This does not mean the real-world goal has been achieved.";
+     });
+     box.append(title,details,button);el.append(box);
+   }
+   $("work-status").textContent=
+      "Four drafts prepared in this browser response. No donors, messages, accounts or sources contacted. Select and review an individual file to download.";
+   show("work-files");
+ }catch(error){
+   $("work-status").textContent=error.message;
+ }finally{button.disabled=false}
+}
+$("prepare-work").addEventListener("click",()=>void preparePacket());
