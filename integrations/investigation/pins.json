@@ -67,6 +67,18 @@
       "repository": "the-static-collective/ALEX.2",
       "blob": "5c095be409d2ace0d39765c4316471702d88acb5",
       "role": "GRAFT_ORIGINAL_ALEX_PROVIDER_ROUTER"
+    },
+    "graft/src/capability-gardener-027.mjs": {
+      "repository": "the-static-collective/GRAFT",
+      "branch": "graft/027-capability-gardener",
+      "blob": "a8d74c3b236f1a53018a458b767ed0ac0120d243",
+      "role": "GENERALIZED_NUMERIC_FIELD_PROJECTION_AND_HELDOUT_EVALUATION"
+    },
+    "graft/src/live-pilot-027.mjs": {
+      "repository": "the-static-collective/GRAFT",
+      "branch": "graft/027-capability-gardener",
+      "blob": "841cb9ed72aa070254009975a036b023f917fa80",
+      "role": "EXPLICIT_PUBLIC_OPENMETEO_FIXED_LOCATION_READ"
     }
   },
   "limits": {
@@ -78,5 +90,6 @@
   },
   "motif023_source": "the-static-collective/MOTIF@research/023-open-question-field",
   "origin_note": "Byte identity establishes intact imported code; not evidence authority or owner approval.",
-  "feature_notes": "ALEX-025 selection recommendations are local and do not send queries; searching new providers requires explicit scope booleans. Source-discovery requires a separate explicit public GitHub query; proposed hosts are never contacted and adapters are only executed against in-memory fixtures."
+  "feature_notes": "ALEX-025 selection recommendations are local and do not send queries; searching new providers requires explicit scope booleans. Source-discovery requires a separate explicit public GitHub query; proposed hosts are never contacted and adapters are only executed against in-memory fixtures.",
+  "note_027": "Fixture-adapter synthesis is not unrestricted code invention; live read is fixed published Open-Meteo example, separate from discovered hosts. No automatic install."
 }
