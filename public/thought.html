@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1d3229"><title>JAR;VIS / Thought Room</title>
+<link rel="stylesheet" href="/thought.css"><script type="module" src="/thought.js"></script></head>
+<body><a class="skip" href="#main">Skip to thought room</a>
+<header><a href="/" class="brand">JAR<span>;</span>VIS</a><small>THE THOUGHT ROOM / 011</small><a href="/workshop">Recursive Workshop ↗</a></header>
+<main id="main">
+ <section class="hero"><p class="eyebrow">MOTIF · PRIVATE LOCAL REASONING EXPERIMENT</p>
+ <h1>Give the thought <em>room to move.</em></h1>
+ <p>A pencil for what might be, a pen for conclusions that survive review. This room is <strong>pencil only</strong>. Ideas can be distinct even when their words match. A diagram never makes something true.</p>
+ <p class="tags">PRIVATE TO THIS COMPUTER · NOT SAVED · NO EXPORT · NO AUTOMATIC PEN</p></section>
+ <div class="columns">
+ <section class="paper">
+  <p class="eyebrow">01 / THE PENCIL</p><h2>What's on your mind?</h2>
+  <label for="question">The question</label><textarea id="question" rows="2" maxlength="300" placeholder="Where might these ideas connect?"></textarea>
+  <label for="idea-input">Add one idea at a time</label>
+  <div class="row"><input id="idea-input" type="text" maxlength="160" placeholder="A word, idea, or possibility…"><button id="add-idea" type="button">Add +</button></div>
+  <p class="hint">Repeating a word makes a distinct idea occurrence, not a duplicate to be merged.</p>
+  <div id="ideas" class="ideas" aria-live="polite"></div>
+  <h3>Draw a possible link</h3><p class="hint">Tap two idea cards. Pick the kind of relation. The pencil option is hypothetical; authored does not mean verified.</p>
+  <label for="predicate">Relationship type</label>
+  <select id="predicate"><option value="associated">might be associated with</option>
+   <option value="requires">requires →</option><option value="enables">could enable →</option>
+   <option value="contradicts">contradicts</option><option value="precedes">precedes →</option></select>
+  <label class="check"><input id="authored" type="checkbox"> I explicitly state this relation (still unverified)</label>
+  <div id="links" class="links" aria-live="polite"></div>
+  <h3>Thinking instruments</h3><fieldset class="goals"><legend>Explore by</legend>
+   <label><input type="checkbox" name="goal" value="association" checked> Association</label>
+   <label><input type="checkbox" name="goal" value="dependency"> Dependency</label>
+   <label><input type="checkbox" name="goal" value="tension"> Tension</label>
+   <label><input type="checkbox" name="goal" value="affordance"> Affordance</label>
+   <label><input type="checkbox" name="goal" value="inventory"> Inventory</label>
+  </fieldset>
+  <label class="check"><input id="geometry" type="checkbox" checked> Show a geometric sketch if useful</label>
+  <div class="actions"><button id="explore" class="primary" type="button">Sketch through MOTIF →</button><button id="example" type="button">Fictional example</button><button id="clear" type="button">Clear</button></div>
+  <p id="status" role="status" aria-live="polite">No input has been saved or sent.</p>
+ </section>
+ <section class="paper output">
+  <p class="eyebrow">02 / THE THOUGHT FIELD <span id="machine" class="badge">CHECKING LOCAL ENGINE</span></p>
+  <h2>An inspectable sketch</h2><p class="hint">Typed relations govern what can be established. The map only helps you look.</p>
+  <div id="empty" class="empty">Add ideas, then ask MOTIF to explore a pencil sketch. Nothing is admitted as fact.</div>
+  <div id="result" hidden>
+   <p id="review" class="review">PENCIL / HOLD_FOR_OPERATOR_REVIEW</p>
+   <div id="lens-pills" class="lenses"></div><div id="drawing" class="drawing" role="img" aria-label="Tentative thought projection"></div>
+   <h3>Questions worth investigating</h3><div id="questions"></div>
+   <details><summary>Source-only answers and reasoning receipts</summary><pre id="evidence"></pre></details>
+   <p id="limits" class="hint"></p>
+  </div>
+ </section></div>
+ <footer>SKETCH ≠ SOURCE · POSITION ≠ MEANING · PEN ≠ AUTHORITY. <a href="/">← Workbench</a></footer>
+</main></body></html>

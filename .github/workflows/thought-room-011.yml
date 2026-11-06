@@ -1,0 +1,36 @@
+name: JAR;VIS MOTIF Thought Room 011
+on:
+  pull_request:
+    paths:
+      - 'runtime/motif-thought-010/**'
+      - 'src/motif-thought-desk.mjs'
+      - 'src/server.mjs'
+      - 'public/thought*'
+      - 'public/index.html'
+      - 'test/thought-room.test.mjs'
+      - 'docs/MOTIF-THOUGHT-ROOM-011*'
+      - '.github/workflows/thought-room-011.yml'
+  workflow_dispatch:
+jobs:
+  thought-room:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate source and Python syntax
+        run: |
+          python3 -m py_compile runtime/motif-thought-010/experiments/thought-007/field.py
+          python3 -m py_compile runtime/motif-thought-010/experiments/thought-008/multiview.py
+          python3 -m py_compile runtime/motif-thought-010/experiments/thought-009/router.py
+          python3 -m py_compile runtime/motif-thought-010/experiments/thought-010/door.py
+          node --check src/motif-thought-desk.mjs
+          node --check public/thought.js
+      - name: Run actual MOTIF local thought room and HTTP integration tests
+        run: node --test test/thought-room.test.mjs
+      - name: Run existing JAR;VIS regressions
+        run: npm test
