@@ -1,0 +1,73 @@
+@import url('/site.css');
+:root{--ink:#213427;--muted:#607361;--wood:#c98c52;--paper:#faf8ed;--line:#d6d4c5;--shade:#ecede2;--forest:#152f25}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:radial-gradient(ellipse at 23% 3%,#f4e8d2 0%,transparent 42%),linear-gradient(90deg,#ebebe0 0%,#f9f8ed 50%,#eaece2 100%);font:16px/1.55 "Trebuchet MS",system-ui,sans-serif}
+button,textarea,select{font:inherit}button{cursor:pointer}
+a{color:inherit}
+.masthead{background:#173127;color:#e5ede0;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(19px,5vw,72px);gap:12px;border-bottom:3px solid #ad855e}
+.logo{font-weight:900;letter-spacing:.09em;font-size:21px;text-decoration:none}.logo span{color:#e2ac71}
+.mastlabel{font:11px/1.2 system-ui;letter-spacing:.18em;color:#b7cfbd}.back{font-size:13px;text-decoration:none;border-bottom:1px solid #d6b88a}
+main{max-width:1080px;padding:clamp(24px,5vw,68px) clamp(18px,4vw,48px);margin:auto}
+.hero{position:relative;padding-bottom:25px;border-bottom:1px solid #b7c2ad}
+.eyebrow,.label,.section-name{color:#687b64;text-transform:uppercase;font-size:11px;letter-spacing:.18em;font-weight:750}
+.hero h1{font:clamp(50px,8vw,92px)/.98 Georgia,serif;letter-spacing:-.045em;margin:20px 0 22px;color:#263e2d}
+.hero h1 em{font-weight:400;color:#a4673d}
+.intro{font-size:17px;color:#526750;max-width:680px;margin:0 0 12px}
+.desk{padding:30px 0 42px}
+#questionForm{background:rgba(255,254,249,.82);border:1px solid #cdd1c3;border-radius:4px;box-shadow:0 5px 2px #b6a88c22,0 22px 60px #6a785625;padding:clamp(20px,4vw,37px);position:relative}
+#questionForm::before{content:"";position:absolute;right:20px;top:0;width:22%;height:10px;background:#d2b48b33;transform:rotate(1.4deg)}
+textarea{resize:vertical;display:block;width:100%;margin:13px 0;border:1px solid #b6bdaa;border-bottom:3px solid #5f765f;border-radius:3px;background:#fffdf6;color:#213427;padding:18px;min-height:120px;font:clamp(18px,2.8vw,23px)/1.35 Georgia,serif;letter-spacing:-.012em}
+textarea:focus,select:focus{outline:3px solid #dcb075;outline-offset:3px}
+.examples{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
+.examples button{font:12px/1.2 system-ui;background:#f5f0e6;color:#556a50;border:1px solid #d6cfbc;border-radius:4px;padding:10px 12px}
+.examples button:hover{background:#e8e8d7}
+fieldset{min-width:0;padding:0;border:0}
+.field{border-top:1px solid #d9decf;padding-top:23px}
+.field legend{padding-right:10px}
+.field legend small{display:block;letter-spacing:0;text-transform:none;margin-top:4px;font-weight:400;color:#7b8178}
+.choice{display:flex;align-items:flex-start;gap:12px;cursor:pointer;border-bottom:1px solid #e4e6dd;padding:13px 6px}
+.choice input{width:18px;height:18px;margin-top:3px;accent-color:#385f46}
+.choice strong{font-size:15px}.choice small{display:block;color:#657467;max-width:630px;font-size:12px;margin-top:1px}
+.options{display:grid;grid-template-columns:210px 1fr;align-items:center;gap:18px;margin:22px 0}
+.depth span{display:block;font-size:11px;letter-spacing:.11em;font-weight:750}
+.depth small{letter-spacing:0;font-weight:400;font-size:12px;color:var(--muted)}
+.depth select{display:block;width:100%;background:#fffdf6;border:1px solid #c9d1bc;border-radius:4px;padding:9px;margin-top:8px;color:var(--ink)}
+.reasoning{border:1px solid #c8d4c6;background:#edf2e7;padding:13px}
+.callout{background:#eee9dc;border-left:3px solid #b47d53;padding:12px 15px;font:12px/1.5 system-ui;color:#645e4e}
+.actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:23px}
+.run{border:0;background:#213f30;color:#faf9ef;font-weight:750;padding:14px 24px;border-radius:3px;min-width:190px;box-shadow:2px 3px #bc9368}
+.run span{margin-left:20px;font-size:21px}.run:disabled{opacity:.5}
+#status{font-size:13px;color:#586954}
+.result{padding:14px 0 40px}
+.result-heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.result h2{font:clamp(37px,5vw,52px) Georgia,serif;margin:5px 0 18px}
+.download{background:transparent;border:1px solid #617e66;color:#30533d;padding:11px 15px;border-radius:3px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin:10px 0 18px}
+.stat{padding:15px 13px;border:1px solid #cad1c5;background:#fafaf4}
+.stat strong{display:block;font:32px Georgia,serif}.stat span{font-size:10px;color:#6f826e;letter-spacing:.08em}
+.warnings{margin:14px 0;color:#6f5b46;font-size:13px}
+.warnings p{background:#f3ebdd;padding:10px;border-left:3px solid #bc8b59;margin:7px 0}
+.result-columns{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px}
+.sheet{background:#fffcf4;border:1px solid #d5d5c7;box-shadow:0 4px 0 #cecbbd55;padding:clamp(18px,3vw,28px);min-width:0}
+.sheet h3{font:29px Georgia,serif;margin:10px 0 20px}
+.lead{border-top:1px solid #dedecd;padding:13px 0}.lead:first-child{border-top:0}.lead .kind{font:10px system-ui;letter-spacing:.13em;text-transform:uppercase;color:#8b815e}
+.lead a{font-size:16px;font-weight:700;color:#355943;text-decoration:underline;text-decoration-color:#aeaf91;text-underline-offset:3px;overflow-wrap:anywhere}
+.lead p{font:13px/1.45 system-ui;color:#627265;margin:4px 0}
+.lead .excerpt{background:#f2f3eb;border-left:2px solid #b5c5ad;padding:7px 10px;font:12px/1.5 ui-monospace,Consolas,monospace;overflow-wrap:anywhere}
+.card{padding:13px 0;border-top:1px solid #dedecd}.card:first-child{border-top:0}
+.card strong{font-size:14px;color:#244733}.card p,.card li{font-size:13px;color:#586b59;margin:6px 0}
+.card ol{padding-left:21px}
+.next{border-top:2px solid #819787;margin-top:20px;padding-top:12px}
+.next strong{font:13px system-ui;color:#325644}.next p{font:18px Georgia,serif}
+.empty{color:#6b766a;font-style:italic}
+footer{text-align:center;padding:35px 0 10px;border-top:1px solid #ccd0c2;color:#83907f;font:10px/2 system-ui;letter-spacing:.07em}
+footer a{color:#455f4c}
+@media(max-width:760px){
+ .mastlabel{display:none}.hero h1{letter-spacing:-.05em}
+ .options,.result-columns{grid-template-columns:1fr}
+ .stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .masthead{padding:12px 20px}
+ .run{width:100%}
+ .actions{align-items:stretch}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}

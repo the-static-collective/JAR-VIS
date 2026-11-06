@@ -1,0 +1,45 @@
+name: JARVIS Eagle Eye Investigation Desk 024
+on:
+  push:
+    branches:
+      - feat/investigation-desk-eagle-eye-024
+  pull_request:
+    paths:
+      - 'src/investigation-desk.mjs'
+      - 'src/server.mjs'
+      - 'integrations/investigation/**'
+      - 'public/investigate.*'
+      - 'public/index.html'
+      - 'test/investigation-desk.test.mjs'
+      - '.github/workflows/investigation-024.yml'
+permissions:
+  contents: read
+jobs:
+  investigation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect source-owned code and browser syntax
+        run: |
+          node --check src/investigation-desk.mjs
+          node --check public/investigate.js
+          node --check integrations/investigation/alex/eagle-eye-024.mjs
+      - name: Run JARVIS original and Investigation Desk regressions
+        run: npm test
+      - name: Actually read public GitHub and run pinned MOTIF two-round reasoning
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          node --input-type=module -e "import {investigateDesk} from './src/investigation-desk.mjs'; const r=await investigateDesk({question:'Which original Maxhinal Fiber and Pressure chambers preserve source custody?',scopes:{github:true,wikipedia:false,scholarly:false},depth:3,deep:true},{githubToken:process.env.GITHUB_TOKEN}); console.error(JSON.stringify({status:r.status,catalog:r.public_research.catalog,errors:r.public_research.failures,motif:r.motif_reasoning.status,hits:r.public_research.hits.length})); if(!r.public_research.source_documents.length||!r.public_research.hits.length||r.motif_reasoning.status!=='TWO_ROUNDS_EXECUTED'||r.external_writes!==0)process.exit(1); console.log(JSON.stringify(r,null,2));" > jarvis-investigation-024.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-024-eagle-eye-real-public-research
+          path: jarvis-investigation-024.json
+          retention-days: 14
