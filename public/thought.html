@@ -3,7 +3,7 @@
 <meta name="theme-color" content="#1d3229"><title>JAR;VIS / Thought Room</title>
 <link rel="stylesheet" href="/thought.css"><script type="module" src="/thought.js"></script></head>
 <body><a class="skip" href="#main">Skip to thought room</a>
-<header><a href="/" class="brand">JAR<span>;</span>VIS</a><small>THE THOUGHT ROOM / 011</small><a href="/workshop">Recursive Workshop ↗</a></header>
+<header><a href="/" class="brand">JAR<span>;</span>VIS</a><small>THE THOUGHT ROOM / 012</small><a href="/workshop">Recursive Workshop ↗</a></header>
 <main id="main">
  <section class="hero"><p class="eyebrow">MOTIF · PRIVATE LOCAL REASONING EXPERIMENT</p>
  <h1>Give the thought <em>room to move.</em></h1>
@@ -33,6 +33,13 @@
   </fieldset>
   <label class="check"><input id="geometry" type="checkbox" checked> Show a geometric sketch if useful</label>
   <div class="actions"><button id="explore" class="primary" type="button">Sketch through MOTIF →</button><button id="example" type="button">Fictional example</button><button id="clear" type="button">Clear</button></div>
+  <div class="cross-select" aria-labelledby="cross-title">
+    <h3 id="cross-title">Rotate a pencil question</h3>
+    <p class="hint">Choose two separate idea occurrences. MOTIF will inspect prerequisites, contradictions, and affordances without treating a drawing as evidence.</p>
+    <div class="cross-select-row"><label for="seed-a">First idea<select id="seed-a"></select></label>
+    <label for="seed-b">Second idea<select id="seed-b"></select></label></div>
+    <button id="cross-check" type="button" class="primary">Cross-examine these two ideas →</button>
+  </div>
   <p id="status" role="status" aria-live="polite">No input has been saved or sent.</p>
  </section>
  <section class="paper output">
@@ -45,6 +52,13 @@
    <h3>Questions worth investigating</h3><div id="questions"></div>
    <details><summary>Source-only answers and reasoning receipts</summary><pre id="evidence"></pre></details>
    <p id="limits" class="hint"></p>
+   <section id="cross-result" class="cross-results" hidden aria-label="Cross-lens investigation results">
+     <p class="eyebrow">03 / THE MOVING PENCIL</p>
+     <h3>One question, several inspections</h3>
+     <p id="cross-review" class="review"></p><div id="cross-steps"></div>
+     <h3>Questions carried forward</h3><div id="cross-questions"></div>
+     <p class="hint">Same authored source throughout. No independent witness, pen promotion, saved note, or external action.</p>
+   </section>
   </div>
  </section></div>
  <footer>SKETCH ≠ SOURCE · POSITION ≠ MEANING · PEN ≠ AUTHORITY. <a href="/">← Workbench</a></footer>

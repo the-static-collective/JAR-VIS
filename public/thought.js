@@ -28,6 +28,12 @@ function draw(){
     del.addEventListener("click",()=>{links.splice(i,1);draw()});block.append(del);list.append(block);
   });
   if(!links.length)list.append(el("p","No authored relations: MOTIF will not invent links from similar words.","hint"));
+  for(const [which,defaultIndex] of [["seed-a",0],["seed-b",1]]){
+    const sel=$(which),original=sel.value;sel.replaceChildren();
+    ideas.forEach((idea,i)=>{const opt=el("option",String(i+1)+". "+idea);opt.value=String(i);sel.append(opt)});
+    if(ideas.length)sel.value=original!==""&&Number(original)<ideas.length?original:String(Math.min(defaultIndex,ideas.length-1));
+  }
+  $("cross-check").disabled=!ready||ideas.length<2;
 }
 function addIdea(){
   const name=$("idea-input").value.trim();
@@ -39,7 +45,7 @@ $("add-idea").addEventListener("click",addIdea);
 $("idea-input").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();addIdea()}});
 $("clear").addEventListener("click",()=>{
  ideas=[];links=[];pending=null;$("question").value="";
- $("result").hidden=true;$("empty").hidden=false;draw();note("Cleared locally. Nothing was stored.");
+ $("result").hidden=true;$("cross-result").hidden=true;$("empty").hidden=false;draw();note("Cleared locally. Nothing was stored.");
 });
 $("example").addEventListener("click",()=>{
  ideas=["Food shelf","Cold storage","Community meal","Volunteers","Venue open","Venue closed"];
@@ -103,6 +109,7 @@ function showDrawing(result){
  container.append(scene);
 }
 function render(out){
+ $("cross-result").hidden=true;
  $("empty").hidden=true;$("result").hidden=false;
  $("review").textContent=out.status+" · PEN "+out.pen_status+" · AUTHORITY NONE";
  $("lens-pills").replaceChildren();
@@ -140,13 +147,49 @@ $("explore").addEventListener("click",async()=>{
  }catch(e){note(e.message);}
  finally{$("explore").disabled=false;}
 });
+$("cross-check").addEventListener("click",async()=>{
+  const seed_a=Number($("seed-a").value),seed_b=Number($("seed-b").value);
+  if(!ready||!csrf){note("HOLD: local MOTIF runtime unavailable.");return;}
+  if(!Number.isSafeInteger(seed_a)||!Number.isSafeInteger(seed_b)||seed_a===seed_b||ideas.length<2){
+    note("Select two separate idea occurrences.");return;
+  }
+  if(!$("question").value.trim()){note("Write a question first.");return;}
+  $("cross-check").disabled=true;
+  note("Carrying one pencil question through several source-bound perspectives…");
+  try{
+    const response=await fetch("/api/thought/cross-check",{method:"POST",cache:"no-store",
+      headers:{"content-type":"application/json","x-jarvis-csrf":csrf},
+      body:JSON.stringify({question:$("question").value,ideas,relationships:links,seed_a,seed_b,show_geometry:$("geometry").checked})});
+    const out=await response.json();
+    if(!response.ok)throw Error(out.error||"HOLD: cross-lens inspection refused");
+    $("result").hidden=false;$("empty").hidden=true;$("cross-result").hidden=false;
+    $("cross-review").textContent=out.status+" · ONE SOURCE · PEN "+out.pen_status;
+    const steps=$("cross-steps");steps.replaceChildren();
+    out.steps.forEach((step,i)=>{
+      const card=el("article");
+      card.append(el("strong",String(i+1)+". "+step.lens.toUpperCase()),
+        el("p",step.new_question_ids.length+" new question(s), "+step.carried_question_ids.length+
+          " carried. Geometric evidence: NONE."));
+      steps.append(card);
+    });
+    const questions=$("cross-questions");questions.replaceChildren();
+    out.carried_questions.forEach((q,i)=>{
+      const card=el("article");
+      card.append(el("strong",String(i+1)+". "+q.question),
+        el("p",q.kind.replaceAll("_"," ")+" / "+q.status+" / "+q.evidence_class));
+      questions.append(card);
+    });
+    note("Cross-lens inspection complete. No input saved, sent, or promoted.");
+  }catch(e){note(e.message)}
+  finally{$("cross-check").disabled=!ready||ideas.length<2}
+});
 async function init(){
  try{
    const [a,b]=await Promise.all([fetch("/api/state",{cache:"no-store"}),
      fetch("/api/thought/status",{cache:"no-store"})]);
    const state=await a.json(),desk=await b.json();
    if(!a.ok||!b.ok||!desk.available)throw Error(desk.reason||"MOTIF unavailable");
-   csrf=state.csrfToken;ready=true;$("machine").textContent="PINNED / LOCAL";
+   csrf=state.csrfToken;ready=true;draw();$("machine").textContent="PINNED / LOCAL";
    note("Local Pencil engine ready; nothing is retained.");
  }catch(e){$("machine").textContent="HOLD / UNAVAILABLE";$("explore").disabled=true;note(e.message);}
 }

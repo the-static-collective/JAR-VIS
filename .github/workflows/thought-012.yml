@@ -1,0 +1,39 @@
+name: JAR;VIS Thought Room 012
+on:
+  push:
+    paths:
+      - 'src/motif-cross-lens-desk.mjs'
+      - 'src/server.mjs'
+      - 'public/thought.*'
+      - 'runtime/motif-thought-010/experiments/thought-012/**'
+      - 'test/thought-cross.test.mjs'
+      - '.github/workflows/thought-012.yml'
+  pull_request:
+    paths:
+      - 'src/motif-cross-lens-desk.mjs'
+      - 'src/server.mjs'
+      - 'public/thought.*'
+      - 'runtime/motif-thought-010/experiments/thought-012/**'
+      - 'test/thought-cross.test.mjs'
+      - '.github/workflows/thought-012.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  local-cross-lens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Syntax and native crossing tests
+        run: |
+          node --check src/motif-cross-lens-desk.mjs
+          node --check public/thought.js
+          node --test test/thought-cross.test.mjs
+      - name: Existing Thought Room and full regression suite
+        run: npm test
