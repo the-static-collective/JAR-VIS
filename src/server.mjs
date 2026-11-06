@@ -1,5 +1,6 @@
 import { createServer } from "node:http";
 import { MotifThoughtDesk } from "./motif-thought-desk.mjs";
+import { MotifCrossLensDesk } from "./motif-cross-lens-desk.mjs";
 import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { Workbench } from "./workbench.mjs";
@@ -68,6 +69,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
     catch (error) { recursiveUnavailable = "HOLD: local Python or pinned Static OS snapshot unavailable"; }
   }
   const thought = thoughtDesk ?? new MotifThoughtDesk();
+  const crossLens = new MotifCrossLensDesk();
   const csrf = randomBytes(24).toString("hex");
   let boundPort;
   const server = createServer(async (req, res) => {
@@ -84,6 +86,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
         if (pathname === "/api/thought/status") return reply(res, 200, await thought.status());
+        if (pathname === "/api/thought/cross-status") return reply(res, 200, await crossLens.status());
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
         if (pathname === "/api/recursive/state") return recursive ?
@@ -102,6 +105,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       }
       const body = await readJson(req);
       if (pathname === "/api/thought/preview") return reply(res, 200, await thought.preview(body));
+      if (pathname === "/api/thought/cross-check") return reply(res, 200, await crossLens.inspect(body));
       if (pathname.startsWith("/api/inheritance/")) {
         if (!inherit) return reply(res, 503, { error: "Inheritance board not configured" });
         const operations = {
