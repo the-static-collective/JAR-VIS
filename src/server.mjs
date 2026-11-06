@@ -5,6 +5,10 @@ import { Workbench } from "./workbench.mjs";
 import { InheritanceBoard } from "./inheritance.mjs";
 import {validateBridgeWork} from "./bridge-work-card.mjs";
 import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
+import {SOURCE_BLOB} from "./motif-reciprocal.mjs";
+import {ReciprocalLab} from "./motif-reciprocal-lab.mjs";
+import {inspectRealityIron} from "./motif-reality-iron.mjs";
+import {askHumanGoal} from "./motif-human-goal.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
 
@@ -19,7 +23,11 @@ const staticFiles = new Map([
   ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/workshop", [new URL("../public/workshop.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/workshop.js", [new URL("../public/workshop.js", import.meta.url), "text/javascript; charset=utf-8"]],
-  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]]
+  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]],
+  ["/reciprocal", [new URL("../public/reciprocal.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/goal", [new URL("../public/goal.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/goal.js", [new URL("../public/goal.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/reciprocal.js", [new URL("../public/reciprocal.js", import.meta.url), "text/javascript; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -63,6 +71,11 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
     try { recursive = await RecursiveWorkshop.open({ journalPath: journalPath + ".recursive.jsonl" }); }
     catch (error) { recursiveUnavailable = "HOLD: local Python or pinned Static OS snapshot unavailable"; }
   }
+  let reciprocal=null;
+  if(recursive && journalPath){
+    try{reciprocal=await ReciprocalLab.open({journalPath:journalPath+".motif-reviews.jsonl",recursive});}
+    catch{ /* Corrupt/unavailable experimental journal must not break ordinary JAR;VIS. */ }
+  }
   const csrf = randomBytes(24).toString("hex");
   let boundPort;
   const server = createServer(async (req, res) => {
@@ -80,6 +93,12 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
+        if (pathname === "/api/reciprocal/environment") return reply(res,200,await inspectRealityIron());
+        if (pathname === "/api/reciprocal/state") return reciprocal ?
+          reply(res,200,{...reciprocal.summary(),csrfToken:csrf,mode:"LOCAL_PROPOSAL_ONLY",
+            sourcePin:SOURCE_BLOB,externalEffect:false}):
+          reply(res,503,{error:"HOLD: reciprocal desk unavailable"});
+
         if (pathname === "/api/recursive/state") return recursive ?
           reply(res,200,{...recursive.summary(),csrfToken:csrf}) :
           reply(res,503,{error: recursiveUnavailable ?? "HOLD: recursive desk not configured"});
@@ -114,6 +133,18 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         };
         if (!operations[pathname]) return reply(res, 404, { error: "Not found" });
         return reply(res, 200, await operations[pathname]());
+      }
+      if (pathname === "/api/reciprocal/goal") {
+        if(!reciprocal)return reply(res,503,{error:"HOLD: local reciprocal desk unavailable"});
+        return reply(res,200,await askHumanGoal(body));
+      }
+      if (pathname === "/api/reciprocal/compare") {
+        if(!reciprocal)return reply(res,503,{error:"HOLD: reciprocal desk unavailable"});
+        return reply(res,200,await reciprocal.compare(body.text));
+      }
+      if (pathname === "/api/reciprocal/review") {
+        if(!reciprocal)return reply(res,503,{error:"HOLD: reciprocal desk unavailable"});
+        return reply(res,200,await reciprocal.review(body));
       }
       if (pathname.startsWith("/api/recursive/")) {
         if(!recursive)return reply(res,503,{error:recursiveUnavailable ?? "HOLD: recursive desk unavailable"});
