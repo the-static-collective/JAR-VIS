@@ -1,4 +1,5 @@
 import { createServer } from "node:http";
+import { MotifThoughtDesk } from "./motif-thought-desk.mjs";
 import { randomBytes } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { Workbench } from "./workbench.mjs";
@@ -19,7 +20,10 @@ const staticFiles = new Map([
   ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/workshop", [new URL("../public/workshop.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/workshop.js", [new URL("../public/workshop.js", import.meta.url), "text/javascript; charset=utf-8"]],
-  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]]
+  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]],
+  ["/thought", [new URL("../public/thought.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/thought.js", [new URL("../public/thought.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/thought.css", [new URL("../public/thought.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -53,7 +57,7 @@ async function readJson(req) {
   return value;
 }
 
-export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard, recursiveDesk } = {}) {
+export async function startWorkbenchServer({ journalPath, port = 7789, workbench, inheritanceBoard, recursiveDesk, thoughtDesk } = {}) {
   if (!workbench && !journalPath) throw new Error("journalPath required");
   const app = workbench ?? await Workbench.open({ journalPath });
   const inherit = inheritanceBoard ?? (journalPath ? await InheritanceBoard.open({ journalPath: journalPath + ".inheritance.jsonl" }) : null);
@@ -63,6 +67,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
     try { recursive = await RecursiveWorkshop.open({ journalPath: journalPath + ".recursive.jsonl" }); }
     catch (error) { recursiveUnavailable = "HOLD: local Python or pinned Static OS snapshot unavailable"; }
   }
+  const thought = thoughtDesk ?? new MotifThoughtDesk();
   const csrf = randomBytes(24).toString("hex");
   let boundPort;
   const server = createServer(async (req, res) => {
@@ -78,6 +83,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/thought/status") return reply(res, 200, await thought.status());
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
         if (pathname === "/api/recursive/state") return recursive ?
@@ -95,6 +101,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res, 403, { error: "Missing or invalid local anti-CSRF token" });
       }
       const body = await readJson(req);
+      if (pathname === "/api/thought/preview") return reply(res, 200, await thought.preview(body));
       if (pathname.startsWith("/api/inheritance/")) {
         if (!inherit) return reply(res, 503, { error: "Inheritance board not configured" });
         const operations = {
