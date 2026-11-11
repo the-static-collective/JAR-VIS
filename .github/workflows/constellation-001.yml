@@ -1,0 +1,49 @@
+name: CONSTELLATION-001 — locked local attendant and cold replay
+on:
+  push:
+    branches: ['experiment/constellation-001-attendant']
+  pull_request:
+    paths:
+      - 'tools/constellation.mjs'
+      - 'spec/constellation-source-v1.json'
+      - 'test/constellation*.test.mjs'
+      - '.github/workflows/constellation-001.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  attendant:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Acquire exact locked CANNON contribution and independent donors
+        run: |
+          CANNON_PIN=$(node -p "JSON.parse(require('fs').readFileSync('spec/constellation-source-v1.json')).commit")
+          git clone https://github.com/the-static-collective/CANNON.git "$RUNNER_TEMP/cannon"
+          git -C "$RUNNER_TEMP/cannon" checkout --detach "$CANNON_PIN"
+          node "$RUNNER_TEMP/cannon/scripts/constellation-acquire.mjs" --into "$RUNNER_TEMP/donors"
+      - name: Complete JAR;VIS suite including actual pinned CANNON runner
+        env:
+          CONSTELLATION_CANNON: ${{ runner.temp }}/cannon
+          CONSTELLATION_ROOTS: ${{ runner.temp }}/donors/roots.json
+        run: npm test
+      - name: Export actual operator-facing artifact from JAR;VIS
+        run: |
+          node tools/constellation.mjs inspect --cannon "$RUNNER_TEMP/cannon"
+          node tools/constellation.mjs build --cannon "$RUNNER_TEMP/cannon" --roots "$RUNNER_TEMP/donors/roots.json" --out "$RUNNER_TEMP/attendant-output" --authorize LOCAL_FICTIONAL_ONLY
+          node tools/constellation.mjs verify --cannon "$RUNNER_TEMP/cannon" --roots "$RUNNER_TEMP/donors/roots.json" --out "$RUNNER_TEMP/attendant-output"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-constellation-001-local-evidence
+          path: ${{ runner.temp }}/attendant-output/
+          if-no-files-found: error
+          retention-days: 30

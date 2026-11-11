@@ -1,0 +1,11 @@
+{
+  "schema": "jarvis.constellation-source-lock/v1",
+  "repository": "the-static-collective/CANNON",
+  "commit": "32979819f5bf7e35dcb19d30fc8ffdeb8c81ccb1",
+  "ancestry": [
+    "bb57e71151bca1eb245abfc82cf74047e9105169",
+    "cb7f14b71e7e26456097abd7b0e78a49f50c64eb",
+    "99a9c270397717b690615178d0e821df545fb684"
+  ],
+  "authority": "EXPLICIT_LOCAL_FICTIONAL_ONLY"
+}
