@@ -1,0 +1,25 @@
+name: PORCH-RECEIVER-009
+on:
+  pull_request:
+    paths:
+      - 'supabase/functions/porch-receiver-009/**'
+      - 'supabase/functions/jarvis-operator-008/**'
+      - 'src/porch-triage.mjs'
+      - 'test/porch-triage.test.mjs'
+      - 'test/porch-receiver-live-smoke.mjs'
+      - '.github/workflows/porch-receiver-009.yml'
+  workflow_dispatch:
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify deterministic, non-authoritative attention
+        run: node --test test/porch-triage.test.mjs
+      - name: Exercise public HTTPS receipt lifecycle and withdraw synthetic row
+        run: node test/porch-receiver-live-smoke.mjs
