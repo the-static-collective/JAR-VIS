@@ -1,0 +1,67 @@
+{
+  "schema": "jarvis.capability-passport/v1",
+  "repository": "the-static-collective/JAR-VIS",
+  "version": "2026-11-04.1",
+  "authority": "PUBLIC_DESCRIPTION_ONLY_NOT_RUNTIME_OR_PERMISSION",
+  "availability": "NOT_OBSERVED",
+  "capabilities": [
+    {
+      "id": "jarvis.work-inherits",
+      "title": "Keep a useful-work trail and reviewed return",
+      "intents": [
+        "follow up",
+        "volunteer task",
+        "track help",
+        "receipt",
+        "report work",
+        "review outcome",
+        "work returns",
+        "acknowledge",
+        "record task"
+      ],
+      "readiness": "LOCAL_OPERATOR",
+      "delivers": "A local operator notebook can record proposed help, self-reported work and a separate review; not a public matching service.",
+      "entry": {
+        "kind": "SOURCE_REFERENCE",
+        "href": "https://github.com/the-static-collective/JAR-VIS/blob/main/docs/WORK-THAT-INHERITS-001.md"
+      },
+      "sourcePath": "docs/WORK-THAT-INHERITS-001.md",
+      "requires": "An operator must run the local workbench; no human identity or benefit is verified.",
+      "contract": {
+        "inputHint": "operator.task-note/v1",
+        "outputHint": "operator.review-candidate/v1",
+        "invocation": "NOT_CONNECTED_TO_JARVIS",
+        "receipt": "LOCAL_SELF_REPORT",
+        "effect": "NO_CROSS_PROJECT_EFFECT"
+      }
+    },
+    {
+      "id": "jarvis.catalog",
+      "title": "Inspect the publicly reviewed project catalog",
+      "intents": [
+        "find a project",
+        "what tools",
+        "what projects",
+        "discover",
+        "capability",
+        "github machinery",
+        "help tools"
+      ],
+      "readiness": "DOCUMENTED_ONLY",
+      "delivers": "A curated public index describes selected projects and their maturity, without giving execution permission.",
+      "entry": {
+        "kind": "SOURCE_REFERENCE",
+        "href": "https://github.com/the-static-collective/JAR-VIS/blob/main/docs/RECENT-WORK-FEED-001.md"
+      },
+      "sourcePath": "commons/recent-work-v1.json",
+      "requires": "Published descriptions are not evidence that a provider is accepting requests.",
+      "contract": {
+        "inputHint": "human.topic/v1",
+        "outputHint": "public.reference/v1",
+        "invocation": "NOT_CONNECTED_TO_JARVIS",
+        "receipt": "NONE",
+        "effect": "NO_CROSS_PROJECT_EFFECT"
+      }
+    }
+  ]
+}
