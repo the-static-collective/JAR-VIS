@@ -25,6 +25,8 @@ jobs:
       - name: Verify pinned Static OS source is unmodified
         run: node --check src/recursive-workshop.mjs && node --check public/workshop.js
       - run: npm test
+      - name: Verify source-owned MOTIF-003 exact upstream bytes
+        run: node --check src/motif-reciprocal.mjs && node --check public/reciprocal.js
       - name: Fetch the source-owned Static OS recomposer cut for byte identity
         uses: actions/checkout@v4
         with:
@@ -37,6 +39,96 @@ jobs:
           cmp integrations/static-os-recomposer/question_first/recomposer.py static-os-recomposer-source/question_first/recomposer.py
           cmp integrations/static-os-recomposer/question_first/recomposer_witness.py static-os-recomposer-source/question_first/recomposer_witness.py
           cmp integrations/static-os-recomposer/scripts/recomposer-bridge.py static-os-recomposer-source/scripts/recomposer-bridge.py
+      - name: Fetch pinned source-owned MOTIF-003 snapshot for independent byte identity
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: main
+          path: motif-003-source
+          persist-credentials: false
+      - name: Compare native algorithm with inspected upstream source blob
+        run: |
+          test "$(git hash-object integrations/motif-003/affordance.py)" = "db25da0d50a9c8e2cd87aa576a22f969405737cf"
+          test "$(git hash-object motif-003-source/experiments/003/affordance.py)" = "db25da0d50a9c8e2cd87aa576a22f969405737cf"
+          cmp integrations/motif-003/affordance.py motif-003-source/experiments/003/affordance.py
+      - name: Verify that the real source-backed MOTIF-015/016 receipt pins match exact upstream bytes
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 23267b297094012d81525ddef2c5c36d6a5560b2
+          path: motif-reality-016-source
+          persist-credentials: false
+      - name: Reject changed environmental witness cards
+        run: |
+          test "$(git hash-object integrations/motif-reality-016/actual-watershed-2026-11-05.json)" = "8e0f7c9123a9d12b0ffcc95c449e4d20bd8bcfeb"
+          test "$(git hash-object integrations/motif-reality-016/actual-weather-2026-11-05.json)" = "a57535a31da37bf9caee4cd3feaf009941749b6f"
+          cmp integrations/motif-reality-016/actual-watershed-2026-11-05.json motif-reality-016-source/experiments/016/evidence/actual-watershed-2026-11-05.json
+          cmp integrations/motif-reality-016/actual-weather-2026-11-05.json motif-reality-016-source/experiments/016/evidence/actual-weather-2026-11-05.json
+      - name: Pin real event and diagnostic lesson source bytes
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 9f238548a0c1d8bcb6034df0e6992950541b40b8
+          path: motif-event-017-source
+          persist-credentials: false
+      - name: Compare frozen event and learning cards to source-owned Git blobs
+        run: |
+          test "$(git hash-object integrations/motif-reality-017/actual-event-2026-11-05.json)" = "43236756f24e3b5b8f982c4c6ce228061094e801"
+          test "$(git hash-object integrations/motif-reality-017/learned-constraints-2026-11-05.json)" = "f5b4d793945e06335e0280687b2a5f0b365a1924"
+          cmp integrations/motif-reality-017/actual-event-2026-11-05.json motif-event-017-source/experiments/017/evidence/first-real-event-2026-11-05.json
+          cmp integrations/motif-reality-017/learned-constraints-2026-11-05.json motif-event-017-source/experiments/017/evidence/first-lessons-2026-11-05.json
+      - name: Fetch source-owned MOTIF-019 question evolution and March physical evidence
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 1bb4028141eb20a8798bed338dcb3d851284de22
+          path: motif-question-019-source
+          persist-credentials: false
+      - name: Confirm exact upstream experimental research receipt bytes
+        run: |
+          test "$(git hash-object integrations/motif-reality-019/question-evolution-2026-11-05.json)" = "15f1e8cfecd781ca68f4eec05e1fc44e71668d1c"
+          test "$(git hash-object integrations/motif-reality-019/march-outcome-2026-11-05.json)" = "0cf1303cdeb83d9c29fe417ac19c66c217ddf63d"
+          cmp integrations/motif-reality-019/question-evolution-2026-11-05.json motif-question-019-source/experiments/019/evidence/final-question-evolution-2026-11-05.json
+          cmp integrations/motif-reality-019/march-outcome-2026-11-05.json motif-question-019-source/experiments/019/evidence/final-value-function-diagnostic-2026-11-05.json
+      - name: Fetch exact MOTIF-020 physical compute witness derived from GHoT
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: aa838a2c419edf5cb19afc15f76b5793e2fe8855
+          path: motif-resource-020-source
+          persist-credentials: false
+      - name: Verify owner source receipt byte identity
+        run: |
+          test "$(git hash-object integrations/motif-resource-020/embodied-resource-2026-11-05.json)" = "825c455e59e26df01157e5a4677a653fa88b8023"
+          cmp integrations/motif-resource-020/embodied-resource-2026-11-05.json motif-resource-020-source/experiments/020/evidence/first-embodied-inquiry-2026-11-05.json
+      - name: Fetch exact source-owned MOTIF-021 protocol question receipt
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: cdcec6013492bb6ccd0982ee9af9f5bf1d3200f7
+          path: motif-protocol-021-source
+          persist-credentials: false
+      - name: Verify protocol repair and conditional work evidence bytes
+        run: |
+          test "$(git hash-object integrations/motif-reality-021/source-question-integrity-2026-11-05.json)" = "b5cfe73c96ab908a8e87de73e90486fc0ab0ad66"
+          cmp integrations/motif-reality-021/source-question-integrity-2026-11-05.json motif-protocol-021-source/experiments/021/evidence/first-question-integrity-2026-11-05.json
+      - name: Pin source-owned MOTIF-023 human goal handshake and GHoT-004 physical evidence
+        uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 5051af387eb05f1611d7f12e473dab58078719cb
+          persist-credentials: false
+          path: motif-023-native-source
+      - name: Verify actual MOTIF-022/023 byte identity and local no-LLM goal UI
+        run: |
+          test "$(git hash-object integrations/experiments/023/human_goal.py)" = "00c6f648588f2cbe0ad153d6c90d91e03247c847"
+          test "$(git hash-object integrations/experiments/022/cost_of_knowing.py)" = "ce59dc4495c29eccc30aabf8fbeec7cf0b99b1f3"
+          test "$(git hash-object integrations/experiments/022/evidence/ghot-004-actual-2026-11-05.json)" = "ee545add1b71f97eb3fae2e5151398f81814a89b"
+          cmp integrations/experiments/023/human_goal.py motif-023-native-source/experiments/023/human_goal.py
+          cmp integrations/experiments/022/cost_of_knowing.py motif-023-native-source/experiments/022/cost_of_knowing.py
+          cmp integrations/experiments/022/evidence/ghot-004-actual-2026-11-05.json motif-023-native-source/experiments/022/evidence/ghot-004-actual-2026-11-05.json
+          node --check src/motif-human-goal.mjs
+          node --check public/goal.js
       - name: Live reviewer portal reversible synthetic QA (feature branch only)
         if: github.event_name == 'pull_request' && github.head_ref == 'feat/reviewer-weave-002'
         env:
