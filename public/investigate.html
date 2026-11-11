@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#172c24">
+<title>Investigation Desk · JAR;VIS</title>
+<link rel="stylesheet" href="/investigate.css"><script src="/investigate.js" defer></script>
+</head><body>
+<header class="masthead">
+ <a class="logo" href="/" aria-label="JAR;VIS home">JAR<span>;</span>VIS</a>
+ <span class="mastlabel">THE STATIC COLLECTIVE / RESEARCH ROOM</span>
+ <a href="/" class="back">← Workbench</a>
+</header>
+<main>
+ <section class="hero" aria-labelledby="title">
+   <div class="eyebrow">FIELD NOTES / 024 · EAGLE EYE</div>
+   <h1 id="title">What should we<br><em>look into?</em></h1>
+   <p class="intro">Ask in ordinary language. JAR;VIS can inspect public source records across the Collective, or look outward through public reference indexes. Evidence stays linked to its origin. Uncertainty stays visible.</p>
+ </section>
+ <section class="desk" aria-label="Investigation question">
+  <form id="questionForm">
+    <label class="label" for="question">YOUR QUESTION</label>
+    <textarea name="question" id="question" rows="3" minlength="10" maxlength="320" required placeholder="What do our different projects know about ...?"></textarea>
+    <div class="examples" aria-label="Example questions">
+      <button type="button" data-question="How can MOTIF and JAR;VIS use the MADD Maxhinal to investigate source ancestry?">MOTIF × Maxhinal</button>
+      <button type="button" data-question="Which tools help planZ and GRAFT turn public research into executable capabilities?">Plans → capability</button>
+      <button type="button" data-question="What research explains why independent witnesses can make the same mistake?">Witnesses & errors</button>
+    </div>
+    <fieldset class="field">
+      <legend class="label">WHERE TO LOOK <small>Each selection permits sending your question to that public service.</small></legend>
+      <label class="choice"><input type="checkbox" id="github" checked><span><strong>Collective GitHub</strong><small>Public repositories, source files, exact commits and line citations.</small></span></label>
+      <label class="choice"><input type="checkbox" id="wikipedia"><span><strong>Wikipedia</strong><small>Public encyclopedia search results; not original-source verification.</small></span></label>
+      <label class="choice"><input type="checkbox" id="scholarly"><span><strong>OpenAlex</strong><small>Public scholarly metadata and article links, not full-text reading.</small></span></label>
+    </fieldset>
+    <div class="options">
+      <label class="depth"><span>SEARCH DEPTH <small>GitHub repositories actually inspected</small></span><select id="depth">
+        <option value="2">Quick · 2</option><option value="3" selected>Standard · 3</option>
+        <option value="4">Wide · 4</option><option value="6">Wider · 6</option>
+      </select></label>
+      <label class="choice reasoning"><input type="checkbox" id="deep"><span><strong>Run MOTIF's reasoning circuit</strong><small>Two additional bounded public-source rounds using original ALEX → planZ → GRAFT code. May use more API requests.</small></span></label>
+    </div>
+    <div class="callout">PUBLIC SEARCH ONLY. No private Drive, email, accounts or personal records are searched. This local service does not automatically save questions or deploy generated code.</div>
+    <div class="actions"><button class="run" type="submit" id="run">Investigate <span aria-hidden="true">↗</span></button><span id="status" role="status" aria-live="polite">Ready for a question.</span></div>
+  </form>
+ </section>
+ <section class="result" id="result" hidden aria-labelledby="resultHeading">
+    <div class="result-heading">
+     <div><div class="eyebrow">RESEARCH RETURN / HELD FOR REVIEW</div><h2 id="resultHeading">What we found</h2></div>
+     <button id="download" class="download" type="button" disabled>Save evidence packet ↓</button>
+    </div>
+    <div class="stat-grid" id="stats" aria-live="polite"></div>
+    <div id="warnings" class="warnings"></div>
+    <div class="result-columns">
+      <section class="sheet" aria-labelledby="sourcesHeading"><div class="section-name">01 / SOURCE WINDOW</div><h3 id="sourcesHeading">Research leads</h3>
+       <div id="sources"></div></section>
+      <section class="sheet" aria-labelledby="planHeading"><div class="section-name">02 / REASONING WINDOW</div><h3 id="planHeading">What MOTIF did</h3>
+       <div id="plan"></div><div class="next" id="next"></div></section>
+    </div>
+ </section>
+ <footer>QUESTIONS ARE NOT ANSWERS. SOURCE MATCHES ARE NOT CONSENT. A PLAN IS NOT AN ACTION.<br>
+  <a href="https://github.com/the-static-collective/JAR-VIS">Source & review</a> · <a href="https://github.com/the-static-collective/MOTIF/pull/42">MOTIF-023 experiment</a></footer>
+</main>
+</body></html>
