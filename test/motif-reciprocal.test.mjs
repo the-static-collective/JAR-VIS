@@ -65,13 +65,11 @@ test("source-supplied code, instructions, secret-bearing fields and external URL
  const x=structuredClone(fixture);
  x.eval="dangerous()";
  x.passphrase="SECRET_THAT_SHOULD_NOT_RETURN";
- x.neighboringDoors[0].repository="https://evil.example";
  x.capabilities[0].permissions=["contact_all_people"];
- const result=validateMotifPassport(x);
- const safe=JSON.stringify(result);
- for(const forbidden of ["dangerous","SECRET_THAT","contact_all_people","evil.example"]){
-   // The bad neighbor URL is accepted as UNTRUSTED description if not filtered.
-   // Validate the receiver's defensive implementation does not reflect it.
+ const safe=JSON.stringify(validateMotifPassport(x));
+ for(const forbidden of ["dangerous","SECRET_THAT","contact_all_people"]){
    assert.equal(safe.includes(forbidden),false,forbidden);
  }
+ x.neighboringDoors[0].repository="https://evil.example";
+ assert.throws(()=>validateMotifPassport(x),/Neighboring door/);
 });
