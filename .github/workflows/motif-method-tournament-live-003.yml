@@ -1,0 +1,90 @@
+name: JAR;VIS × MOTIF Tournament 003 — actual unmerged donor competition
+
+on:
+  pull_request:
+    paths:
+      - 'integrations/motif-council/motif/method_tournament.py'
+      - 'integrations/motif-council/motif/branch_runner.py'
+      - 'integrations/motif-council/experiments/method-tournament-003/**'
+      - 'integrations/motif-council/trial_bridge.py'
+      - 'src/motif-method-tournament.mjs'
+      - 'src/server.mjs'
+      - 'public/motif.*'
+      - 'test/motif-method-tournament.test.mjs'
+      - 'tools/verify-motif-tournament-live.mjs'
+      - '.github/workflows/motif-method-tournament-live-003.yml'
+  push:
+    paths:
+      - 'integrations/motif-council/motif/method_tournament.py'
+      - 'integrations/motif-council/motif/branch_runner.py'
+      - 'integrations/motif-council/experiments/method-tournament-003/**'
+      - 'integrations/motif-council/trial_bridge.py'
+      - 'src/motif-method-tournament.mjs'
+      - 'src/server.mjs'
+      - 'public/motif.*'
+      - 'test/motif-method-tournament.test.mjs'
+      - 'tools/verify-motif-tournament-live.mjs'
+      - '.github/workflows/motif-method-tournament-live-003.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-transfer-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 9135a4592fecf7461e20c8248455726aa7f4c403
+          path: _source/MOTIF
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact original tournament algorithm, runner and fixed independent evaluator
+        run: |
+          cmp integrations/motif-council/motif/method_tournament.py _source/MOTIF/motif/method_tournament.py
+          cmp integrations/motif-council/motif/branch_runner.py _source/MOTIF/motif/branch_runner.py
+          cmp integrations/motif-council/experiments/method-tournament-003/evaluate.cjs _source/MOTIF/experiments/method-tournament-003/evaluate.cjs
+          cmp integrations/motif-council/experiments/method-tournament-003/fixtures.v1.json _source/MOTIF/experiments/method-tournament-003/fixtures.v1.json
+          echo 'Exact source-owned MOTIF donor and independent harness hashes verified.'
+      - name: Original MOTIF local boundary tests
+        working-directory: _source/MOTIF
+        run: python -m unittest discover -s tests -v
+      - name: Original JAR;VIS complete suite plus new localhost trial boundaries
+        run: |
+          node --check public/motif.js
+          node --check src/motif-method-tournament.mjs
+          npm test
+      - name: Fetch fixed Node image for explicit no-network Docker run
+        run: docker pull node:22-alpine
+      - name: Actually run independent synthetic tournament through protected local JAR;VIS HTTP endpoint
+        run: |
+          node tools/verify-motif-tournament-live.mjs > /tmp/jarvis-method-tournament-local-proof.json
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import {readFileSync} from 'node:fs';
+          const v=JSON.parse(readFileSync('/tmp/jarvis-method-tournament-local-proof.json','utf8'));
+          assert.equal(v.originalCodeReallyExecuted,true);
+          assert.equal(v.separateFutureCases,6);
+          assert.equal(v.measured.candidate_minus_strong_correct,0);
+          assert.ok(v.measured.cases_regressing_vs_global.length);
+          assert.equal(v.methodInstalled,false);
+          assert.equal(v.journalChanged,false);
+          assert.equal(v.sourceWasMerged,false);
+          console.log('ACTUAL ORIGINAL UNMERGED DONOR TESTED VIA JAR;VIS:',v.measured);
+          JS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-motif-original-transfer-tournament-003-held-evidence
+          path: /tmp/jarvis-method-tournament-local-proof.json
+          retention-days: 14

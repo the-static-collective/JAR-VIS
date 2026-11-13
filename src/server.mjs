@@ -9,6 +9,7 @@ import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
 import {inspectMotifKernel,runMotifSpine} from "./motif-spine.mjs";
 import {inspectMotifCouncil,runMotifCouncil} from "./motif-source-council.mjs";
+import {inspectMotifTournament,runMotifTournament} from "./motif-method-tournament.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
@@ -70,6 +71,7 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
   }
   const csrf = randomBytes(24).toString("hex");
   let boundPort;
+  let tournamentBusy = false;
   const server = createServer(async (req, res) => {
     try {
       const host = req.headers.host;
@@ -83,6 +85,13 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/motif/tournament/state") {
+          try {return reply(res,200,{...await inspectMotifTournament(),
+            csrfToken:csrf,network:"NONE_UNTIL_EXPLICIT_POST",
+            methodInstalled:false,automaticMerge:false});}
+          catch{return reply(res,503,{disposition:"HOLD_SOURCE_TOURNAMENT_UNAVAILABLE",
+            csrfToken:csrf,methodInstalled:false});}
+        }
         if (pathname === "/api/motif/council/state") {
           try { return reply(res,200,{...await inspectMotifCouncil(),csrfToken:csrf,
             network:"NONE_UNTIL_EXPLICIT_POST",adoptionAllowed:false}); }
@@ -140,6 +149,23 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
           stored:false,externalEffect:false
         });
         return reply(res,404,{error:"Unknown recursive workshop operation"});
+      }
+      if (pathname === "/api/motif/tournament") {
+        if (tournamentBusy) return reply(res,429,{
+          disposition:"HOLD_TOURNAMENT_ALREADY_RUNNING",externalWrites:false});
+        if(typeof body.question!=="string" || ![true,false,undefined].includes(body.execute))
+          return reply(res,400,{disposition:"HOLD_UNKNOWN_METHOD_ACTION",
+            externalWrites:false});
+        tournamentBusy=true;
+        try {
+          const trial=await runMotifTournament(body.question,{execute:body.execute===true});
+          return reply(res,200,{...trial,stored:false,reviewRequired:true});
+        } catch(error) {
+          return reply(res,error.status===400?400:error.status===413?413:409,
+            {disposition:"HOLD_REVIEWED_METHOD_TOURNAMENT_UNAVAILABLE",
+              error:"The reviewed source, native runner or independent comparison could not be verified.",
+              externalWrites:false,methodInstalled:false,mergePerformed:false});
+        } finally {tournamentBusy=false;}
       }
       if (pathname === "/api/motif/council") {
         try {
