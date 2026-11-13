@@ -28,7 +28,7 @@ On the explicit source-inspection POST, JAR;VIS verifies all four local Source C
 
 ## Tests, inspection and the next scientific question
 
-Dedicated workflow .github/workflows/motif-source-council-local-002.yml independently checks out the original MOTIF source commit and byte-compares four original files, runs the existing JAR suite and original MOTIF tests, and performs an explicit original public Git fetch of real unmerged experimental documents. It retains the source-attributed HOLD packet as an artifact.
+Dedicated workflow .github/workflows/motif-source-council-local-002.yml independently checks out the original MOTIF source commit and byte-compares four original files, runs the existing JAR suite and original MOTIF tests, and performs an explicit original public Git fetch of real unmerged experimental documents. It retains the source-attributed HOLD packet as an artifact. The additional `node tools/verify-motif-council-live.mjs` proof runs **the entire real localhost chain**: an independently diagnosed `HOLD_MODEL_FALSIFIED` from the original MOTIF spine, explicit JAR CSRF-guarded Source Council inquiry, original public remote Git reads, source-hashed candidate returns, no journal change and no external writes or merges. That live verifier requires GitHub access and is deliberately excluded from ordinary offline `npm test`.
 
 **Now test the actual value:** freeze a set of real source-discovery tasks, compare this council against equally resourced branch-name, BM25/document retrieval and human selections, then measure whether independently tested experimental methods solve more problems. Do not claim this first council improves discovery until it survives stronger matched baselines.
 
