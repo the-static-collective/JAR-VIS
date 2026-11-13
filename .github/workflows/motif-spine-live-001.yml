@@ -1,0 +1,62 @@
+name: JAR;VIS × original MOTIF Reasoning Spine 001
+
+on:
+  push:
+    paths:
+      - 'integrations/motif-spine/**'
+      - 'src/motif-spine.mjs'
+      - 'src/server.mjs'
+      - 'public/motif.*'
+      - 'public/index.html'
+      - 'test/motif-spine.test.mjs'
+      - '.github/workflows/motif-spine-live-001.yml'
+  pull_request:
+    paths:
+      - 'integrations/motif-spine/**'
+      - 'src/motif-spine.mjs'
+      - 'src/server.mjs'
+      - 'public/motif.*'
+      - 'public/index.html'
+      - 'test/motif-spine.test.mjs'
+      - '.github/workflows/motif-spine-live-001.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  actual-native-motif:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 139b59d22414659d75c7ffebe9e75cbd01c25925
+          path: _source/MOTIF
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compare borrowed kernel bytes to original exact upstream commit
+        run: |
+          cmp -s integrations/motif-spine/reason_spine.py _source/MOTIF/motif/reason_spine.py
+          echo "SOURCE VERIFIED: original MOTIF sha 139b59d22414659d75c7ffebe9e75cbd01c25925"
+      - name: Verify browser code syntax
+        run: node --check public/motif.js
+      - name: Test full existing JAR;VIS suite with original MOTIF execution
+        run: npm test
+      - name: Verify original MOTIF native tests remain independently reproducible
+        working-directory: _source/MOTIF
+        run: python -m unittest discover -s tests -v
+      - name: Explicitly state restricted research status
+        run: |
+          echo '### JAR;VIS MOTIF local bridge' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Original source matched the source-owned immutable MOTIF commit.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Local-only, source-pinned native Python execution. No external action, saved human input, branch merge, deployment or model claims.' >> "$GITHUB_STEP_SUMMARY"
