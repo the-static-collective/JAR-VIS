@@ -8,6 +8,7 @@ import {tmpdir} from "node:os";
 import {join} from "node:path";
 import {Workbench} from "../src/workbench.mjs";
 import {startWorkbenchServer} from "../src/server.mjs";
+import {runMotifSpine} from "../src/motif-spine.mjs";
 
 const caseData={
   question:"Which fictional reciprocal question method survives the contradiction?",
@@ -22,6 +23,8 @@ const caseData={
     review_receipt:"fictional-review-not-independent",
   }],
 };
+const independent=await runMotifSpine(caseData,{action:"analyze"});
+assert.equal(independent.results.result,"HOLD_MODEL_FALSIFIED");
 const dir=await mkdtemp(join(tmpdir(),"jarvis-motif-real-council-"));
 const journalPath=join(dir,"journal.jsonl");
 let server;
@@ -39,8 +42,8 @@ try{
     headers:{"content-type":"application/json","x-jarvis-csrf":state.csrfToken},
     body:JSON.stringify({question:"reciprocal questions",budget:2,case:caseData}),
   });
-  assert.equal(reply.status,200);
   const result=await reply.json();
+  assert.equal(reply.status,200,"Local source-council endpoint refused with "+result.disposition);
   assert.equal(result.schema,"jarvis.motif-source-council/v1");
   assert.equal(result.diagnosis.status,"HOLD_MODEL_FALSIFIED");
   assert.equal(result.diagnosis.gapDetected,true);
