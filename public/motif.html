@@ -58,6 +58,20 @@
 <div id="policies" class="policies"></div>
 <p class="hint">Fixed order, strong classical information gain, and MOTIF's cost-aware selection are actually executed. Real pretrained LLM and hybrid trials have <strong>not</strong> been run. One useful question is not proof of architectural superiority.</p>
 </section>
+<section class="board council-board" id="council">
+<div class="section-top"><span class="n">04</span><div><h2>Investigate the experimental forest</h2><p>When a method is missing, look for an existing experimental approach before inventing another.</p></div></div>
+<p>The <strong>original MOTIF Source Council</strong> can read public source documents from unmerged experimental branches and identify source-backed research leads. This is not a claim that the candidate works, nor permission to execute or merge its code.</p>
+<form id="council-form">
+<label for="council-query">Which missing method or question should MOTIF investigate?</label>
+<input id="council-query" type="text" maxlength="180" minlength="3" value="reciprocal reasoning and purposeful questions" required>
+<div class="actions"><label for="council-budget">Maximum branches to inspect
+<select id="council-budget"><option value="1">1 branch</option><option value="2" selected>2 branches</option><option value="3">3 branches</option></select></label>
+<button id="investigate" type="submit">Find source-backed experiments ↗</button></div>
+</form>
+<p class="hint">This button explicitly reads a fixed, public MOTIF GitHub repository. Your typed question stays on this computer and is used to rank the fetched documents locally. No arbitrary experimental code runs. Git access may be unavailable offline.</p>
+<p id="council-status" class="status" role="status" aria-live="polite">No branch investigation requested.</p>
+<div id="council-results" aria-live="polite"></div>
+</section>
 <footer><span>REPORT ≠ TRUTH. BRANCH ≠ MERGE. REASONING ≠ AUTHORITY.</span><a href="/">Return to JAR;VIS</a></footer>
 </main>
 </body></html>
