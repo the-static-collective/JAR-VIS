@@ -8,6 +8,7 @@ import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
 import {inspectMotifKernel,runMotifSpine} from "./motif-spine.mjs";
+import {inspectMotifCouncil,runMotifCouncil} from "./motif-source-council.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
@@ -82,6 +83,12 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/motif/council/state") {
+          try { return reply(res,200,{...await inspectMotifCouncil(),csrfToken:csrf,
+            network:"NONE_UNTIL_EXPLICIT_POST",adoptionAllowed:false}); }
+          catch { return reply(res,503,{disposition:"HOLD_SOURCE_COUNCIL_UNAVAILABLE",
+            csrfToken:csrf,adoptionAllowed:false}); }
+        }
         if (pathname === "/api/motif/state") {
           try { return reply(res,200,{...await inspectMotifKernel(),csrfToken:csrf,reasoningReady:"PYTHON_REQUIRED_ON_REQUEST",localOnly:true}); }
           catch { return reply(res,503,{disposition:"HOLD_SOURCE_UNAVAILABLE",csrfToken:csrf,localOnly:true}); }
@@ -133,6 +140,32 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
           stored:false,externalEffect:false
         });
         return reply(res,404,{error:"Unknown recursive workshop operation"});
+      }
+      if (pathname === "/api/motif/council") {
+        try {
+          let diagnosis = {
+            status:"OPERATOR_REQUESTED_RESEARCH",gapDetected:false,
+            interpretation:"No diagnostic model was supplied; selected branches are research leads."
+          };
+          if (body.case !== undefined) {
+            const local = await runMotifSpine(body.case,{action:"analyze"});
+            const state = local.results.result;
+            diagnosis = {
+              status:state,gapDetected:state.startsWith("HOLD_"),
+              remainingHypotheses:local.results.remaining_hypotheses.length,
+              interpretation:state.startsWith("HOLD_")
+                ? "Original MOTIF reports a gap or unresolved evidence. These branches remain unverified candidate methods."
+                : "MOTIF has not established a model gap. These are optional source leads, not required methods."
+            };
+          }
+          const council = await runMotifCouncil(body.question,{budget:body.budget??2});
+          return reply(res,200,{...council,diagnosis});
+        } catch(error) {
+          return reply(res,error.status===413?413:error.status===400?400:409,
+            {disposition:"HOLD_ORIGINAL_SOURCE_RESEARCH_UNAVAILABLE",
+              error:"MOTIF Source Council could not verify or inspect the requested public source.",
+              externalWrites:false,mergePerformed:false});
+        }
       }
       if (pathname === "/api/motif/compare" || pathname === "/api/motif/analyze") {
         try { return reply(res,200,await runMotifSpine(body.case,{
