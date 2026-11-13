@@ -115,7 +115,9 @@ export async function runMotifCouncil(question,{
   if(!Array.isArray(cards) || cards.length>budget ||
      cards.some(x=>x?.automatic_merge!==false ||
         x?.executable!==false || !/^[0-9a-f]{40}$/.test(x.commit) ||
-        !(/^[A-Za-z0-9._/-]{1,220}$/.test(x.branch) &&\n          !x.branch.includes("..") && !x.branch.includes("//") &&\n          !x.branch.startsWith(".") && x.branch!=="main")))
+        !(/^[A-Za-z0-9._/-]{1,220}$/.test(x.branch) &&
+          !x.branch.includes("..") && !x.branch.includes("//") &&
+          !x.branch.startsWith(".") && x.branch!=="main")))
     throw bad("HOLD: unrecognized candidate or source reference");
   return {...result,source,
     disposition:"HELD_UNMERGED_SOURCE_LEADS",
