@@ -8,6 +8,7 @@ on:
       - 'src/server.mjs'
       - 'public/motif.*'
       - 'test/motif-source-council.test.mjs'
+      - 'tools/verify-motif-council-live.mjs'
       - 'docs/MOTIF-SOURCE-COUNCIL-LOCAL-002.md'
       - '.github/workflows/motif-source-council-local-002.yml'
   pull_request:
@@ -17,6 +18,7 @@ on:
       - 'src/server.mjs'
       - 'public/motif.*'
       - 'test/motif-source-council.test.mjs'
+      - 'tools/verify-motif-council-live.mjs'
       - 'docs/MOTIF-SOURCE-COUNCIL-LOCAL-002.md'
       - '.github/workflows/motif-source-council-local-002.yml'
   workflow_dispatch:
@@ -83,8 +85,23 @@ jobs:
           console.log('REAL UNMERGED MOTIF SOURCE OBSERVED:',
             r.originalCouncil.candidates.map(x=>x.branch).join(', '));
           JS
+      - name: Live original MOTIF gap → Source Council → JAR;VIS localhost crossing
+        run: |
+          node tools/verify-motif-council-live.mjs > /tmp/motif-council-jar-real-endpoint.json
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import {readFileSync} from 'node:fs';
+          const r=JSON.parse(readFileSync('/tmp/motif-council-jar-real-endpoint.json','utf8'));
+          assert.equal(r.originalMOTIFDiagnosis,'HOLD_MODEL_FALSIFIED');
+          assert.equal(r.codeExecutedFromUnmergedBranches,false);
+          assert.equal(r.journalChanged,false);
+          assert.ok(r.candidates.some(c=>c.evidenceFiles>0));
+          console.log('FULL LIVE JAR;VIS CROSSING VERIFIED:',r.candidates.map(c=>c.branch).join(', '));
+          JS
       - uses: actions/upload-artifact@v4
         with:
           name: motif-source-council-002-original-evidence-held
-          path: /tmp/motif-public-research.json
+          path: |
+            /tmp/motif-public-research.json
+            /tmp/motif-council-jar-real-endpoint.json
           retention-days: 14
