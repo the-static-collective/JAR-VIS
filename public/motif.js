@@ -229,3 +229,100 @@ el("council-form").addEventListener("submit",async event=>{
       "research-empty");
   } finally {button.disabled=false;}
 });
+
+
+// METHOD TOURNAMENT-003 / SOURCE-OWNED ORIGINAL EXPERIMENT, NOT A TOOL INVENTOR.
+// Only fixed reviewed source may run, and only on this explicit user gesture.
+// Server response data is rendered as text, never HTML or executable code.
+let trialBusy=false, heldTrialReceipt=null;
+function trialStatus(message,error=false){
+  const node=el("trial-status");
+  node.textContent=message;
+  node.classList.toggle("error",error);
+}
+function drawTrial(response,executed){
+  const parent=el("trial-results");clear(parent);
+  const original=response.original_motif;
+  const heading=put(parent,"div","","trial-evidence");
+  put(heading,"h3",executed?"Original experimental method really executed":"Reviewed source verified; nothing executed");
+  put(heading,"p","Method: "+original.profile);
+  put(heading,"p","Unmerged source at commit: "+original.source.sha,"source-hold");
+  const terms=original.selection?.document_terms_matched??[];
+  put(heading,"p","Original source documents matched: "+
+    (terms.join(", ")||"none"));
+  if(!executed){
+    put(parent,"p","This is only a source inspection. Click the separate trial button to run the fixed, reviewed synthetic benchmark.","source-hold");
+    return;
+  }
+  const score=original.scorecard,totals=score.aggregate_on_proposed_only;
+  const metrics=put(parent,"div","","trial-metrics");
+  for(const [title,value] of [
+    ["Original candidate",totals.original_branch_candidate_correct+"/"+totals.future_n],
+    ["Global classical",totals.global_classical_correct+"/"+totals.future_n],
+    ["Strong classical",totals.independent_strong_classical_correct+"/"+totals.future_n]
+  ]){
+    const cell=put(metrics,"div");
+    put(cell,"strong",value);
+    put(cell,"span",title);
+  }
+  put(parent,"p","The experimental role-conditioned method tied a strong independent classical implementation. Neither has demonstrated a novel superiority.","source-hold");
+  const bad=put(parent,"div","","adverse");
+  put(bad,"strong","Negative transfer was observed.");
+  put(bad,"p","Candidate regressed relative to the global classical control in: "+
+    totals.cases_regressing_vs_global.join(", ")+".");
+  put(bad,"p","Across four cases where the original candidate made a proposal, it scored "+
+    totals.original_branch_candidate_correct+" / "+totals.future_n+
+    " future synthetic reports; the strong classical control scored "+
+    totals.independent_strong_classical_correct+".");
+  const statuses=put(parent,"div","","trial-evidence");
+  put(statuses,"h3","Retained, but not admitted");
+  put(statuses,"p","Original method code remains on its own unmerged branch. The receipt preserves its exact source SHA, independent scenario receipts, regressions and limitation.");
+  put(statuses,"p","HOLD: strong classical outperformance and real-world transfer not established. No code installed, no source merged, no real-world action performed.");
+  heldTrialReceipt=original.held_receipt;
+  el("trial-export").hidden=!heldTrialReceipt;
+}
+async function performTrial(execute){
+  if(trialBusy)return;
+  trialBusy=true;heldTrialReceipt=null;
+  el("trial-export").hidden=true;
+  el("trial-preview").disabled=true;
+  el("trial-execute").disabled=true;
+  clear(el("trial-results"));
+  try {
+    const question=el("trial-query").value.trim();
+    trialStatus(execute
+      ?"Running source-owned original donor and six synthetic future stress tests. No container networking or external delivery."
+      :"Inspecting exact public source of the one approved unmerged experimental method.");
+    const result=await request("/api/motif/tournament",{question,execute});
+    const expected=execute?"REVIEWED_METHOD_TESTED_RETAINED_HELD":"REVIEWED_METHOD_PREVIEW_ONLY";
+    if(result.disposition!==expected)throw Error("The research boundary did not complete.");
+    drawTrial(result,execute);
+    trialStatus(execute
+      ?"Original donor tests and independent classical comparisons finished. The source remains unmerged; evidence is HELD."
+      :"Reviewed original source and research relevance inspected. No method executed.");
+  } catch(error) {
+    trialStatus("HOLD: "+error.message,true);
+    put(el("trial-results"),"p","No method was installed or promoted. This local experiment requires Git, Python 3 and (for execution) an already available Docker image.","research-empty");
+  } finally {
+    trialBusy=false;
+    el("trial-preview").disabled=false;
+    el("trial-execute").disabled=false;
+  }
+}
+el("trial-form").addEventListener("submit",event=>{
+  event.preventDefault();
+  performTrial(true);
+});
+el("trial-preview").addEventListener("click",()=>performTrial(false));
+el("trial-export").addEventListener("click",()=>{
+  if(!heldTrialReceipt)return;
+  const blob=new Blob([JSON.stringify(heldTrialReceipt,null,2)+"\n"],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement("a");
+  link.href=url;
+  link.download="motif-reviewed-method-held-receipt-003.json";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+});
