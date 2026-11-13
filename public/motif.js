@@ -140,3 +140,92 @@ el("record").addEventListener("click",async()=>{
     el("run").disabled=true;
   }
 })();
+
+
+// Source Council is *only* invoked by clicking the research button.
+// The original MOTIF council runs locally and sends only fixed public-ref Git
+// operations to GitHub. Query text remains in this tab and the Python process.
+function councilStatus(text,error=false) {
+  const node=el("council-status");
+  node.textContent=text;
+  node.classList.toggle("error",error);
+}
+function drawCouncil(data) {
+  const root=el("council-results");clear(root);
+  const native=data.originalCouncil;
+  const diag=data.diagnosis;
+  put(root,"h3","Original MOTIF inspected "+
+      native.candidates.length+" candidate branches");
+  put(root,"p",
+    (diag?.gapDetected
+      ? "MOTIF's current reasoning result is "+diag.status+
+        ". The branches below are potential research leads, not proven repairs."
+      : "Method discovery was explicitly requested. No independently verified method gap has been established."),
+    "council-caution");
+  put(root,"p",
+    "Visible Git heads examined for source pointers: "+native.all_remote_heads_observed+
+    ". Every branch below is still unmerged and has no execution or merge authority.",
+    "council-caution");
+  if(!native.candidates.length) {
+    put(root,"p","No branch-name matches at this bounded budget. This does not prove the capability is absent.","research-empty");
+    return;
+  }
+  for(const card of native.candidates) {
+    const item=put(root,"article","","research-card");
+    put(item,"h3",card.branch);
+    put(item,"p",card.phase.replaceAll("_"," "));
+    const matched=card.evidence?.document_terms_matched??[];
+    if(card.phase==="PENCIL_SOURCE_EVIDENCE") {
+      put(item,"p","Original document terms matching the question: "+
+        (matched.join(", ")||"none"));
+      put(item,"p","Visible test filenames: "+
+        (card.evidence.test_file_name_visible?"yes (not execution proof)":"not observed"));
+      put(item,"p","Suggested next step: "+
+        (card.recommendation==="READ_MORE_OR_RUN_REVIEWED_TEST"
+          ?"Inspect exact source, then request an independently reviewed native test."
+          :"Insufficient document evidence. Keep this candidate on HOLD."));
+      const docs=card.evidence?.source_witnesses??[];
+      for(const witness of docs) {
+        put(item,"p",witness.path+" • SHA-256 "+
+          witness.sha256.slice(0,20)+"… • not executed","mini");
+      }
+    } else {
+      put(item,"p","Original source could not be inspected. No method was admitted.");
+    }
+    if(/^[0-9a-f]{40}$/.test(card.commit)) {
+      const link=put(item,"a","Inspect immutable GitHub source ↗");
+      link.href="https://github.com/the-static-collective/MOTIF/tree/"+card.commit;
+      link.target="_blank";link.rel="noopener noreferrer";
+    }
+  }
+  put(root,"p","A matching document is a lead, not a demonstrated method. "+
+      "This desk cannot execute branches, install methods, contact people or merge code.",
+      "council-caution");
+}
+el("council-form").addEventListener("submit",async event=>{
+  event.preventDefault();
+  const button=el("investigate");
+  if(button.disabled)return;
+  button.disabled=true;
+  const root=el("council-results");
+  clear(root);
+  try {
+    const question=el("council-query").value.trim();
+    const budget=Number(el("council-budget").value);
+    councilStatus("Reading only the public MOTIF experimental forest on your explicit request…");
+    const body={question,budget};
+    // If the local reasoning run exists, diagnose its actual reported state
+    // without transmitting its unverified hypotheses to GitHub.
+    if(last && caseData)body.case=caseData;
+    const result=await request("/api/motif/council",body);
+    if(result.disposition!=="HELD_UNMERGED_SOURCE_LEADS")
+      throw Error("Source Council did not return a held research packet.");
+    drawCouncil(result);
+    councilStatus("Original public source evidence inspected locally. "+
+      "Nothing merged, executed from branches, or recorded.");
+  } catch(error) {
+    councilStatus("HOLD: "+error.message,true);
+    put(root,"p","No candidate promoted; a missing source is not evidence that a method is absent.",
+      "research-empty");
+  } finally {button.disabled=false;}
+});
