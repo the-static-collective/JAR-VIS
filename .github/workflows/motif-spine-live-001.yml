@@ -53,7 +53,8 @@ jobs:
       - name: Test full existing JAR;VIS suite with original MOTIF execution
         run: npm test
       - name: Verify original MOTIF native tests remain independently reproducible
-        run: python -m unittest discover -s _source/MOTIF/tests -v
+        working-directory: _source/MOTIF
+        run: python -m unittest discover -s tests -v
       - name: Explicitly state restricted research status
         run: |
           echo '### JAR;VIS MOTIF local bridge' >> "$GITHUB_STEP_SUMMARY"
