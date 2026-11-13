@@ -72,6 +72,24 @@
 <p id="council-status" class="status" role="status" aria-live="polite">No branch investigation requested.</p>
 <div id="council-results" aria-live="polite"></div>
 </section>
+<section class="board trial-board" id="method-tournament">
+<div class="section-top"><span class="n">05</span><div><h2>Challenge an existing method</h2><p>Does its apparent improvement survive an unfamiliar situation?</p></div></div>
+<p>The first reviewed competitor is the <strong>original RECIPROCAL-003 role-conditioned prediction method</strong>, still on an unmerged MOTIF experimental branch. The tournament compares its actual program against global and strong role-conditioned classical controls across six separate synthetic future regimes.</p>
+<form id="trial-form">
+<label for="trial-query">Why is this particular method relevant to your question?</label>
+<input id="trial-query" maxlength="180" minlength="3" required value="reciprocal role conditioned prediction">
+<div class="actions">
+<button type="button" id="trial-preview" class="outline">Inspect approved donor ↗</button>
+<button type="submit" id="trial-execute">Run the independent transfer tournament ↗</button>
+</div>
+</form>
+<p class="hint">The preview reads fixed public Git source only. The trial explicitly executes the unmodified original experiment in a non-root, read-only, <strong>no-network Docker container</strong>. Running requires Git, Python 3, Docker and a locally available node:22-alpine image. Neither action executes a method from an arbitrary search result.</p>
+<p class="hint">This is a prediction-method test, <strong>not a demonstrated repair</strong> for the question above. No model is improved or installed unless separate evidence and review justify it.</p>
+<p id="trial-status" class="status" role="status" aria-live="polite">No original experimental code executed.</p>
+<div id="trial-results" aria-live="polite"></div>
+<button id="trial-export" type="button" class="outline" hidden>Save HELD method receipt as JSON ↓</button>
+<p class="hint">The operator can choose to save the receipt locally. Otherwise results are retained only in this browser tab. A receipt points to original source and evidence; it is not code admission, a proof of authenticity, or permission to merge.</p>
+</section>
 <footer><span>REPORT ≠ TRUTH. BRANCH ≠ MERGE. REASONING ≠ AUTHORITY.</span><a href="/">Return to JAR;VIS</a></footer>
 </main>
 </body></html>
