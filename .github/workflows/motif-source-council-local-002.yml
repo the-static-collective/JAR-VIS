@@ -1,0 +1,90 @@
+name: JAR;VIS × MOTIF Source Council 002 — live original-branch evidence
+
+on:
+  push:
+    paths:
+      - 'integrations/motif-council/**'
+      - 'src/motif-source-council.mjs'
+      - 'src/server.mjs'
+      - 'public/motif.*'
+      - 'test/motif-source-council.test.mjs'
+      - 'docs/MOTIF-SOURCE-COUNCIL-LOCAL-002.md'
+      - '.github/workflows/motif-source-council-local-002.yml'
+  pull_request:
+    paths:
+      - 'integrations/motif-council/**'
+      - 'src/motif-source-council.mjs'
+      - 'src/server.mjs'
+      - 'public/motif.*'
+      - 'test/motif-source-council.test.mjs'
+      - 'docs/MOTIF-SOURCE-COUNCIL-LOCAL-002.md'
+      - '.github/workflows/motif-source-council-local-002.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-owned-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: the-static-collective/MOTIF
+          ref: 90e41d18a04ae2aaae0a16ded61199415488250f
+          path: _source/MOTIF
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Byte-compare original MOTIF Source Council modules
+        run: |
+          for file in __init__.py branch_garden.py branch_source.py source_council.py; do
+            cmp "integrations/motif-council/motif/$file" "_source/MOTIF/motif/$file"
+          done
+          echo 'Original immutable MOTIF Council implementation verified.'
+      - name: Check browser source syntax
+        run: node --check public/motif.js
+      - name: Run existing JAR;VIS and new Source Council tests without public network access
+        run: npm test
+      - name: Run original native Source Council tests
+        working-directory: _source/MOTIF
+        run: python -m unittest discover -s tests -v
+      - name: Explicit public MOTIF Git source inspection — user question is local
+        run: |
+          node --input-type=module - <<'JS' > /tmp/motif-public-research.json
+          import {runMotifCouncil} from './src/motif-source-council.mjs';
+          const result=await runMotifCouncil('reciprocal questions',{budget:2});
+          console.log(JSON.stringify(result,null,2));
+          JS
+          node --input-type=module - <<'JS'
+          import {readFileSync} from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r=JSON.parse(readFileSync('/tmp/motif-public-research.json','utf8'));
+          assert.equal(r.disposition,'HELD_UNMERGED_SOURCE_LEADS');
+          assert.equal(r.externalWrites,false);
+          assert.equal(r.codeExecutedFromExperimentalBranches,false);
+          assert.equal(r.questionTransmittedToGitHub,false);
+          assert.equal(r.mergePerformed,false);
+          assert.ok(r.originalCouncil.all_remote_heads_observed>2);
+          assert.ok(r.originalCouncil.candidates.length>0);
+          assert.ok(r.originalCouncil.candidates.some(x=>x.phase==='PENCIL_SOURCE_EVIDENCE'));
+          for (const card of r.originalCouncil.candidates) {
+            assert.equal(card.executable,false);
+            assert.equal(card.automatic_merge,false);
+          }
+          console.log('REAL UNMERGED MOTIF SOURCE OBSERVED:',
+            r.originalCouncil.candidates.map(x=>x.branch).join(', '));
+          JS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: motif-source-council-002-original-evidence-held
+          path: /tmp/motif-public-research.json
+          retention-days: 14
