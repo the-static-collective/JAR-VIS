@@ -1,7 +1,7 @@
 {
   "schema": "static-collective/change-candidates-v1",
   "authority": "NONE",
-  "scannedAt": "2026-11-19T07:40:03.399Z",
+  "scannedAt": "2026-11-19T20:49:27.343Z",
   "monitoredRepos": [
     "webZ",
     "reLATTE",
@@ -17,6 +17,66 @@
   ],
   "disclosure": "Automatically generated source-diff CANDIDATES, not reviewed claims, canon, releases, deployments, partnerships or completed acts. No automatic admission is possible.",
   "candidates": [
+    {
+      "id": "DIFF-91803D087E30577F1F0C",
+      "repo": "GHoT",
+      "ref": "main",
+      "from": "9748a0772c4a13135421c4fa84a9991e0a51e05f",
+      "to": "655b0191e800ab16843c2d632ff0b5a780c0cae0",
+      "observedAt": "2026-11-19T20:49:27.343Z",
+      "compareUrl": "https://github.com/the-static-collective/GHoT/compare/9748a0772c4a13135421c4fa84a9991e0a51e05f...655b0191e800ab16843c2d632ff0b5a780c0cae0",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "PENDING_REVIEW",
+      "reason": "NONE",
+      "totalFiles": 7,
+      "categoryCounts": {
+        "TESTS": 1,
+        "DOCUMENTATION": 2,
+        "CONFIGURATION": 1,
+        "SOURCE_CODE": 2,
+        "OTHER": 1
+      },
+      "files": [
+        {
+          "path": ".github/workflows/garden-pulse.yml",
+          "status": "added",
+          "category": "CONFIGURATION"
+        },
+        {
+          "path": "AGENTS.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "CONTINUE.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "garden/__init__.py",
+          "status": "added",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "garden/intent.json",
+          "status": "added",
+          "category": "OTHER"
+        },
+        {
+          "path": "garden/pulse.py",
+          "status": "added",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "garden/tests/test_pulse.py",
+          "status": "added",
+          "category": "TESTS"
+        }
+      ]
+    },
     {
       "id": "DIFF-316AE112525E83E2BE31",
       "repo": "reLATTE",
