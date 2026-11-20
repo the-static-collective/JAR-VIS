@@ -1,7 +1,7 @@
 {
   "schema": "static-collective/change-candidates-v1",
   "authority": "NONE",
-  "scannedAt": "2026-11-19T20:49:27.343Z",
+  "scannedAt": "2026-11-20T07:31:31.509Z",
   "monitoredRepos": [
     "webZ",
     "reLATTE",
@@ -17,6 +17,76 @@
   ],
   "disclosure": "Automatically generated source-diff CANDIDATES, not reviewed claims, canon, releases, deployments, partnerships or completed acts. No automatic admission is possible.",
   "candidates": [
+    {
+      "id": "DIFF-DE77DE2079B83F74E798",
+      "repo": "GHoT",
+      "ref": "main",
+      "from": "655b0191e800ab16843c2d632ff0b5a780c0cae0",
+      "to": "5894b2c2038470670ea069a966b688c7dc81531d",
+      "observedAt": "2026-11-20T07:31:31.509Z",
+      "compareUrl": "https://github.com/the-static-collective/GHoT/compare/655b0191e800ab16843c2d632ff0b5a780c0cae0...5894b2c2038470670ea069a966b688c7dc81531d",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "PENDING_REVIEW",
+      "reason": "NONE",
+      "totalFiles": 9,
+      "categoryCounts": {
+        "TESTS": 1,
+        "DOCUMENTATION": 4,
+        "CONFIGURATION": 0,
+        "SOURCE_CODE": 1,
+        "OTHER": 3
+      },
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "status": "modified",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "CONTINUE.md",
+          "status": "modified",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "chatgpt/ENTRY.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "garden/ROUTER.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "garden/intent.json",
+          "status": "modified",
+          "category": "OTHER"
+        },
+        {
+          "path": "garden/router.py",
+          "status": "added",
+          "category": "SOURCE_CODE"
+        },
+        {
+          "path": "garden/routes.json",
+          "status": "added",
+          "category": "OTHER"
+        },
+        {
+          "path": "garden/run-local.ps1",
+          "status": "added",
+          "category": "OTHER"
+        },
+        {
+          "path": "garden/tests/test_router.py",
+          "status": "added",
+          "category": "TESTS"
+        }
+      ]
+    },
     {
       "id": "DIFF-91803D087E30577F1F0C",
       "repo": "GHoT",
