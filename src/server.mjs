@@ -7,6 +7,7 @@ import {validateBridgeWork} from "./bridge-work-card.mjs";
 import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
+import {inspectMotifKernel,runMotifSpine} from "./motif-spine.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
@@ -19,7 +20,10 @@ const staticFiles = new Map([
   ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/workshop", [new URL("../public/workshop.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/workshop.js", [new URL("../public/workshop.js", import.meta.url), "text/javascript; charset=utf-8"]],
-  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]]
+  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]],
+  ["/motif", [new URL("../public/motif.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/motif.js", [new URL("../public/motif.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/motif.css", [new URL("../public/motif.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -78,6 +82,10 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
+        if (pathname === "/api/motif/state") {
+          try { return reply(res,200,{...await inspectMotifKernel(),csrfToken:csrf,reasoningReady:"PYTHON_REQUIRED_ON_REQUEST",localOnly:true}); }
+          catch { return reply(res,503,{disposition:"HOLD_SOURCE_UNAVAILABLE",csrfToken:csrf,localOnly:true}); }
+        }
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
         if (pathname === "/api/recursive/state") return recursive ?
@@ -125,6 +133,12 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
           stored:false,externalEffect:false
         });
         return reply(res,404,{error:"Unknown recursive workshop operation"});
+      }
+      if (pathname === "/api/motif/compare" || pathname === "/api/motif/analyze") {
+        try { return reply(res,200,await runMotifSpine(body.case,{
+          action:pathname.endsWith("/analyze")?"analyze":"compare"})); }
+        catch (error) { return reply(res,error.status===413?413:error.status===400?400:409,
+          {disposition:"HOLD",error:"MOTIF source unavailable or structured case invalid; no action performed"}); }
       }
       if (pathname === "/api/bridge/triage") {
         let reviewed;

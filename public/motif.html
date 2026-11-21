@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#203529"><title>MOTIF × JAR;VIS — The Reasoning Desk</title>
+<link rel="stylesheet" href="/motif.css"><script type="module" src="/motif.js"></script></head>
+<body>
+<a class="skip" href="#main">Skip to reasoning desk</a>
+<header class="header"><a href="/" class="wordmark">JAR<span>;</span>VIS</a><strong>MOTIF / REASONING DESK 001</strong><a href="/workshop">Recursive Workshop ↗</a></header>
+<main id="main" class="shell">
+<div class="eyebrow">LOCAL / SOURCE-PINNED / NON-AUTONOMOUS</div>
+<h1>Ask a question.<br><em>Or be asked one.</em></h1>
+<p class="lead">A real connection to MOTIF's original Python reasoning spine. Your possible explanations become a small explicit field; the machine selects a discriminating question, keeps contradictions visible, and shows how three competing planning policies behave.</p>
+<p class="rule">This is <strong>structured experimental reasoning</strong>, not an LLM generating explanations or answering your question from world knowledge. Predictions are supplied by you. No questions, observations or reports are stored, published or sent off this computer.</p>
+<div id="machine-status" role="status" aria-live="polite" class="status">Checking the source-pinned local kernel…</div>
+<section class="board">
+<form id="case-form">
+<div class="section-top"><span class="n">01</span><div><h2>Ask MOTIF</h2><p>Define what matters and what might be true.</p></div></div>
+<div class="fields">
+<label>Question <input id="question" maxlength="320" required value="What caused the mismatch in this fictional drawing?"></label>
+<label>What decision could improve? <input id="goal" maxlength="320" required value="Choose which observation to make before revising the diagram."></label>
+</div>
+<h3>Competing hypotheses</h3>
+<p class="hint">Give three possible explanations. MOTIF cannot invent these yet in this interface.</p>
+<div class="three">
+<label>Explanation A <input id="hyp-a" maxlength="90" value="Camera orientation" required></label>
+<label>Explanation B <input id="hyp-b" maxlength="90" value="Post alignment" required></label>
+<label>Explanation C <input id="hyp-c" maxlength="90" value="Drawing corner" required></label>
+</div>
+<h3>Two possible observations</h3>
+<div class="two">
+<label>Observation A <input id="test-a" maxlength="90" value="Check camera angle" required></label>
+<label>Observation B <input id="test-b" maxlength="90" value="Check fictional post alignment" required></label>
+</div>
+<p class="hint">For each hypothesis, say whether you expect each observation to return YES or NO. These are assumptions to test, not verified facts.</p>
+<div class="prediction">
+<div class="prediction-header"><span>Hypothesis</span><span>Observation A</span><span>Observation B</span></div>
+<div><strong>A</strong><select id="a-a" aria-label="Hypothesis A observation A"><option value="yes">YES</option><option value="no">NO</option><option value="unknown">UNKNOWN</option></select><select id="a-b" aria-label="Hypothesis A observation B"><option value="no">NO</option><option value="yes">YES</option><option value="unknown">UNKNOWN</option></select></div>
+<div><strong>B</strong><select id="b-a" aria-label="Hypothesis B observation A"><option value="no">NO</option><option value="yes">YES</option><option value="unknown">UNKNOWN</option></select><select id="b-b" aria-label="Hypothesis B observation B"><option value="yes">YES</option><option value="no">NO</option><option value="unknown">UNKNOWN</option></select></div>
+<div><strong>C</strong><select id="c-a" aria-label="Hypothesis C observation A"><option value="no">NO</option><option value="yes">YES</option><option value="unknown">UNKNOWN</option></select><select id="c-b" aria-label="Hypothesis C observation B"><option value="no">NO</option><option value="yes">YES</option><option value="unknown">UNKNOWN</option></select></div>
+</div>
+<div class="actions"><button id="run" type="submit">Run three reasoning policies ↗</button><button id="reset" class="outline" type="button">Clear local observations</button></div>
+</form>
+</section>
+<section class="board pale" id="answer" hidden aria-live="polite">
+<div class="section-top"><span class="n">02</span><div><h2>Let MOTIF Ask</h2><p>Question selection is information gain minus illustrative inquiry costs.</p></div></div>
+<div id="decision"></div>
+<div id="challenge" hidden>
+<h3 id="next-question">Which observation should come next?</h3>
+<p>Report a fictional observation. You control whether to mark this as reviewed for the exercise; a review label is still not authenticated real-world truth.</p>
+<label for="outcome">Synthetic observation outcome</label>
+<select id="outcome"><option value="yes">YES</option><option value="no">NO</option><option value="unknown">UNKNOWN</option></select>
+<label class="check"><input type="checkbox" id="reviewed"> Mark as reviewed within this fictional exercise</label>
+<div class="actions"><button id="record" type="button">Add local report and rethink ↗</button></div>
+</div>
+<div id="ledger"></div>
+</section>
+<section class="board" id="compare" hidden>
+<div class="section-top"><span class="n">03</span><div><h2>The comparison</h2><p>Identical hypothetical input, different decision policies.</p></div></div>
+<div id="policies" class="policies"></div>
+<p class="hint">Fixed order, strong classical information gain, and MOTIF's cost-aware selection are actually executed. Real pretrained LLM and hybrid trials have <strong>not</strong> been run. One useful question is not proof of architectural superiority.</p>
+</section>
+<footer><span>REPORT ≠ TRUTH. BRANCH ≠ MERGE. REASONING ≠ AUTHORITY.</span><a href="/">Return to JAR;VIS</a></footer>
+</main>
+</body></html>
