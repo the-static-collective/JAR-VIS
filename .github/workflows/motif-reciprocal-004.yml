@@ -1,0 +1,49 @@
+name: JAR;VIS — Pinned MOTIF reciprocal public-source observation
+on:
+  push:
+    branches:
+      - feature/motif-reciprocal-source-door-004
+  pull_request:
+    paths:
+      - 'src/motif-reciprocal.mjs'
+      - 'tools/inspect-motif-reciprocal.mjs'
+      - 'test/motif-reciprocal.test.mjs'
+      - 'test/fixtures/motif-reciprocal-passport.v1.json'
+      - 'docs/MOTIF-RECIPROCAL-004.md'
+      - '.github/workflows/motif-reciprocal-004.yml'
+      - 'package.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-only-observer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Execute source-observation boundary and mutation tests
+        run: |
+          node --check src/motif-reciprocal.mjs
+          node --check tools/inspect-motif-reciprocal.mjs
+          node --test test/motif-reciprocal.test.mjs
+      - name: Independently read exact pinned public MOTIF passport, no tools or external write
+        run: |
+          npm run --silent motif:inspect > /tmp/motif-reciprocal-source-observation.json
+          node --input-type=module - <<'JS'
+          import {readFileSync} from "node:fs";
+          import {MOTIF_SOURCE_SHA} from "./src/motif-reciprocal.mjs";
+          const x=JSON.parse(readFileSync("/tmp/motif-reciprocal-source-observation.json","utf8"));
+          if(x.sourceCommit!==MOTIF_SOURCE_SHA||x.capabilities.length!==3 ||
+             x.admission!=="none" || x.executionAllowed!==false ||
+             x.authority!=="none" || x.externalActions!==false ||
+             x.neighbors.some(n=>n.status!=="PROPOSED_NOT_CONNECTED"))throw Error("UNSAFE_PUBLIC_MOTIF_SOURCE");
+          console.log("MOTIF_PUBLIC_PINNED_ONLY",x.sourceCommit,x.sha256);
+          JS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-pinned-motif-public-observation
+          path: /tmp/motif-reciprocal-source-observation.json
+          retention-days: 30
