@@ -28,7 +28,7 @@ export async function readPublicCommons({fetchImpl=fetch,timeoutMs=8000}={}){
   return {schema:'static-collective/ai-human-commons-read/v1',room:'build-together',
     source:URL,events,scope:'APPROVED_PUBLIC_ONLY',noWriteAuthority:true};
 }
-if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
+if(process.argv[1]&&import.meta.url===new globalThis.URL('file://'+process.argv[1]).href){
   try{console.log(JSON.stringify(await readPublicCommons(),null,2))}
   catch(error){console.error(error.message);process.exitCode=1}
 }
