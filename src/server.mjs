@@ -7,6 +7,7 @@ import {validateBridgeWork} from "./bridge-work-card.mjs";
 import {RecursiveWorkshop, draftCard} from "./recursive-workshop.mjs";
 import {inhabitBoundary} from "./boundary-inhabitation.mjs";
 import {compileFieldScout} from "./boundary-field-scout.mjs";
+import {WakeDesk} from "./wake-signal.mjs";
 
 const staticFiles = new Map([
   ["/", [new URL("../public/index.html", import.meta.url), "text/html; charset=utf-8"]],
@@ -19,7 +20,10 @@ const staticFiles = new Map([
   ["/bridge.js", [new URL("../public/bridge.js", import.meta.url), "text/javascript; charset=utf-8"]],
   ["/workshop", [new URL("../public/workshop.html", import.meta.url), "text/html; charset=utf-8"]],
   ["/workshop.js", [new URL("../public/workshop.js", import.meta.url), "text/javascript; charset=utf-8"]],
-  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]]
+  ["/workshop.css", [new URL("../public/workshop.css", import.meta.url), "text/css; charset=utf-8"]],
+  ["/wake", [new URL("../public/wake.html", import.meta.url), "text/html; charset=utf-8"]],
+  ["/wake.js", [new URL("../public/wake.js", import.meta.url), "text/javascript; charset=utf-8"]],
+  ["/wake.css", [new URL("../public/wake.css", import.meta.url), "text/css; charset=utf-8"]]
 ]);
 const headers = {
   "cache-control": "no-store",
@@ -63,6 +67,11 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
     try { recursive = await RecursiveWorkshop.open({ journalPath: journalPath + ".recursive.jsonl" }); }
     catch (error) { recursiveUnavailable = "HOLD: local Python or pinned Static OS snapshot unavailable"; }
   }
+  let wakeUnavailable=null, wake=null;
+  if(journalPath){
+    try{wake=await WakeDesk.open({directory:journalPath+".wake-signal"});}
+    catch{wakeUnavailable="HOLD: pinned MOTIF WAKE source or local Python unavailable";}
+  }
   const csrf = randomBytes(24).toString("hex");
   let boundPort;
   const server = createServer(async (req, res) => {
@@ -74,12 +83,16 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
       if (origin && (new URL(origin).protocol !== "http:" || !allowed.has(new URL(origin).host))) {
         return reply(res, 403, { error: "Cross-origin request refused" });
       }
-      const pathname = new URL(req.url, "http://" + host).pathname;
+      const requestUrl = new URL(req.url, "http://" + host);
+      const pathname = requestUrl.pathname;
       if (req.method === "GET") {
         if (pathname === "/api/state") return reply(res, 200, { ...app.state(), csrfToken: csrf });
         if (pathname === "/api/health") return reply(res, 200, { ok: true, mode: "localhost-mock" });
         if (pathname === "/api/boundary/001") return reply(res,200,inhabitBoundary());
         if (pathname === "/api/boundary/field-scout-002") return reply(res,200,compileFieldScout());
+        if (pathname === "/api/wake/state") return wake ?
+          reply(res,200,{...await wake.state(requestUrl.searchParams.get("studyId")),csrfToken:csrf}) :
+          reply(res,503,{error:wakeUnavailable ?? "HOLD: WAKE desk unavailable"});
         if (pathname === "/api/recursive/state") return recursive ?
           reply(res,200,{...recursive.summary(),csrfToken:csrf}) :
           reply(res,503,{error: recursiveUnavailable ?? "HOLD: recursive desk not configured"});
@@ -95,6 +108,14 @@ export async function startWorkbenchServer({ journalPath, port = 7789, workbench
         return reply(res, 403, { error: "Missing or invalid local anti-CSRF token" });
       }
       const body = await readJson(req);
+      if (pathname.startsWith("/api/wake/")) {
+        if(!wake)return reply(res,503,{error:wakeUnavailable ?? "HOLD: WAKE desk unavailable"});
+        if(pathname==="/api/wake/create")
+          return reply(res,200,{...await wake.create(body),csrfToken:csrf});
+        if(pathname==="/api/wake/record")
+          return reply(res,200,{...await wake.record(body),csrfToken:csrf});
+        return reply(res,404,{error:"Unknown WAKE desk operation"});
+      }
       if (pathname.startsWith("/api/inheritance/")) {
         if (!inherit) return reply(res, 503, { error: "Inheritance board not configured" });
         const operations = {

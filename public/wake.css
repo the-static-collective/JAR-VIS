@@ -1,0 +1,33 @@
+/* WAKE Signal: tactile paper, pencil-ink, mobile-first operator desk. */
+:root{color-scheme:light;--paper:#f8f5e9;--sand:#eae3cf;--ink:#273a31;--fade:#536b60;--accent:#ae5c35;--green:#205b4b;--line:#cbbfaa;}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:radial-gradient(circle at 16% 5%,#fdf9ed 0,#eee9d8 53%,#e5dec7 100%);font:16px/1.6 "Trebuchet MS",Verdana,sans-serif;}
+button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}a{color:#245a4e}a:hover{text-decoration-thickness:2px}a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #c77a3b;outline-offset:2px}
+.skip{position:absolute;left:-9999px}.skip:focus{left:10px;top:10px;background:#fff;padding:10px;z-index:99}
+.mast{display:flex;align-items:center;gap:2rem;justify-content:space-between;padding:1rem clamp(1rem,5vw,5rem);border-bottom:2px solid var(--ink);background:var(--ink);color:var(--paper)}
+.brand{color:#fff;text-decoration:none;font-family:Georgia,serif;font-size:1.55rem;font-weight:bold;letter-spacing:-.05em}.brand span{color:#eebd74}.edition{letter-spacing:.18em;font-size:.66rem;font-weight:700}.back{color:#f0e7d0;font-size:.85rem}
+main{max-width:1180px;margin:auto;padding:0 1.25rem}.hero{position:relative;padding:4rem 0 2.7rem;max-width:980px}
+.eyebrow,.section-bar,.letter-tag{font-size:.71rem;letter-spacing:.18em;text-transform:uppercase;font-weight:800}
+.hero h1{font:clamp(2.8rem,7vw,5.8rem)/1.04 Georgia,"Times New Roman",serif;letter-spacing:-.05em;margin:.9rem 0 1.4rem}.hero h1 em{color:var(--accent);font-weight:normal}
+.hero>p:not(.eyebrow){max-width:650px;font-size:1.15rem;color:#42574d}
+.rail{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;border-top:1px solid #9cac9f;padding-top:1.3rem;margin-top:2rem;font-size:.72rem;font-weight:bold;letter-spacing:.12em}
+.rail b{color:var(--accent)}
+.notice{border-left:6px solid var(--accent);background:#fff7df;padding:1.15rem 1.4rem;margin:1rem 0 2rem;box-shadow:3px 4px 0 #dcd2b9}
+.sheet{margin:2.4rem 0;background:linear-gradient(90deg,transparent 33px,#ddb6a7 34px,transparent 35px),repeating-linear-gradient(0deg,transparent 0,transparent 36px,#ece5d5 37px,#ece5d5 38px),var(--paper);padding:clamp(1.3rem,4vw,3rem);border:1px solid #c5b99e;border-radius:2px;box-shadow:0 15px 30px #38352b22,3px 4px 0 #d1c6b1}
+.section-bar{display:flex;gap:1rem;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:1rem;color:var(--fade)}.stamp{border:2px solid var(--accent);padding:.2rem .5rem;color:var(--accent);transform:rotate(-2deg);white-space:nowrap}
+h2{font:clamp(1.8rem,3.4vw,2.9rem)/1.18 Georgia,serif;letter-spacing:-.025em;margin:1.5rem 0}h3{font:1.7rem Georgia,serif;margin:.2rem 0 1rem}
+label{display:block;font-size:.9rem;font-weight:bold;margin:.8rem 0 .4rem}label small{font-size:.75rem;color:var(--fade);font-weight:normal;margin-left:.4rem}
+input:not([type=checkbox]),textarea,select{border:1px solid #aca995;background:#fdfbf6;color:var(--ink);display:block;width:100%;border-radius:2px;padding:.67rem .8rem;box-shadow:inset 1px 2px 0 #ebe4d3}
+textarea{resize:vertical}.presets{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1.2rem}.presets button{border:1px dashed var(--green);background:#eaf0e5;padding:.4rem .75rem;color:var(--green);border-radius:0}
+.three-arms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:1.6rem}.arm{border:1px solid var(--line);background:#f5f0dfb8;padding:1rem}.arm-label{display:block;border-bottom:1px solid var(--line);font-size:.72rem;letter-spacing:.14em;font-weight:bold;color:var(--accent)}
+.controls{display:flex;gap:1rem;flex-wrap:wrap}.controls label{max-width:170px}
+.check{display:flex;align-items:flex-start;gap:.8rem;font-size:.85rem;line-height:1.5;margin:1.35rem 0}.check input{width:1.25rem;height:1.25rem;margin-top:.12rem;accent-color:var(--green);flex:none}
+.action-row{display:flex;align-items:center;flex-wrap:wrap;gap:.9rem;margin:1.3rem 0}.primary,.secondary{padding:.72rem 1.1rem;border-radius:0;font-weight:bold;border:2px solid var(--ink)}.primary{background:var(--ink);color:white}.primary:hover{background:var(--green)}.secondary{background:transparent;color:var(--ink)}.secondary:hover{background:#e5eddf}
+.quiet,.subtle{color:var(--fade);font-size:.87rem}#create-status,#record-status{border-top:1px dashed var(--line);margin-top:1.1rem;padding-top:.75rem;font-size:.88rem}
+.counts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1.3rem 0}.count{padding:1rem;border:1px solid var(--line);background:#eef0e7}.count strong{display:block;letter-spacing:.12em;color:var(--accent);font-size:.76rem}.count b{display:block;font:1.7rem Georgia,serif;margin:.2rem 0}.count span{display:block;font-size:.73rem;color:var(--fade)}
+.work-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:1.5rem;margin:2rem 0}.envelope,.ledger{min-width:0}.ledger{background:#eee9d9;border:1px solid var(--line);padding:1.4rem}
+.letter{margin:1rem 0;border:1px solid #aaa58e;background:#fffdf4;box-shadow:3px 5px 0 #d8cfb9;padding:1.4rem}.letter-tag{color:var(--accent);margin:0 0 1rem;border-bottom:1px solid var(--line);padding-bottom:.55rem}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font:1rem/1.65 Georgia,serif;margin:0}#receipt-row{font-size:.86rem}.status-label{color:var(--accent);font-size:.82rem;font-weight:bold}.boundary{border-top:1px dashed var(--line);font-size:.85rem;padding-top:1rem;color:#7a4d31}
+.report-actions{border-top:1px solid var(--line);padding-top:1rem}.appendix{max-width:760px;margin:3rem auto 4rem;border-left:4px solid var(--green);padding:.4rem 2rem;font-family:Georgia,serif;font-size:1.05rem}footer{padding:2rem 0 3rem;border-top:2px solid var(--ink);font-size:.72rem;letter-spacing:.09em}
+[hidden]{display:none!important}
+@media(max-width:760px){.mast{gap:.5rem}.edition{display:none}.hero{padding:2.7rem 0 1rem}.three-arms,.counts,.work-grid{grid-template-columns:1fr}.sheet{padding:1.25rem;margin:1.5rem 0}.hero h1{font-size:3rem}.rail{font-size:.66rem;gap:.45rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

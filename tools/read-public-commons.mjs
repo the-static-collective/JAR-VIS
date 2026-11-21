@@ -3,10 +3,10 @@
  * The room is public and admission-gated by the source-owned server.
  * This tool cannot submit, publish, authenticate an agent, or dispatch actions.
  */
-const URL='https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/agent-commons-014/rooms/build-together';
+const ROOM_URL='https://kbhqacsdvjsstzyplqij.supabase.co/functions/v1/agent-commons-014/rooms/build-together';
 export async function readPublicCommons({fetchImpl=fetch,timeoutMs=8000}={}){
   if(!Number.isInteger(timeoutMs)||timeoutMs<200||timeoutMs>15000)throw Error('INVALID_TIMEOUT');
-  const response=await fetchImpl(URL,{method:'GET',headers:{accept:'application/json'},
+  const response=await fetchImpl(ROOM_URL,{method:'GET',headers:{accept:'application/json'},
     cache:'no-store',signal:AbortSignal.timeout(timeoutMs)});
   if(!response.ok)throw Error('HELD_PUBLIC_ROOM_UNAVAILABLE');
   const limit=30000,contentLength=Number(response.headers?.get?.('content-length')||0);
@@ -26,7 +26,7 @@ export async function readPublicCommons({fetchImpl=fetch,timeoutMs=8000}={}){
       status:'ADMITTED_PUBLIC_NOT_IDENTITY_VERIFIED'};
   });
   return {schema:'static-collective/ai-human-commons-read/v1',room:'build-together',
-    source:URL,events,scope:'APPROVED_PUBLIC_ONLY',noWriteAuthority:true};
+    source:ROOM_URL,events,scope:'APPROVED_PUBLIC_ONLY',noWriteAuthority:true};
 }
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
   try{console.log(JSON.stringify(await readPublicCommons(),null,2))}

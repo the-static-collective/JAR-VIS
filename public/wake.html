@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ece7d7"><title>WAKE SIGNAL · JAR;VIS</title>
+<link rel="stylesheet" href="/wake.css"><script type="module" src="/wake.js"></script></head>
+<body><a class="skip" href="#main">Skip to experiment</a>
+<header class="mast"><a class="brand" href="/">JAR<span>;</span>VIS</a><span class="edition">FIELD NOTE / WAKE SIGNAL 001</span><a class="back" href="/">← Workbench</a></header>
+<main id="main">
+ <section class="hero" aria-labelledby="headline"><p class="eyebrow">A QUESTION FOR THE WORLD · NOT A RANKING OF PEOPLE</p>
+  <h1 id="headline">Ping the possibility.<br><em>Not the person.</em></h1>
+  <p>Make three kinds of invitation. Let people choose freely. Record what actually happened—or leave the silence unknown. The best outcome is a useful thing happening outside the screen.</p>
+  <div class="rail"><span>INVITE</span><b>→</b><span>CHOOSE</span><b>→</b><span>DO</span><b>→</b><span>DISCOVER</span></div>
+ </section>
+ <section class="notice" role="note"><strong>LOCAL / MANUAL / VOLUNTARY.</strong> Nothing here sends a message, finds recipients, authenticates anyone, or verifies a real-world outcome. Never enter names, addresses, sensitive stories or contact details. Only invite people through appropriate channels with their permission; an opt-out is final.</section>
+ <section class="sheet" aria-labelledby="create-heading">
+  <div class="section-bar"><span>01 / MAKE A POSSIBILITY VISIBLE</span><span class="stamp">NO SEND BUTTON</span></div>
+  <h2 id="create-heading">What could someone help make real?</h2>
+  <div class="presets" aria-label="Illustrative presets"><button type="button" data-preset="fellowship">Fellowship example</button><button type="button" data-preset="garden">Garden example</button><button type="button" data-preset="commons">Commons example</button></div>
+  <form id="new-study">
+    <label for="title">Opportunity title <small>Not a person's name</small></label>
+    <input id="title" name="title" maxlength="160" required placeholder="Welcome table — illustrative example">
+    <label for="context">Shared context <small>Describe only a genuine, non-sensitive opportunity</small></label>
+    <textarea id="context" name="context" rows="3" maxlength="500" required placeholder="What would help, where in general, and why it matters"></textarea>
+    <div class="three-arms">
+      <div class="arm"><span class="arm-label">A / SMALL</span><label for="small">One tiny doable step</label><textarea id="small" name="small" maxlength="500" rows="3" required></textarea></div>
+      <div class="arm"><span class="arm-label">B / CREATIVE</span><label for="creative">One invitation to imagine</label><textarea id="creative" name="creative" maxlength="500" rows="3" required></textarea></div>
+      <div class="arm"><span class="arm-label">C / AUTONOMOUS</span><label for="autonomous">One self-directed piece</label><textarea id="autonomous" name="autonomous" maxlength="500" rows="3" required></textarea></div>
+    </div>
+    <div class="controls"><label for="count">Slots <input id="count" type="number" min="3" max="100" value="100" required></label><label for="seed">Random seed <input id="seed" type="number" min="0" max="999999999" value="2026" required></label></div>
+    <label class="check"><input id="verified" type="checkbox"> <span><strong>I independently confirmed this opportunity is real.</strong> This is my assertion, not a verification by JAR;VIS. Drafts are safer for rehearsal. This checkbox does not establish permission to contact any individual.</span></label>
+    <div class="action-row"><button id="create-button" class="primary" type="submit">Create local invitation study →</button><span class="quiet">100 assignments ≠ 100 messages sent.</span></div>
+  </form>
+  <p id="create-status" role="status" aria-live="polite">No invitation created or delivered.</p>
+ </section>
+ <section class="sheet" id="study" hidden aria-labelledby="study-heading">
+  <div class="section-bar"><span>02 / OPEN THE LOCAL NOTEBOOK</span><span id="kind" class="stamp">DRAFT</span></div>
+  <h2 id="study-heading">One opportunity. Three ways to invite.</h2>
+  <label for="study-select">Local studies</label><select id="study-select"></select>
+  <p class="subtle" id="study-summary"></p>
+  <div id="counts" class="counts" aria-live="polite"></div>
+  <div class="work-grid">
+   <section class="envelope" aria-label="Invitation draft">
+    <label for="slot">Select one pseudonymous invitation slot</label>
+    <select id="slot"></select>
+    <p id="slot-state" class="status-label"></p>
+    <div class="letter"><p class="letter-tag">INVITATION / NOT SENT</p><pre id="message"></pre></div>
+    <div class="action-row"><button type="button" id="copy" class="primary">Copy this draft</button><button type="button" id="download" class="secondary">Save all drafts (.txt)</button></div>
+    <p class="subtle">Do not send to unsolicited recipients. There is no delivery confirmation or contact database.</p>
+   </section>
+   <section class="ledger" aria-label="Operator event record">
+    <h3>What actually happened?</h3><p class="subtle">Records are operator claims. Permission and evidence are checked before the ledger changes.</p>
+    <form id="record-form">
+      <label for="event">Next event</label><select id="event"></select>
+      <label class="check" id="permission-row"><input id="contact-permission" type="checkbox"><span>I personally checked that this recipient permitted contact.</span></label>
+      <label class="check" id="attest-row"><input id="attestation" type="checkbox"><span>I attest this action occurred; a separate nonpersonal receipt exists.</span></label>
+      <label id="receipt-row" for="receipt">Nonpersonal evidence ID <input id="receipt" maxlength="64" pattern="[A-Za-z0-9_.-]{1,64}" placeholder="R001"></label>
+      <button class="primary" id="record-button" type="submit">Record this event locally →</button>
+    </form>
+    <p id="record-status" role="status" aria-live="polite">No event recorded by this screen yet.</p>
+    <p class="boundary">No response does not mean AFK. Decline and opt-out are legitimate final outcomes. Never score a person's consciousness, worth, or permanent agency.</p>
+   </section>
+  </div>
+  <div class="action-row report-actions"><button type="button" id="export" class="secondary">Download aggregate report (.json)</button><span>Descriptive pilot only · no causal winner</span></div>
+ </section>
+ <section class="appendix">
+  <p class="eyebrow">03 / WHAT THE EXPERIMENT CANNOT KNOW</p>
+  <p>Timing, circumstances, attention, available energy, safety and trust all influence whether an invitation is useful. A reply is not proof of commitment. An operator's attestation is not independent proof. We are measuring opportunities that led to action, not separating people into superior and inferior classes.</p>
+ </section>
+ <footer>ATTENTION ≠ AUTHORITY · PING ≠ PERMISSION · NO REPLY ≠ INACTIVE · ACTIVITY ≠ HUMAN WORTH · <a href="/">JAR;VIS HOME</a></footer>
+</main></body></html>
