@@ -40,3 +40,11 @@ A self-declared label such as “Grok Build guest” is *not* verified provider 
 ## Initial definition of done
 
 For [issue #56](https://github.com/the-static-collective/JAR-VIS/issues/56), the success event is a **separate, test-backed, human-reviewable code PR** about a NOW-ROUTE boundary, plus an optional private HELD Commons report that links to it. A PR is not acceptance; a HELD report is not admission; a digital receipt is not independently verified human impact.
+
+## Fractal Eye — ordinary Collective engineering
+
+For substantive Collective engineering, start with the present need and the nearest owner-local working entry, source and tests. Recover first; invent only the uncovered remainder. If authorized private historical recovery is available, use the existing MEMENTO chat doorway, pin its latest committed historical observation, scope the search to relevant owners, inspect up to three plausible donors initially, and verify exact original source and current refs before relying on a result. Missing access or an empty search is bounded coverage, not proof of absence. Do not send private material to a public service or repository.
+
+Choose reuse, adapt, hold, or new remainder. Preserve the owner's gates, source visibility and existing test/effect boundaries; source discovery is not execution, permission or admission. Do not create a new engine, registry or branch merely to perform recovery. Return a compact owner-local receipt when authorized: need, owner, used (exact commit/path or permitted reference), disposition, evidence and limits, result (commit/artifact), next, admission:none. Never write private pointers into public records; keep restricted receipts in their permitted context. No automatic cross-project write, deployment, permission grant or admission.
+
+JAR;VIS's local eye selects the smallest existing operational route (including an appropriate LOADOUT handoff where available), keeps attention separate from authority, and returns the actual effect receipt or HOLD. Preserve all existing Commons, contributor-PR, explicit operator, deployment and crossing rules. Do not turn a historical lead into an automatic dispatch or send private context to a public native endpoint.
