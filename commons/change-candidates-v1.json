@@ -1,7 +1,7 @@
 {
   "schema": "static-collective/change-candidates-v1",
   "authority": "NONE",
-  "scannedAt": "2026-11-24T22:37:30.290Z",
+  "scannedAt": "2026-11-25T08:52:09.220Z",
   "monitoredRepos": [
     "webZ",
     "reLATTE",
@@ -17,6 +17,71 @@
   ],
   "disclosure": "Automatically generated source-diff CANDIDATES, not reviewed claims, canon, releases, deployments, partnerships or completed acts. No automatic admission is possible.",
   "candidates": [
+    {
+      "id": "DIFF-B4FDED1DBB480CC27D5E",
+      "repo": "GRAFT",
+      "ref": "main",
+      "from": "265fd538266a742d033ba2f5b408a78610d0a75c",
+      "to": "f06fed6d055082fb9e9574037205bd4134b5ff68",
+      "observedAt": "2026-11-25T08:52:09.220Z",
+      "compareUrl": "https://github.com/the-static-collective/GRAFT/compare/265fd538266a742d033ba2f5b408a78610d0a75c...f06fed6d055082fb9e9574037205bd4134b5ff68",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "PENDING_REVIEW",
+      "reason": "NONE",
+      "totalFiles": 1,
+      "categoryCounts": {
+        "TESTS": 0,
+        "DOCUMENTATION": 1,
+        "CONFIGURATION": 0,
+        "SOURCE_CODE": 0,
+        "OTHER": 0
+      },
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "status": "added",
+          "category": "DOCUMENTATION"
+        }
+      ]
+    },
+    {
+      "id": "DIFF-FC69B14ADCA05163D455",
+      "repo": "GHoT",
+      "ref": "main",
+      "from": "5894b2c2038470670ea069a966b688c7dc81531d",
+      "to": "0cedefb76f830a90d4f1331ff5b5fc99a827fd04",
+      "observedAt": "2026-11-25T08:52:09.220Z",
+      "compareUrl": "https://github.com/the-static-collective/GHoT/compare/5894b2c2038470670ea069a966b688c7dc81531d...0cedefb76f830a90d4f1331ff5b5fc99a827fd04",
+      "admission": "NOT_ADMITTED",
+      "authority": "NONE",
+      "nextCheck": "Open the exact GitHub comparison. Check behavior, tests, deployment and independent owner approval separately; do not infer partners or completed work.",
+      "disclosure": "Candidate from public GitHub compare metadata; filenames are not verified implemented features or field outcomes.",
+      "state": "PENDING_REVIEW",
+      "reason": "NONE",
+      "totalFiles": 2,
+      "categoryCounts": {
+        "TESTS": 0,
+        "DOCUMENTATION": 2,
+        "CONFIGURATION": 0,
+        "SOURCE_CODE": 0,
+        "OTHER": 0
+      },
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "status": "modified",
+          "category": "DOCUMENTATION"
+        },
+        {
+          "path": "CONTINUE.md",
+          "status": "modified",
+          "category": "DOCUMENTATION"
+        }
+      ]
+    },
     {
       "id": "DIFF-E0A7FC5127729E14AC53",
       "repo": "planZ",
