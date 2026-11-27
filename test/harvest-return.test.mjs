@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtempSync,writeFileSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import {inspect,contact,transport,digest,SOURCE} from '../tools/harvest-return.mjs';
+const card={schema:'harvest.return/v1',source_commit:SOURCE,manifest_pin:'a'.repeat(64),receipt_sha256:'b'.repeat(64),plan_pin:'c'.repeat(64),verified_files:3,direct:2,regenerated:1,readback:'matched',classification:'PRIVATE_OPERATOR_HANDOFF',authority:'NONE',admission:'none'};
+const encode=p=>Buffer.from(JSON.stringify(Object.fromEntries(Object.keys(p).sort().map(k=>[k,p[k]])))+'\n');
+const bytes=encode(card),pin=digest(bytes);
+test('held return never confers authority',()=>{const r=inspect(bytes,pin);assert.equal(r.status,'HOLD_FOR_OPERATOR_REVIEW');assert.equal(r.authority,'NONE');assert.equal(r.admission,'none');assert.equal(r.executed,false)});
+test('wrong pins, fields and authority fail closed',()=>{assert.throws(()=>inspect(bytes,'0'.repeat(64)));for(const bad of [{...card,authority:'ALL'},{...card,destination:'private'},{...card,admission:'canon'}]){const b=encode(bad);assert.throws(()=>inspect(b,digest(b)))}});
+test('transport checks exact local bytes',()=>{const d=mkdtempSync(join(tmpdir(),'harvest-delivery-'));try{const f=join(d,'artifact');writeFileSync(f,bytes);assert.equal(transport(f,pin,bytes.length).status,'BYTES_MATCH_EXPECTED_PIN');assert.throws(()=>transport(f,pin,bytes.length+1));writeFileSync(f,'changed');assert.throws(()=>transport(f,pin,bytes.length))}finally{rmSync(d,{recursive:true,force:true})}});
