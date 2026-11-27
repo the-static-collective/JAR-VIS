@@ -1,0 +1,10 @@
+// Adapted from webZ bridge/outbox/vault.mjs (5e94bc62fa40df936f78d731e5ad067a90cf8d13).
+// Separate domain; encrypted local vault, not Outbox wire compatibility.
+const enc=new TextEncoder(),dec=new TextDecoder('utf-8',{fatal:true}),iterations=600000;
+const schema='caravan.vault/v1'; const aad=enc.encode('CARAVAN-001|'+schema+'|PBKDF2-SHA256|600000|AES-256-GCM');
+const need=(x,m)=>{if(!x)throw Error(m)};
+const b64=b=>Buffer.from(b).toString('base64url');
+function un64(s,max){need(typeof s==='string'&&s.length<=Math.ceil(max*4/3)&&/^[A-Za-z0-9_-]+$/.test(s),'Invalid encrypted envelope');const b=Buffer.from(s,'base64url');need(b.length<=max&&b64(b)===s,'Invalid encoding');return b}
+async function key(pass,salt){need(typeof pass==='string'&&pass.length>=12&&pass.length<=200,'Passphrase must contain 12–200 characters');const raw=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt,iterations},raw,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+export async function seal(data,pass){const bytes=enc.encode(JSON.stringify(data));need(bytes.length<=1048576,'Vault plaintext limit');const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:aad},await key(pass,salt),bytes);return {schema,kdf:'PBKDF2-SHA256',iterations,cipher:'AES-256-GCM',salt:b64(salt),iv:b64(iv),ciphertext:b64(ct)}}
+export async function unlock(e,pass){need(e&&typeof e==='object'&&!Array.isArray(e)&&Object.keys(e).sort().join('|')==='cipher|ciphertext|iterations|iv|kdf|salt|schema'&&e.schema===schema&&e.kdf==='PBKDF2-SHA256'&&e.iterations===iterations&&e.cipher==='AES-256-GCM','Invalid vault');const salt=un64(e.salt,16),iv=un64(e.iv,12),ct=un64(e.ciphertext,1048592);need(salt.length===16&&iv.length===12&&ct.length>=16,'Invalid vault lengths');try{return JSON.parse(dec.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad},await key(pass,salt),ct)))}catch{throw Error('Wrong passphrase or damaged vault')}}
